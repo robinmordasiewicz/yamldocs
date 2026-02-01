@@ -3,12 +3,7 @@
  * Extracts form fields from markdown custom HTML elements
  */
 
-import type {
-  NormalizedFormField,
-  NormalizedFieldOption,
-  ParsedFormSchema,
-  FormMetadata,
-} from '../types/index.js';
+import type { NormalizedFormField, ParsedFormSchema, FormMetadata } from '../types/index.js';
 
 export interface ExtractedField {
   type: 'checkbox' | 'radio' | 'text';
@@ -68,7 +63,7 @@ export function extractCheckboxes(content: string): CheckboxGroup[] {
     const line = lines[i];
 
     // Track current heading
-    const headingMatch = line.match(/^#{1,6}\s+(.+)$/);
+    const headingMatch = /^#{1,6}\s+(.+)$/.exec(line);
     if (headingMatch) {
       currentHeading = headingMatch[1].trim();
       // Save any pending group when we hit a new heading
@@ -79,7 +74,7 @@ export function extractCheckboxes(content: string): CheckboxGroup[] {
     }
 
     // Check for standard markdown checkbox: - [ ] or - [x]
-    const markdownCheckbox = line.match(/^-\s+\[[ x]\]\s+(.+)$/);
+    const markdownCheckbox = /^-\s+\[[ x]\]\s+(.+)$/.exec(line);
     if (markdownCheckbox) {
       const checkboxText = markdownCheckbox[1].trim();
       if (!currentGroup || i - currentGroup.lineStart > 5) {
@@ -100,7 +95,9 @@ export function extractCheckboxes(content: string): CheckboxGroup[] {
     }
 
     // Check for inline checkbox: [ ] text (used in tables or inline)
-    const inlineCheckboxes = [...line.matchAll(/\[\s*[x ]?\s*\]\s+([^|[\]]+?)(?=\s*\[|\s*$|\s*\|)/g)];
+    const inlineCheckboxes = [
+      ...line.matchAll(/\[\s*[x ]?\s*\]\s+([^|[\]]+?)(?=\s*\[|\s*$|\s*\|)/g),
+    ];
     if (inlineCheckboxes.length > 0) {
       for (const match of inlineCheckboxes) {
         const checkboxText = match[1].trim();
@@ -218,11 +215,16 @@ export function extractRadioGroups(content: string): RadioGroup[] {
         // Look for preceding heading or text
         for (let j = i - 1; j >= Math.max(0, i - 5); j--) {
           const prevLine = lines[j].trim();
-          if (prevLine && !prevLine.includes('<') && !prevLine.includes('|') && !prevLine.startsWith('-')) {
+          if (
+            prevLine &&
+            !prevLine.includes('<') &&
+            !prevLine.includes('|') &&
+            !prevLine.startsWith('-')
+          ) {
             context = prevLine.substring(0, 50);
             break;
           }
-          const headingMatch = prevLine.match(/^#{1,6}\s+(.+)$/);
+          const headingMatch = /^#{1,6}\s+(.+)$/.exec(prevLine);
           if (headingMatch) {
             context = headingMatch[1];
             break;
@@ -278,7 +280,7 @@ export function extractTextPlaceholders(content: string): TextPlaceholder[] {
         }
       } else {
         // Look for preceding text
-        const colonMatch = line.match(/^([^:]+):\s*_{3,}/);
+        const colonMatch = /^([^:]+):\s*_{3,}/.exec(line);
         if (colonMatch) {
           context = colonMatch[1].trim();
         } else {
@@ -289,7 +291,7 @@ export function extractTextPlaceholders(content: string): TextPlaceholder[] {
               context = prevLine.substring(0, 50);
               break;
             }
-            const headingMatch = prevLine.match(/^#{1,6}\s+(.+)$/);
+            const headingMatch = /^#{1,6}\s+(.+)$/.exec(prevLine);
             if (headingMatch) {
               context = headingMatch[1];
               break;
@@ -298,9 +300,9 @@ export function extractTextPlaceholders(content: string): TextPlaceholder[] {
         }
       }
 
-      for (const match of matches) {
+      for (const _match of matches) {
         placeholders.push({
-          context: context || `text_field_${i}`,
+          context: context ?? `text_field_${i}`,
           lineNumber: i,
           columnContext: line.includes('|') ? 'table' : undefined,
         });
@@ -361,8 +363,8 @@ export function extractFormFields(markdownContent: string): ExtractedField[] {
  */
 export function fieldsToSchema(
   fields: ExtractedField[],
-  title: string = 'Form',
-  pageHeight: number = 792
+  title = 'Form',
+  pageHeight = 792
 ): ParsedFormSchema {
   const formFields: NormalizedFormField[] = [];
   let yPosition = pageHeight - 150; // Start below title
@@ -415,10 +417,7 @@ export function fieldsToSchema(
 /**
  * Extract form fields from markdown and generate a complete schema
  */
-export function generateFormSchema(
-  markdownContent: string,
-  title: string = 'Form'
-): ParsedFormSchema {
+export function generateFormSchema(markdownContent: string, title = 'Form'): ParsedFormSchema {
   const fields = extractFormFields(markdownContent);
   return fieldsToSchema(fields, title);
 }

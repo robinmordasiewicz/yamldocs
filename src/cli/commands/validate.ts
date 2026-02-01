@@ -64,19 +64,19 @@ export async function executeValidate(options: ValidateOptions): Promise<Validat
 /**
  * Print validation results
  */
-export function printValidateResult(result: ValidateResult, verbose: boolean = false): void {
+export function printValidateResult(result: ValidateResult, verbose = false): void {
   console.log('');
 
   if (result.valid) {
-    console.log(chalk.green('✓') + ` Schema is valid: ${chalk.cyan(result.schemaPath)}`);
+    console.log(`${chalk.green('✓')} Schema is valid: ${chalk.cyan(result.schemaPath)}`);
 
     if (verbose) {
-      console.log(chalk.gray('  Form ID:    ') + result.formId);
-      console.log(chalk.gray('  Form Title: ') + result.formTitle);
-      console.log(chalk.gray('  Fields:     ') + result.fieldCount);
+      console.log(chalk.gray('  Form ID:    ') + (result.formId ?? ''));
+      console.log(chalk.gray('  Form Title: ') + (result.formTitle ?? ''));
+      console.log(chalk.gray('  Fields:     ') + String(result.fieldCount ?? 0));
     }
   } else {
-    console.log(chalk.red('✗') + ` Schema validation failed: ${chalk.cyan(result.schemaPath)}`);
+    console.log(`${chalk.red('✗')} Schema validation failed: ${chalk.cyan(result.schemaPath)}`);
     console.log('');
 
     if (result.errors) {

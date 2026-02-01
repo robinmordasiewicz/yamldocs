@@ -3,7 +3,7 @@
  * Watches for file changes and regenerates outputs
  */
 
-import { resolve, dirname } from 'path';
+import { resolve } from 'path';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
@@ -46,7 +46,7 @@ export async function executeWatch(options: WatchOptions): Promise<void> {
   let debounceTimer: NodeJS.Timeout | null = null;
 
   // Generate function
-  const generate = async () => {
+  const generate = async (): Promise<void> => {
     console.log(chalk.yellow('\n🔄 Changes detected, regenerating...\n'));
 
     try {
@@ -59,9 +59,7 @@ export async function executeWatch(options: WatchOptions): Promise<void> {
       if (failCount === 0) {
         console.log(chalk.green(`✓ All ${successCount} outputs generated successfully`));
       } else {
-        console.log(
-          chalk.yellow(`⚠ ${successCount} succeeded, ${failCount} failed`)
-        );
+        console.log(chalk.yellow(`⚠ ${successCount} succeeded, ${failCount} failed`));
       }
     } catch (error) {
       const err = error as Error;
@@ -84,19 +82,23 @@ export async function executeWatch(options: WatchOptions): Promise<void> {
   });
 
   // Handle file changes with debouncing
-  const handleChange = (path: string, event: string) => {
+  const handleChange = (path: string, event: string): void => {
     if (debounceTimer) {
       clearTimeout(debounceTimer);
     }
 
-    debounceTimer = setTimeout(async () => {
+    debounceTimer = setTimeout(() => {
       console.log(chalk.gray(`  ${event}: ${path}`));
-      await generate();
+      void generate();
     }, debounce);
   };
 
-  watcher.on('change', (path) => handleChange(path, 'Modified'));
-  watcher.on('add', (path) => handleChange(path, 'Added'));
+  watcher.on('change', (path) => {
+    handleChange(path, 'Modified');
+  });
+  watcher.on('add', (path) => {
+    handleChange(path, 'Added');
+  });
   watcher.on('unlink', (path) => {
     console.log(chalk.yellow(`\n⚠ File removed: ${path}`));
     console.log(chalk.gray('  Watching for changes... (Ctrl+C to exit)\n'));
@@ -107,9 +109,9 @@ export async function executeWatch(options: WatchOptions): Promise<void> {
   });
 
   // Handle graceful shutdown
-  const shutdown = () => {
+  const shutdown = (): void => {
     console.log(chalk.cyan('\n\n👋 Stopping watch mode...\n'));
-    watcher.close();
+    void watcher.close();
     process.exit(0);
   };
 
@@ -117,5 +119,7 @@ export async function executeWatch(options: WatchOptions): Promise<void> {
   process.on('SIGTERM', shutdown);
 
   // Keep process alive
-  await new Promise(() => {});
+  await new Promise<void>(() => {
+    // Intentionally empty - keeps process alive
+  });
 }

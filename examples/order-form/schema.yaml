@@ -1,18 +1,18 @@
 # Order Form Schema - Demonstrates Calculations and Conditionals
-$schema: "form-schema/v1"
+$schema: 'form-schema/v1'
 form:
-  id: "order-form"
-  title: "Product Order Form"
-  version: "1.0.0"
+  id: 'order-form'
+  title: 'Product Order Form'
+  version: '1.0.0'
   pages: 1
-  author: "Sales Department"
-  description: "Order form with automatic calculations"
+  author: 'Sales Department'
+  description: 'Order form with automatic calculations'
 
 fields:
   # Customer Information
-  - name: "customer_name"
-    type: "text"
-    label: "Customer Name"
+  - name: 'customer_name'
+    type: 'text'
+    label: 'Customer Name'
     page: 1
     required: true
     maxLength: 100
@@ -22,14 +22,14 @@ fields:
       width: 250
       height: 24
 
-  - name: "customer_email"
-    type: "text"
-    label: "Email"
+  - name: 'customer_email'
+    type: 'text'
+    label: 'Email'
     page: 1
     required: true
     validation:
       pattern: "^[\\w.-]+@[\\w.-]+\\.\\w+$"
-      message: "Please enter a valid email"
+      message: 'Please enter a valid email'
     position:
       x: 340
       y: 680
@@ -37,16 +37,16 @@ fields:
       height: 24
 
   # Product Selection
-  - name: "product"
-    type: "dropdown"
-    label: "Product"
+  - name: 'product'
+    type: 'dropdown'
+    label: 'Product'
     page: 1
     required: true
     options:
-      - "Widget A - $25.00"
-      - "Widget B - $50.00"
-      - "Widget C - $75.00"
-      - "Premium Bundle - $150.00"
+      - 'Widget A - $25.00'
+      - 'Widget B - $50.00'
+      - 'Widget C - $75.00'
+      - 'Premium Bundle - $150.00'
     position:
       x: 72
       y: 620
@@ -54,14 +54,14 @@ fields:
       height: 24
 
   # Quantity
-  - name: "quantity"
-    type: "text"
-    label: "Quantity"
+  - name: 'quantity'
+    type: 'text'
+    label: 'Quantity'
     page: 1
     required: true
     min: 1
     max: 100
-    default: "1"
+    default: '1'
     position:
       x: 290
       y: 620
@@ -69,12 +69,12 @@ fields:
       height: 24
 
   # Unit Price (read-only, filled based on product)
-  - name: "unit_price"
-    type: "text"
-    label: "Unit Price"
+  - name: 'unit_price'
+    type: 'text'
+    label: 'Unit Price'
     page: 1
     readOnly: true
-    default: "$25.00"
+    default: '$25.00'
     position:
       x: 390
       y: 620
@@ -82,9 +82,9 @@ fields:
       height: 24
 
   # Subtotal (calculated)
-  - name: "subtotal"
-    type: "text"
-    label: "Subtotal"
+  - name: 'subtotal'
+    type: 'text'
+    label: 'Subtotal'
     page: 1
     readOnly: true
     position:
@@ -94,39 +94,39 @@ fields:
       height: 24
 
   # Shipping Option
-  - name: "shipping_method"
-    type: "radio"
-    label: "Shipping Method"
+  - name: 'shipping_method'
+    type: 'radio'
+    label: 'Shipping Method'
     page: 1
     required: true
     options:
-      - value: "standard"
-        label: "Standard (5-7 days) - $5.00"
-      - value: "express"
-        label: "Express (2-3 days) - $15.00"
-      - value: "overnight"
-        label: "Overnight - $30.00"
-    default: "standard"
+      - value: 'standard'
+        label: 'Standard (5-7 days) - $5.00'
+      - value: 'express'
+        label: 'Express (2-3 days) - $15.00'
+      - value: 'overnight'
+        label: 'Overnight - $30.00'
+    default: 'standard'
     position:
       x: 72
       y: 520
 
   # Include Gift Wrapping
-  - name: "gift_wrap"
-    type: "checkbox"
-    label: "Add gift wrapping (+$5.00)"
+  - name: 'gift_wrap'
+    type: 'checkbox'
+    label: 'Add gift wrapping (+$5.00)'
     page: 1
     position:
       x: 72
       y: 420
 
   # Gift Message (conditional - only shown if gift wrap is selected)
-  - name: "gift_message"
-    type: "textarea"
-    label: "Gift Message"
+  - name: 'gift_message'
+    type: 'textarea'
+    label: 'Gift Message'
     page: 1
     maxLength: 200
-    placeholder: "Enter your gift message here..."
+    placeholder: 'Enter your gift message here...'
     hidden: true
     position:
       x: 72
@@ -135,9 +135,9 @@ fields:
       height: 80
 
   # Tax (calculated)
-  - name: "tax"
-    type: "text"
-    label: "Tax (8%)"
+  - name: 'tax'
+    type: 'text'
+    label: 'Tax (8%)'
     page: 1
     readOnly: true
     position:
@@ -147,9 +147,9 @@ fields:
       height: 24
 
   # Grand Total (calculated)
-  - name: "grand_total"
-    type: "text"
-    label: "Grand Total"
+  - name: 'grand_total'
+    type: 'text'
+    label: 'Grand Total'
     page: 1
     readOnly: true
     position:
@@ -159,9 +159,9 @@ fields:
       height: 24
 
   # Terms Agreement
-  - name: "agree_terms"
-    type: "checkbox"
-    label: "I agree to the terms and conditions"
+  - name: 'agree_terms'
+    type: 'checkbox'
+    label: 'I agree to the terms and conditions'
     page: 1
     required: true
     position:
@@ -169,9 +169,9 @@ fields:
       y: 140
 
   # Signature
-  - name: "customer_signature"
-    type: "signature"
-    label: "Customer Signature"
+  - name: 'customer_signature'
+    type: 'signature'
+    label: 'Customer Signature'
     page: 1
     required: true
     position:
@@ -182,33 +182,33 @@ fields:
 
 # Calculated fields - these would be computed in HTML/JavaScript output
 calculations:
-  - name: "subtotal"
-    formula: "unit_price * quantity"
-    format: "currency"
+  - name: 'subtotal'
+    formula: 'unit_price * quantity'
+    format: 'currency'
     decimals: 2
 
-  - name: "tax"
-    formula: "subtotal * 0.08"
-    format: "currency"
+  - name: 'tax'
+    formula: 'subtotal * 0.08'
+    format: 'currency'
     decimals: 2
 
-  - name: "grand_total"
-    formula: "subtotal + tax + shipping_cost + gift_wrap_cost"
-    format: "currency"
+  - name: 'grand_total'
+    formula: 'subtotal + tax + shipping_cost + gift_wrap_cost'
+    format: 'currency'
     decimals: 2
 
 # Conditional field visibility
 conditionalFields:
   # Show gift message field when gift wrap is selected
   - trigger:
-      field: "gift_wrap"
+      field: 'gift_wrap'
       value: true
-    show: ["gift_message"]
+    show: ['gift_message']
 
 # Validation rules
 validation:
   rules:
-    - if: "quantity < 1"
-      then: "error: Quantity must be at least 1"
-    - if: "quantity > 100"
-      then: "error: Maximum quantity is 100"
+    - if: 'quantity < 1'
+      then: 'error: Quantity must be at least 1'
+    - if: 'quantity > 100'
+      then: 'error: Maximum quantity is 100'

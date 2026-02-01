@@ -23,6 +23,24 @@ import {
   printPreviewYaml,
 } from './commands/index.js';
 
+// CLI option interfaces
+interface GenerateCliOptions {
+  schema?: string;
+  output?: string;
+  format: string;
+  config?: string;
+  watch?: boolean;
+  verbose?: boolean;
+}
+
+interface ValidateCliOptions {
+  verbose?: boolean;
+}
+
+interface PreviewCliOptions {
+  format: 'table' | 'json' | 'yaml';
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -30,8 +48,10 @@ const __dirname = dirname(__filename);
 function getVersion(): string {
   try {
     const packagePath = resolve(__dirname, '../../package.json');
-    const packageJson = JSON.parse(readFileSync(packagePath, 'utf-8'));
-    return packageJson.version;
+    const packageJson = JSON.parse(readFileSync(packagePath, 'utf-8')) as {
+      version?: string;
+    };
+    return packageJson.version ?? '1.0.0';
   } catch {
     return '1.0.0';
   }
@@ -55,10 +75,10 @@ program
   .option('-c, --config <path>', 'Path to configuration file')
   .option('-w, --watch', 'Watch for file changes and regenerate')
   .option('-v, --verbose', 'Verbose output')
-  .action(async (content, options) => {
+  .action(async (content: string, options: GenerateCliOptions) => {
     try {
       // Parse formats
-      const formats = options.format.split(',').map((f: string) => f.trim()) as OutputFormat[];
+      const formats = options.format.split(',').map((f) => f.trim()) as OutputFormat[];
 
       const generateOptions = {
         content,
@@ -75,7 +95,7 @@ program
         console.log(chalk.gray('Press Ctrl+C to stop'));
         console.log('');
 
-        const filesToWatch = [content];
+        const filesToWatch: string[] = [content];
         if (options.schema) {
           filesToWatch.push(options.schema);
         }
@@ -90,7 +110,7 @@ program
 
         let isGenerating = false;
 
-        const generate = async () => {
+        const generate = async (): Promise<void> => {
           if (isGenerating) return;
           isGenerating = true;
 
@@ -108,11 +128,11 @@ program
 
         watcher.on('change', (path) => {
           console.log(chalk.gray(`File changed: ${path}`));
-          generate();
+          void generate();
         });
 
         watcher.on('ready', () => {
-          generate();
+          void generate();
         });
       } else {
         // Single generation
@@ -147,10 +167,10 @@ program
   .description('Validate a form schema YAML file')
   .argument('<schema>', 'Path to form schema YAML file')
   .option('-v, --verbose', 'Verbose output')
-  .action(async (schema, options) => {
+  .action(async (schema: string, options: ValidateCliOptions) => {
     try {
       const result = await executeValidate({ schema, verbose: options.verbose });
-      printValidateResult(result, options.verbose);
+      printValidateResult(result, options.verbose ?? false);
 
       if (!result.valid) {
         process.exit(1);
@@ -168,7 +188,7 @@ program
   .description('Preview form fields from a schema (dry run)')
   .argument('<schema>', 'Path to form schema YAML file')
   .option('-f, --format <format>', 'Output format (table, json, yaml)', 'table')
-  .action(async (schema, options) => {
+  .action(async (schema: string, options: PreviewCliOptions) => {
     try {
       const result = await executePreview({ schema, format: options.format });
 
@@ -198,7 +218,7 @@ program
   .command('init')
   .description('Initialize a new markdown-2pdf project')
   .argument('[directory]', 'Directory to initialize', '.')
-  .action(async (directory) => {
+  .action(async (directory: string) => {
     try {
       const { initProject } = await import('./init.js');
       await initProject(directory);

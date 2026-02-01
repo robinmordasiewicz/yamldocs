@@ -19,7 +19,6 @@ export {
 export {
   type ConditionalRule,
   type FieldVisibility,
-  type FieldValues,
   evaluateTrigger,
   evaluateConditionals,
   getConditionalFields,
@@ -34,6 +33,7 @@ export {
   type FieldValidation,
   type ValidationResult,
   type ValidationError,
+  type FieldValues,
   ValidationPatterns,
   validateField,
   validateAllFields,

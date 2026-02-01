@@ -31,16 +31,16 @@ describe('Page Flow', () => {
   });
 
   it('initializes with correct number of pages', async () => {
-    const ctx1 = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx1 = initializeLayout(doc, testConfig, 1, stylesheet);
     expect(ctx1.pages.length).toBe(1);
 
     const doc2 = await PDFDocument.create();
-    const ctx3 = await initializeLayout(doc2, testConfig, 3, stylesheet);
+    const ctx3 = initializeLayout(doc2, testConfig, 3, stylesheet);
     expect(ctx3.pages.length).toBe(3);
   });
 
   it('draws title and moves cursor', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
     const initialY = ctx.cursor.y;
 
     await drawTitle(ctx, 'Test Title');
@@ -49,7 +49,7 @@ describe('Page Flow', () => {
   });
 
   it('draws section heading and moves cursor', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
     const initialY = ctx.cursor.y;
 
     await drawSectionHeading(ctx, 'Section 1', 2);
@@ -58,7 +58,7 @@ describe('Page Flow', () => {
   });
 
   it('draws paragraph and moves cursor', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
     const initialY = ctx.cursor.y;
 
     await drawParagraph(ctx, 'This is a test paragraph with some content.');
@@ -67,7 +67,7 @@ describe('Page Flow', () => {
   });
 
   it('draws horizontal rule and moves cursor', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
     const initialY = ctx.cursor.y;
 
     drawHorizontalRule(ctx);
@@ -76,7 +76,7 @@ describe('Page Flow', () => {
   });
 
   it('handles long paragraph that spans multiple lines', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
     const initialY = ctx.cursor.y;
 
     const longText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(10);
@@ -87,18 +87,21 @@ describe('Page Flow', () => {
   });
 
   it('creates new page when content overflows', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     // Fill the page with content
     for (let i = 0; i < 50; i++) {
-      await drawParagraph(ctx, `Paragraph ${i}: This is test content that will eventually overflow to a new page.`);
+      await drawParagraph(
+        ctx,
+        `Paragraph ${i}: This is test content that will eventually overflow to a new page.`
+      );
     }
 
     expect(ctx.pages.length).toBeGreaterThan(1);
   });
 
   it('nextPage creates additional page if needed', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     nextPage(ctx);
 
@@ -107,7 +110,7 @@ describe('Page Flow', () => {
   });
 
   it('preserves page order when navigating', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 3, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 3, stylesheet);
 
     expect(ctx.currentPage).toBe(0);
 
@@ -124,14 +127,14 @@ describe('Page Flow', () => {
   });
 
   it('title can be centered', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     // Should not throw
     await expect(drawTitle(ctx, 'Centered Title', { centered: true })).resolves.not.toThrow();
   });
 
   it('section headings have different sizes based on level', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     // Should handle all heading levels without error
     await drawSectionHeading(ctx, 'H1 Heading', 1);
@@ -145,7 +148,7 @@ describe('Page Flow', () => {
   });
 
   it('generates valid PDF after all content operations', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     await drawTitle(ctx, 'Test Document');
     await drawSectionHeading(ctx, 'Introduction', 2);

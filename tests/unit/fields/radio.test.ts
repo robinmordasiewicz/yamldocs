@@ -4,7 +4,10 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
-import { createRadioGroup, drawRadioGroupLabels } from '../../../src/generators/pdf/fields/radio.js';
+import {
+  createRadioGroup,
+  drawRadioGroupLabels,
+} from '../../../src/generators/pdf/fields/radio.js';
 import { getDefaultStylesheet } from '../../../src/parsers/stylesheet.js';
 import type { NormalizedFormField } from '../../../src/types/schema.js';
 import type { ResolvedStylesheet } from '../../../src/types/stylesheet.js';
@@ -36,7 +39,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet);
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet);
 
     expect(radioGroup).toBeDefined();
     expect(radioGroup.getName()).toBe('test_radio');
@@ -52,7 +55,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet);
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet);
     const options = radioGroup.getOptions();
 
     expect(options).toHaveLength(3);
@@ -72,7 +75,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet);
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet);
 
     expect(radioGroup.getSelected()).toBe('option_b');
   });
@@ -87,7 +90,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet);
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet);
 
     expect(radioGroup.getSelected()).toBeUndefined();
   });
@@ -103,7 +106,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet);
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet);
 
     expect(radioGroup.isReadOnly()).toBe(true);
   });
@@ -118,7 +121,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet);
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet);
 
     radioGroup.select('option_a');
     expect(radioGroup.getSelected()).toBe('option_a');
@@ -137,7 +140,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    await createRadioGroup(doc, page, field, stylesheet);
+    createRadioGroup(doc, page, field, stylesheet);
     await expect(drawRadioGroupLabels(doc, page, field, stylesheet)).resolves.not.toThrow();
   });
 
@@ -151,7 +154,9 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet, { direction: 'horizontal' });
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet, {
+      direction: 'horizontal',
+    });
 
     expect(radioGroup).toBeDefined();
     expect(radioGroup.getOptions()).toHaveLength(3);
@@ -167,7 +172,9 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet, { direction: 'vertical' });
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet, {
+      direction: 'vertical',
+    });
 
     expect(radioGroup).toBeDefined();
     expect(radioGroup.getOptions()).toHaveLength(3);
@@ -183,7 +190,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    await createRadioGroup(doc, page, field, stylesheet);
+    createRadioGroup(doc, page, field, stylesheet);
     const pdfBytes = await doc.save();
 
     expect(pdfBytes).toBeInstanceOf(Uint8Array);
@@ -200,7 +207,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet);
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet);
 
     expect(radioGroup.getOptions()).toHaveLength(0);
   });
@@ -215,7 +222,7 @@ describe('Radio Button Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const radioGroup = await createRadioGroup(doc, page, field, stylesheet);
+    const radioGroup = createRadioGroup(doc, page, field, stylesheet);
 
     expect(radioGroup.getOptions()).toHaveLength(1);
   });

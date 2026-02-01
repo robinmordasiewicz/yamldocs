@@ -141,7 +141,13 @@ describe('Conditionals Feature', () => {
         },
       ];
       const values: FieldValues = { employment: 'contract', remote: true };
-      const allFields = ['employment', 'remote', 'contract_duration', 'salary', 'location_preference'];
+      const allFields = [
+        'employment',
+        'remote',
+        'contract_duration',
+        'salary',
+        'location_preference',
+      ];
 
       const visibility = evaluateConditionals(rules, values, allFields);
 

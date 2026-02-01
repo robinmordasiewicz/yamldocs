@@ -61,8 +61,8 @@ describe('Table Content Type', () => {
       const form = doc.getForm();
       const fields = form.getFields();
       expect(fields.length).toBe(2);
-      expect(fields.map(f => f.getName())).toContain('value_1');
-      expect(fields.map(f => f.getName())).toContain('value_2');
+      expect(fields.map((f) => f.getName())).toContain('value_1');
+      expect(fields.map((f) => f.getName())).toContain('value_2');
     });
 
     it('generates a table with dropdown cells', async () => {
@@ -78,9 +78,7 @@ describe('Table Content Type', () => {
             type: 'table',
             page: 1,
             position: { y: 700 },
-            columns: [
-              { label: 'Status', width: 150 },
-            ],
+            columns: [{ label: 'Status', width: 150 }],
             rows: [
               {
                 cells: [
@@ -178,8 +176,18 @@ describe('Table Content Type', () => {
               { label: 'Col2', width: 100 },
             ],
             rows: [
-              { cells: [{ type: 'label', value: 'A' }, { type: 'label', value: 'B' }] },
-              { cells: [{ type: 'label', value: 'C' }, { type: 'label', value: 'D' }] },
+              {
+                cells: [
+                  { type: 'label', value: 'A' },
+                  { type: 'label', value: 'B' },
+                ],
+              },
+              {
+                cells: [
+                  { type: 'label', value: 'C' },
+                  { type: 'label', value: 'D' },
+                ],
+              },
             ],
           } as TableContent,
         ],
@@ -190,7 +198,7 @@ describe('Table Content Type', () => {
 
       // Check that table was tracked
       expect(result.drawnElements).toBeDefined();
-      const tableElement = result.drawnElements?.find(el => el.type === 'table');
+      const tableElement = result.drawnElements?.find((el) => el.type === 'table');
       expect(tableElement).toBeDefined();
       expect(tableElement?.page).toBe(1);
       expect(tableElement?.bounds.width).toBe(200); // 100 + 100
@@ -212,12 +220,8 @@ describe('Table Content Type', () => {
             page: 1,
             position: { y: 700 },
             label: 'Test Table Description',
-            columns: [
-              { label: 'Column', width: 100 },
-            ],
-            rows: [
-              { cells: [{ type: 'label', value: 'Row 1' }] },
-            ],
+            columns: [{ label: 'Column', width: 100 }],
+            rows: [{ cells: [{ type: 'label', value: 'Row 1' }] }],
           } as TableContent,
         ],
         fields: [],
@@ -229,7 +233,7 @@ describe('Table Content Type', () => {
       expect(result.bytes.length).toBeGreaterThan(0);
 
       // Element should include label height
-      const tableElement = result.drawnElements?.find(el => el.type === 'table');
+      const tableElement = result.drawnElements?.find((el) => el.type === 'table');
       expect(tableElement).toBeDefined();
       // With label, total height > just header (24) + row (22) = 46
       expect(tableElement?.bounds.height).toBeGreaterThan(46);
@@ -249,19 +253,15 @@ describe('Table Content Type', () => {
             page: 1,
             position: { y: 700 },
             // No label property
-            columns: [
-              { label: 'Column', width: 100 },
-            ],
-            rows: [
-              { cells: [{ type: 'label', value: 'Row 1' }] },
-            ],
+            columns: [{ label: 'Column', width: 100 }],
+            rows: [{ cells: [{ type: 'label', value: 'Row 1' }] }],
           } as TableContent,
         ],
         fields: [],
       };
 
       const result = await generatePdf({ schema });
-      const tableElement = result.drawnElements?.find(el => el.type === 'table');
+      const tableElement = result.drawnElements?.find((el) => el.type === 'table');
 
       // Without label, height = header (24) + row (22) = 46
       expect(tableElement?.bounds.height).toBe(46);
@@ -284,9 +284,7 @@ describe('Table Content Type', () => {
             position: { y: 700 },
             rowHeight: 30,
             headerHeight: 35,
-            columns: [
-              { label: 'Column', width: 100 },
-            ],
+            columns: [{ label: 'Column', width: 100 }],
             rows: [
               { cells: [{ type: 'label', value: 'Row 1' }] },
               { cells: [{ type: 'label', value: 'Row 2' }] },
@@ -297,7 +295,7 @@ describe('Table Content Type', () => {
       };
 
       const result = await generatePdf({ schema });
-      const tableElement = result.drawnElements?.find(el => el.type === 'table');
+      const tableElement = result.drawnElements?.find((el) => el.type === 'table');
 
       // Total height = headerHeight (35) + 2 rows * rowHeight (30) = 95
       expect(tableElement?.bounds.height).toBe(95);
@@ -317,12 +315,8 @@ describe('Table Content Type', () => {
             page: 1,
             position: { y: 700 },
             showBorders: false,
-            columns: [
-              { label: 'Column', width: 100 },
-            ],
-            rows: [
-              { cells: [{ type: 'label', value: 'Row 1' }] },
-            ],
+            columns: [{ label: 'Column', width: 100 }],
+            rows: [{ cells: [{ type: 'label', value: 'Row 1' }] }],
           } as TableContent,
         ],
         fields: [],
@@ -362,7 +356,10 @@ describe('Table Content Type', () => {
                   {
                     type: 'dropdown',
                     fieldName: 'dropdown_field',
-                    options: [{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }],
+                    options: [
+                      { value: 'a', label: 'A' },
+                      { value: 'b', label: 'B' },
+                    ],
                   },
                   { type: 'checkbox', fieldName: 'check_field' },
                 ],

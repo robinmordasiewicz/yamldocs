@@ -3,35 +3,34 @@
  * Enables show/hide logic based on field values
  */
 
-import type { ParsedFormSchema, NormalizedFormField } from '../types/schema.js';
+import type { ParsedFormSchema } from '../types/schema.js';
+import type { FieldValues } from './validation.js';
 
 export interface ConditionalRule {
   trigger: {
     field: string;
     value: string | string[] | boolean;
-    operator?: 'equals' | 'notEquals' | 'contains' | 'greaterThan' | 'lessThan' | 'isEmpty' | 'isNotEmpty';
+    operator?:
+      | 'equals'
+      | 'notEquals'
+      | 'contains'
+      | 'greaterThan'
+      | 'lessThan'
+      | 'isEmpty'
+      | 'isNotEmpty';
   };
   show?: string[];
   hide?: string[];
 }
 
-export interface FieldVisibility {
-  [fieldName: string]: boolean;
-}
-
-export interface FieldValues {
-  [fieldName: string]: string | number | boolean | undefined;
-}
+export type FieldVisibility = Record<string, boolean>;
 
 /**
  * Evaluate a single trigger condition
  */
-export function evaluateTrigger(
-  trigger: ConditionalRule['trigger'],
-  values: FieldValues
-): boolean {
+export function evaluateTrigger(trigger: ConditionalRule['trigger'], values: FieldValues): boolean {
   const fieldValue = values[trigger.field];
-  const operator = trigger.operator || 'equals';
+  const operator = trigger.operator ?? 'equals';
 
   switch (operator) {
     case 'equals':
@@ -41,7 +40,7 @@ export function evaluateTrigger(
       if (typeof trigger.value === 'boolean') {
         return fieldValue === trigger.value;
       }
-      return String(fieldValue) === String(trigger.value);
+      return String(fieldValue) === trigger.value;
 
     case 'notEquals':
       if (Array.isArray(trigger.value)) {
@@ -50,7 +49,7 @@ export function evaluateTrigger(
       if (typeof trigger.value === 'boolean') {
         return fieldValue !== trigger.value;
       }
-      return String(fieldValue) !== String(trigger.value);
+      return String(fieldValue) !== trigger.value;
 
     case 'contains':
       if (typeof fieldValue !== 'string') return false;
@@ -59,21 +58,23 @@ export function evaluateTrigger(
       }
       return fieldValue.includes(String(trigger.value));
 
-    case 'greaterThan':
+    case 'greaterThan': {
       const gtNum = parseFloat(String(fieldValue));
       const gtThreshold = parseFloat(String(trigger.value));
       return !isNaN(gtNum) && !isNaN(gtThreshold) && gtNum > gtThreshold;
+    }
 
-    case 'lessThan':
+    case 'lessThan': {
       const ltNum = parseFloat(String(fieldValue));
       const ltThreshold = parseFloat(String(trigger.value));
       return !isNaN(ltNum) && !isNaN(ltThreshold) && ltNum < ltThreshold;
+    }
 
     case 'isEmpty':
-      return fieldValue === undefined || fieldValue === '' || fieldValue === null;
+      return fieldValue === undefined || fieldValue === '';
 
     case 'isNotEmpty':
-      return fieldValue !== undefined && fieldValue !== '' && fieldValue !== null;
+      return fieldValue !== undefined && fieldValue !== '';
 
     default:
       return false;
@@ -202,15 +203,11 @@ export function generateConditionalScript(rules: ConditionalRule[]): string {
   const ruleEvaluations = rules
     .map((rule, index) => {
       const conditionCode = generateConditionCode(rule.trigger);
-      const showCode = (rule.show || [])
-        .map((f) => `showField('${f}');`)
-        .join('\n        ');
-      const hideCode = (rule.hide || [])
-        .map((f) => `hideField('${f}');`)
-        .join('\n        ');
+      const showCode = (rule.show ?? []).map((f) => `showField('${f}');`).join('\n        ');
+      const hideCode = (rule.hide ?? []).map((f) => `hideField('${f}');`).join('\n        ');
 
       return `
-      // Rule ${index + 1}: ${rule.trigger.field} ${rule.trigger.operator || 'equals'} ${JSON.stringify(rule.trigger.value)}
+      // Rule ${index + 1}: ${rule.trigger.field} ${rule.trigger.operator ?? 'equals'} ${JSON.stringify(rule.trigger.value)}
       if (${conditionCode}) {
         ${showCode}
         ${hideCode}
@@ -269,7 +266,7 @@ export function generateConditionalScript(rules: ConditionalRule[]): string {
  */
 function generateConditionCode(trigger: ConditionalRule['trigger']): string {
   const fieldRef = `getFieldValue('${trigger.field}')`;
-  const operator = trigger.operator || 'equals';
+  const operator = trigger.operator ?? 'equals';
   const value = JSON.stringify(trigger.value);
 
   switch (operator) {

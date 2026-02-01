@@ -109,7 +109,7 @@ describe('Layout Validation', () => {
       const elements = fieldsToLayoutElements(fields);
       const violations = checkBoundaries(elements, pageSize, margins);
 
-      expect(violations.some(v => v.violation === 'left')).toBe(true);
+      expect(violations.some((v) => v.violation === 'left')).toBe(true);
     });
 
     it('detects right boundary violations', async () => {
@@ -122,7 +122,7 @@ describe('Layout Validation', () => {
       const elements = fieldsToLayoutElements(fields);
       const violations = checkBoundaries(elements, pageSize, margins);
 
-      expect(violations.some(v => v.violation === 'right')).toBe(true);
+      expect(violations.some((v) => v.violation === 'right')).toBe(true);
     });
 
     it('detects bottom boundary violations', async () => {
@@ -135,7 +135,7 @@ describe('Layout Validation', () => {
       const elements = fieldsToLayoutElements(fields);
       const violations = checkBoundaries(elements, pageSize, margins);
 
-      expect(violations.some(v => v.violation === 'bottom')).toBe(true);
+      expect(violations.some((v) => v.violation === 'bottom')).toBe(true);
     });
 
     it('detects top boundary violations', async () => {
@@ -148,7 +148,7 @@ describe('Layout Validation', () => {
       const elements = fieldsToLayoutElements(fields);
       const violations = checkBoundaries(elements, pageSize, margins);
 
-      expect(violations.some(v => v.violation === 'top')).toBe(true);
+      expect(violations.some((v) => v.violation === 'top')).toBe(true);
     });
   });
 
@@ -243,7 +243,7 @@ describe('Layout Validation', () => {
       expect(result.drawnElements).toBeDefined();
       expect(result.drawnElements!.length).toBeGreaterThan(0);
 
-      const titleElement = result.drawnElements!.find(e => e.type === 'title');
+      const titleElement = result.drawnElements!.find((e) => e.type === 'title');
       expect(titleElement).toBeDefined();
       expect(titleElement!.content).toBe('Test Form Title');
     });
@@ -255,16 +255,14 @@ describe('Layout Validation', () => {
 
       const markdown: ParsedMarkdown = {
         title: 'Form Title',
-        sections: [
-          { level: 2, title: 'Section', content: 'Content paragraph.' },
-        ],
+        sections: [{ level: 2, title: 'Section', content: 'Content paragraph.' }],
       };
 
       const result = await generatePdf({ schema, markdown });
       const fields = await getFormFields(result.bytes);
 
       const fieldElements = fieldsToLayoutElements(fields);
-      const textElements = drawnElementsToLayoutElements(result.drawnElements || []);
+      const textElements = drawnElementsToLayoutElements(result.drawnElements ?? []);
 
       const overlaps = detectTextFieldOverlaps(textElements, fieldElements);
       expect(overlaps.length).toBe(0);
@@ -287,9 +285,9 @@ describe('Layout Validation', () => {
       };
 
       const result = await generatePdf({ schema, markdown });
-      const textElements = drawnElementsToLayoutElements(result.drawnElements || []);
+      const textElements = drawnElementsToLayoutElements(result.drawnElements ?? []);
 
-      const headingElements = textElements.filter(e => e.type === 'heading');
+      const headingElements = textElements.filter((e) => e.type === 'heading');
       expect(headingElements.length).toBeGreaterThan(0);
       expect(textElements.length).toBeGreaterThan(0);
     });
@@ -302,20 +300,18 @@ describe('Layout Validation', () => {
 
       const markdown: ParsedMarkdown = {
         title: 'Test Title',
-        sections: [
-          { level: 2, title: 'Section', content: 'Some content here.' },
-        ],
+        sections: [{ level: 2, title: 'Section', content: 'Some content here.' }],
       };
 
       const result = await generatePdf({ schema, markdown });
 
       const fields = await getFormFields(result.bytes);
       const fieldElements = fieldsToLayoutElements(fields);
-      const textElements = drawnElementsToLayoutElements(result.drawnElements || []);
+      const textElements = drawnElementsToLayoutElements(result.drawnElements ?? []);
 
       // All text should be above all fields
-      const lowestTextY = Math.min(...textElements.map(e => e.bounds.y));
-      const highestFieldY = Math.max(...fieldElements.map(e => e.bounds.y + e.bounds.height));
+      const lowestTextY = Math.min(...textElements.map((e) => e.bounds.y));
+      const highestFieldY = Math.max(...fieldElements.map((e) => e.bounds.y + e.bounds.height));
 
       expect(highestFieldY).toBeLessThan(lowestTextY);
 
@@ -341,11 +337,11 @@ describe('Layout Validation', () => {
       };
 
       const result = await generatePdf({ schema, markdown });
-      const textElements = drawnElementsToLayoutElements(result.drawnElements || []);
+      const textElements = drawnElementsToLayoutElements(result.drawnElements ?? []);
 
-      expect(textElements.some(e => e.type === 'title')).toBe(true);
-      expect(textElements.some(e => e.type === 'heading')).toBe(true);
-      expect(textElements.some(e => e.type === 'paragraph')).toBe(true);
+      expect(textElements.some((e) => e.type === 'title')).toBe(true);
+      expect(textElements.some((e) => e.type === 'heading')).toBe(true);
+      expect(textElements.some((e) => e.type === 'paragraph')).toBe(true);
 
       for (const elem of textElements) {
         expect(elem.bounds.width).toBeGreaterThan(0);

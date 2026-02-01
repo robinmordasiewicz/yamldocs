@@ -14,37 +14,37 @@
    */
   --color-black: #000000;
   --color-white: #ffffff;
-  --color-gray: #666666;           /* 5.74:1 contrast on white */
-  --color-light-gray: #d1d1d1;     /* Decorative only */
-  --color-dark-gray: #333333;      /* 12.63:1 contrast on white */
-  --color-text: #333333;           /* Primary text - 12.63:1 contrast */
+  --color-gray: #666666; /* 5.74:1 contrast on white */
+  --color-light-gray: #d1d1d1; /* Decorative only */
+  --color-dark-gray: #333333; /* 12.63:1 contrast on white */
+  --color-text: #333333; /* Primary text - 12.63:1 contrast */
   --color-text-secondary: #555555; /* Secondary text - 7.46:1 contrast */
-  --color-border: #767676;         /* 4.54:1 contrast - meets AA */
-  --color-border-focus: #0066cc;   /* Focus indicator */
+  --color-border: #767676; /* 4.54:1 contrast - meets AA */
+  --color-border-focus: #0066cc; /* Focus indicator */
 
   /*
    * Admonition Colors - Optimized for readability
    * Background colors light enough for text contrast
    * Border colors meet 3:1 for non-text elements
    */
-  --warning-bg: #fef3cd;           /* Warm yellow */
-  --warning-border: #856404;       /* 4.71:1 on warning-bg */
-  --warning-text: #664d03;         /* 5.84:1 on warning-bg */
+  --warning-bg: #fef3cd; /* Warm yellow */
+  --warning-border: #856404; /* 4.71:1 on warning-bg */
+  --warning-text: #664d03; /* 5.84:1 on warning-bg */
 
-  --note-bg: #cce5ff;              /* Light blue */
-  --note-border: #004085;          /* 7.05:1 on note-bg */
+  --note-bg: #cce5ff; /* Light blue */
+  --note-border: #004085; /* 7.05:1 on note-bg */
   --note-text: #004085;
 
-  --info-bg: #d1ecf1;              /* Light cyan */
-  --info-border: #0c5460;          /* 6.49:1 on info-bg */
+  --info-bg: #d1ecf1; /* Light cyan */
+  --info-border: #0c5460; /* 6.49:1 on info-bg */
   --info-text: #0c5460;
 
-  --tip-bg: #d4edda;               /* Light green */
-  --tip-border: #155724;           /* 7.08:1 on tip-bg */
+  --tip-bg: #d4edda; /* Light green */
+  --tip-border: #155724; /* 7.08:1 on tip-bg */
   --tip-text: #155724;
 
-  --danger-bg: #f8d7da;            /* Light red */
-  --danger-border: #721c24;        /* 6.28:1 on danger-bg */
+  --danger-bg: #f8d7da; /* Light red */
+  --danger-border: #721c24; /* 6.28:1 on danger-bg */
   --danger-text: #721c24;
 
   /*
@@ -55,19 +55,19 @@
   --font-family: Helvetica;
   --font-family-bold: HelveticaBold;
   --font-family-mono: Courier;
-  --base-font-size: 12pt;          /* UK GDS minimum, ISO recommended */
-  --base-line-height: 1.5;         /* ISO 9241-115 recommendation */
+  --base-font-size: 12pt; /* UK GDS minimum, ISO recommended */
+  --base-line-height: 1.5; /* ISO 9241-115 recommendation */
 
   /*
    * Spacing System - Consistent rhythm
    * Based on 6pt base unit for mathematical harmony
    */
-  --spacing-xs: 3pt;               /* 0.5 units */
-  --spacing-sm: 6pt;               /* 1 unit - label gap */
-  --spacing-md: 12pt;              /* 2 units - paragraph spacing */
-  --spacing-lg: 18pt;              /* 3 units - field spacing */
-  --spacing-xl: 24pt;              /* 4 units - section spacing */
-  --spacing-xxl: 36pt;             /* 6 units - major sections */
+  --spacing-xs: 3pt; /* 0.5 units */
+  --spacing-sm: 6pt; /* 1 unit - label gap */
+  --spacing-md: 12pt; /* 2 units - paragraph spacing */
+  --spacing-lg: 18pt; /* 3 units - field spacing */
+  --spacing-xl: 24pt; /* 4 units - section spacing */
+  --spacing-xxl: 36pt; /* 6 units - major sections */
 }
 
 /* ========================================
@@ -75,8 +75,8 @@
    Per government form standards: 1" margins minimum
    ======================================== */
 @page {
-  size: letter;                    /* 612pt x 792pt (US standard) */
-  margin: 72pt;                    /* 1 inch all sides */
+  size: letter; /* 612pt x 792pt (US standard) */
+  margin: 72pt; /* 1 inch all sides */
 }
 
 .header {
@@ -95,7 +95,12 @@
    Headings - Clear Visual Hierarchy
    Size scale: 20pt -> 16pt -> 14pt -> 12pt -> 11pt -> 11pt
    ======================================== */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-family-bold);
   color: var(--color-black);
   margin-top: 0;
@@ -139,7 +144,7 @@ p {
   font-size: var(--base-font-size);
   color: var(--color-text);
   line-height: var(--base-line-height);
-  max-width: 468pt;                /* ~65 characters at 12pt */
+  max-width: 468pt; /* ~65 characters at 12pt */
   margin-bottom: var(--spacing-md);
 }
 

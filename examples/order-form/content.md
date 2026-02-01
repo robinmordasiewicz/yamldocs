@@ -24,4 +24,4 @@ By signing below, you agree to our terms and conditions and authorize this purch
 
 ---
 
-*All orders are processed within 1-2 business days. For questions, contact support@example.com*
+_All orders are processed within 1-2 business days. For questions, contact support@example.com_

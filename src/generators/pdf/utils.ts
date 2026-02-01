@@ -20,19 +20,10 @@ export function hexToRgb(hex: string): RGB {
 }
 
 /**
- * Convert RGB to hex string
- */
-export function rgbToHex(color: RGB): string {
-  const r = Math.round(color.red * 255).toString(16).padStart(2, '0');
-  const g = Math.round(color.green * 255).toString(16).padStart(2, '0');
-  const b = Math.round(color.blue * 255).toString(16).padStart(2, '0');
-  return `#${r}${g}${b}`;
-}
-
-/**
  * Calculate text width (approximate)
+ * Used internally by wrapText
  */
-export function estimateTextWidth(text: string, fontSize: number): number {
+function estimateTextWidth(text: string, fontSize: number): number {
   // Average character width is approximately 0.5 * fontSize for Helvetica
   return text.length * fontSize * 0.5;
 }
@@ -63,32 +54,3 @@ export function wrapText(text: string, maxWidth: number, fontSize: number): stri
 
   return lines;
 }
-
-/**
- * Convert points to inches
- */
-export function pointsToInches(points: number): number {
-  return points / 72;
-}
-
-/**
- * Convert inches to points
- */
-export function inchesToPoints(inches: number): number {
-  return inches * 72;
-}
-
-/**
- * Convert millimeters to points
- */
-export function mmToPoints(mm: number): number {
-  return mm * 2.83465;
-}
-
-/**
- * Convert points to millimeters
- */
-export function pointsToMm(points: number): number {
-  return points / 2.83465;
-}
-

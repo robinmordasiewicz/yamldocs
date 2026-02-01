@@ -6,7 +6,7 @@
 import { resolve } from 'path';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
-import type { PreviewOptions, NormalizedFormField } from '../../types/index.js';
+import type { PreviewOptions } from '../../types/index.js';
 import { parseSchema, SchemaValidationError } from '../../parsers/schema.js';
 
 export interface PreviewResult {
@@ -52,7 +52,7 @@ export async function executePreview(options: PreviewOptions): Promise<PreviewRe
       type: field.type,
       label: field.label,
       page: field.page,
-      required: field.required || false,
+      required: field.required ?? false,
       position: `(${field.position.x}, ${field.position.y})`,
       options: field.options?.map((opt) => opt.label),
     }));
@@ -62,7 +62,7 @@ export async function executePreview(options: PreviewOptions): Promise<PreviewRe
       schemaPath,
       formTitle: schema.form.title,
       formVersion: schema.form.version,
-      pageCount: schema.form.pages || 1,
+      pageCount: schema.form.pages ?? 1,
       fields,
     };
   } catch (err) {
@@ -90,17 +90,17 @@ export function printPreviewTable(result: PreviewResult): void {
   console.log('');
 
   if (!result.success) {
-    console.log(chalk.red('✗') + ` Preview failed: ${result.error}`);
+    console.log(`${chalk.red('✗')} Preview failed: ${result.error ?? 'Unknown error'}`);
     console.log('');
     return;
   }
 
   console.log(chalk.cyan('Form Preview'));
   console.log(chalk.gray('─'.repeat(60)));
-  console.log(`${chalk.gray('Title:')}    ${result.formTitle}`);
-  console.log(`${chalk.gray('Version:')}  ${result.formVersion || 'N/A'}`);
-  console.log(`${chalk.gray('Pages:')}    ${result.pageCount}`);
-  console.log(`${chalk.gray('Fields:')}   ${result.fields?.length || 0}`);
+  console.log(`${chalk.gray('Title:')}    ${result.formTitle ?? 'Untitled'}`);
+  console.log(`${chalk.gray('Version:')}  ${result.formVersion ?? 'N/A'}`);
+  console.log(`${chalk.gray('Pages:')}    ${String(result.pageCount ?? 0)}`);
+  console.log(`${chalk.gray('Fields:')}   ${result.fields?.length ?? 0}`);
   console.log('');
 
   if (result.fields && result.fields.length > 0) {
@@ -153,12 +153,12 @@ export function printPreviewYaml(result: PreviewResult): void {
 
   if (!result.success) {
     lines.push(`success: false`);
-    lines.push(`error: "${result.error}"`);
+    lines.push(`error: "${result.error ?? 'Unknown error'}"`);
   } else {
     lines.push(`success: true`);
-    lines.push(`formTitle: "${result.formTitle}"`);
-    lines.push(`formVersion: "${result.formVersion || 'N/A'}"`);
-    lines.push(`pageCount: ${result.pageCount}`);
+    lines.push(`formTitle: "${result.formTitle ?? 'Untitled'}"`);
+    lines.push(`formVersion: "${result.formVersion ?? 'N/A'}"`);
+    lines.push(`pageCount: ${String(result.pageCount ?? 0)}`);
     lines.push(`fields:`);
 
     for (const field of result.fields || []) {

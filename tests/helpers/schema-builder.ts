@@ -46,8 +46,8 @@ export interface RadioOption {
 export class SchemaBuilder {
   private formId: string;
   private title: string;
-  private version: string = '1.0.0';
-  private pageCount: number = 1;
+  private version = '1.0.0';
+  private pageCount = 1;
   private fields: NormalizedFormField[] = [];
 
   constructor(formId: string, title: string) {
@@ -74,11 +74,7 @@ export class SchemaBuilder {
   /**
    * Add a text field
    */
-  addTextField(
-    name: string,
-    position: Position,
-    options: TextFieldOptions = {}
-  ): this {
+  addTextField(name: string, position: Position, options: TextFieldOptions = {}): this {
     this.fields.push({
       name,
       type: 'text',
@@ -137,7 +133,7 @@ export class SchemaBuilder {
     options: RadioOption[],
     settings: { required?: boolean; default?: string; readOnly?: boolean; label?: string } = {}
   ): this {
-    const normalizedOptions: NormalizedFieldOption[] = options.map(opt => ({
+    const normalizedOptions: NormalizedFieldOption[] = options.map((opt) => ({
       value: opt.value,
       label: opt.label,
     }));
@@ -170,7 +166,7 @@ export class SchemaBuilder {
     options: string[],
     settings: { required?: boolean; default?: string; readOnly?: boolean; label?: string } = {}
   ): this {
-    const normalizedOptions: NormalizedFieldOption[] = options.map(opt => ({
+    const normalizedOptions: NormalizedFieldOption[] = options.map((opt) => ({
       value: opt,
       label: opt,
     }));
@@ -197,11 +193,7 @@ export class SchemaBuilder {
   /**
    * Add a textarea field
    */
-  addTextarea(
-    name: string,
-    position: Position,
-    options: TextareaOptions = {}
-  ): this {
+  addTextarea(name: string, position: Position, options: TextareaOptions = {}): this {
     this.fields.push({
       name,
       type: 'textarea',
@@ -263,14 +255,14 @@ export class SchemaBuilder {
    * Get a field by name (for modification)
    */
   getField(name: string): NormalizedFormField | undefined {
-    return this.fields.find(f => f.name === name);
+    return this.fields.find((f) => f.name === name);
   }
 
   /**
    * Remove a field by name
    */
   removeField(name: string): this {
-    this.fields = this.fields.filter(f => f.name !== name);
+    this.fields = this.fields.filter((f) => f.name !== name);
     return this;
   }
 
@@ -302,11 +294,9 @@ export class SchemaBuilder {
         version: this.version,
         pages: this.pageCount,
       },
-      fields: this.fields.map(f => ({
+      fields: this.fields.map((f) => ({
         ...f,
-        options: f.options?.map(opt =>
-          typeof opt === 'string' ? opt : opt.label
-        ),
+        options: f.options?.map((opt) => (typeof opt === 'string' ? opt : opt.label)),
       })),
     };
 
@@ -333,7 +323,11 @@ export class SchemaBuilder {
  */
 export function createSimpleTestSchema(): ParsedFormSchema {
   return new SchemaBuilder('test-form', 'Test Form')
-    .addTextField('name', { x: 72, y: -30, width: 200, height: 24 }, { label: 'Name', required: true })
+    .addTextField(
+      'name',
+      { x: 72, y: -30, width: 200, height: 24 },
+      { label: 'Name', required: true }
+    )
     .addTextField('email', { x: 72, y: -80, width: 200, height: 24 }, { label: 'Email' })
     .addCheckbox('agree', { x: 72, y: -130 }, 'I agree to terms')
     .build();
@@ -345,9 +339,8 @@ export function createSimpleTestSchema(): ParsedFormSchema {
  * NOTE: Page 1 fields use RELATIVE y positions (offsets from content baseline).
  * Page 2+ fields use ABSOLUTE y positions (no adjustment applied).
  */
-export function createMultiPageTestSchema(pageCount: number = 2): ParsedFormSchema {
-  const builder = new SchemaBuilder('multi-page-form', 'Multi-Page Form')
-    .setPages(pageCount);
+export function createMultiPageTestSchema(pageCount = 2): ParsedFormSchema {
+  const builder = new SchemaBuilder('multi-page-form', 'Multi-Page Form').setPages(pageCount);
 
   for (let page = 1; page <= pageCount; page++) {
     // Page 1: relative positions (negative offsets from content baseline)
@@ -356,9 +349,17 @@ export function createMultiPageTestSchema(pageCount: number = 2): ParsedFormSche
     const y2 = page === 1 ? -80 : 650;
 
     builder
-      .addTextField(`page${page}_field1`, { x: 72, y: y1, width: 200, height: 24 }, { label: `Page ${page} Field 1` })
+      .addTextField(
+        `page${page}_field1`,
+        { x: 72, y: y1, width: 200, height: 24 },
+        { label: `Page ${page} Field 1` }
+      )
       .onPage(page)
-      .addTextField(`page${page}_field2`, { x: 72, y: y2, width: 200, height: 24 }, { label: `Page ${page} Field 2` })
+      .addTextField(
+        `page${page}_field2`,
+        { x: 72, y: y2, width: 200, height: 24 },
+        { label: `Page ${page} Field 2` }
+      )
       .onPage(page);
   }
 
@@ -375,13 +376,28 @@ export function createAllFieldTypesSchema(): ParsedFormSchema {
   return new SchemaBuilder('all-fields-form', 'All Field Types Form')
     .addTextField('text_field', { x: 72, y: -30, width: 200, height: 24 }, { label: 'Text Field' })
     .addCheckbox('checkbox_field', { x: 72, y: -80 }, 'Checkbox Field')
-    .addRadioGroup('radio_field', { x: 72, y: -130 }, [
-      { value: 'option1', label: 'Option 1' },
-      { value: 'option2', label: 'Option 2' },
-      { value: 'option3', label: 'Option 3' },
-    ], { label: 'Radio Field' })
-    .addDropdown('dropdown_field', { x: 72, y: -230 }, ['Choice A', 'Choice B', 'Choice C'], { label: 'Dropdown Field' })
-    .addTextarea('textarea_field', { x: 72, y: -280, width: 400, height: 100 }, { label: 'Textarea Field' })
-    .addSignature('signature_field', { x: 72, y: -430, width: 200, height: 50 }, { label: 'Signature Field' })
+    .addRadioGroup(
+      'radio_field',
+      { x: 72, y: -130 },
+      [
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        { value: 'option3', label: 'Option 3' },
+      ],
+      { label: 'Radio Field' }
+    )
+    .addDropdown('dropdown_field', { x: 72, y: -230 }, ['Choice A', 'Choice B', 'Choice C'], {
+      label: 'Dropdown Field',
+    })
+    .addTextarea(
+      'textarea_field',
+      { x: 72, y: -280, width: 400, height: 100 },
+      { label: 'Textarea Field' }
+    )
+    .addSignature(
+      'signature_field',
+      { x: 72, y: -430, width: 200, height: 50 },
+      { label: 'Signature Field' }
+    )
     .build();
 }

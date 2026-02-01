@@ -23,10 +23,12 @@ const CONFIG_FILENAMES = [
 /**
  * Find configuration file in directory hierarchy
  */
-async function findConfigFile(startDir: string): Promise<string | null> {
+function findConfigFile(startDir: string): string | null {
   let currentDir = resolve(startDir);
 
-  while (true) {
+  // Traverse up the directory tree looking for config files
+  for (let i = 0; i < 100; i++) {
+    // Safety limit to prevent infinite loops
     for (const filename of CONFIG_FILENAMES) {
       const configPath = resolve(currentDir, filename);
       if (existsSync(configPath)) {
@@ -105,7 +107,7 @@ export async function loadConfig(
   let config: Config = { ...DEFAULTS };
 
   // Find and load config file
-  const configPath = options.config ? resolve(options.config) : await findConfigFile(cwd);
+  const configPath = options.config ? resolve(options.config) : findConfigFile(cwd);
 
   if (configPath && existsSync(configPath)) {
     const fileConfig = await loadConfigFile(configPath);
@@ -159,11 +161,9 @@ export function generateOutputFilename(
   format: string,
   version?: string
 ): string {
-  return (
-    template
-      .replace('{name}', name)
-      .replace('{format}', format)
-      .replace('{version}', version || '1.0.0')
-      .replace('{date}', new Date().toISOString().split('T')[0]) + `.${format}`
-  );
+  return `${template
+    .replace('{name}', name)
+    .replace('{format}', format)
+    .replace('{version}', version ?? '1.0.0')
+    .replace('{date}', new Date().toISOString().split('T')[0])}.${format}`;
 }

@@ -6,17 +6,24 @@
 export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'textarea' | 'signature';
 
 // Content element types for schema-driven PDF generation
-export type ContentType = 'heading' | 'paragraph' | 'rule' | 'admonition' | 'spacer' | 'table' | 'field';
+export type ContentType =
+  | 'heading'
+  | 'paragraph'
+  | 'rule'
+  | 'admonition'
+  | 'spacer'
+  | 'table'
+  | 'field';
 
 export interface ContentPosition {
   x?: number;
-  y?: number;  // Optional in flow mode
+  y?: number; // Optional in flow mode
 }
 
 export interface BaseContentElement {
   type: ContentType;
-  page?: number;  // Optional in flow mode - content flows automatically
-  position?: ContentPosition;  // Optional in flow mode
+  page?: number; // Optional in flow mode - content flows automatically
+  position?: ContentPosition; // Optional in flow mode
 }
 
 export interface HeadingContent extends BaseContentElement {
@@ -51,53 +58,53 @@ export interface SpacerContent extends BaseContentElement {
 // Table content types
 export interface TableColumn {
   label: string;
-  width: number;  // Width in points
-  cellType?: 'text' | 'dropdown' | 'checkbox' | 'label';  // Default cell type for column
-  fieldSuffix?: string;  // Suffix for auto-generated field names
-  options?: FieldOption[];  // Column-level options for dropdown cells
+  width: number; // Width in points
+  cellType?: 'text' | 'dropdown' | 'checkbox' | 'label'; // Default cell type for column
+  fieldSuffix?: string; // Suffix for auto-generated field names
+  options?: FieldOption[]; // Column-level options for dropdown cells
 }
 
 export interface TableCellLabel {
-  type: 'label';  // Static text (non-editable)
+  type: 'label'; // Static text (non-editable)
   value: string;
 }
 
 export interface TableCellField {
   type: 'text' | 'dropdown' | 'checkbox';
   fieldName: string;
-  options?: FieldOption[];  // For dropdown
+  options?: FieldOption[]; // For dropdown
   default?: string | boolean;
 }
 
 export type TableCell = TableCellLabel | TableCellField;
 
 export interface TableRow {
-  cells?: TableCell[];  // Full cell definitions (optional if using values)
-  values?: (string | boolean)[];  // Compact format: labels/fieldNames
+  cells?: TableCell[]; // Full cell definitions (optional if using values)
+  values?: (string | boolean)[]; // Compact format: labels/fieldNames
 }
 
 export interface TableContent extends BaseContentElement {
   type: 'table';
-  label?: string;          // Optional label/description above the table
+  label?: string; // Optional label/description above the table
   columns: TableColumn[];
-  fieldPrefix?: string;    // Base for auto-generated field names
-  rowCount?: number;       // Generate N identical rows using column definitions
-  rows?: TableRow[];       // Explicit rows (optional if rowCount used)
-  rowHeight?: number;      // Default: 22pt
-  headerHeight?: number;   // Default: 24pt
-  showBorders?: boolean;   // Default: true
+  fieldPrefix?: string; // Base for auto-generated field names
+  rowCount?: number; // Generate N identical rows using column definitions
+  rows?: TableRow[]; // Explicit rows (optional if rowCount used)
+  rowHeight?: number; // Default: 22pt
+  headerHeight?: number; // Default: 24pt
+  showBorders?: boolean; // Default: true
 }
 
 // Standalone field content type for flow mode
 export interface FieldContent extends BaseContentElement {
   type: 'field';
-  label: string;           // Label displayed above or beside the field
-  labelPosition?: 'above' | 'left';  // Label position (default: above)
-  labelWidth?: number;     // Label width when position is 'left' (default: 120)
+  label: string; // Label displayed above or beside the field
+  labelPosition?: 'above' | 'left'; // Label position (default: above)
+  labelWidth?: number; // Label width when position is 'left' (default: 120)
   fieldType: 'text' | 'dropdown' | 'checkbox' | 'textarea';
-  fieldName: string;       // Unique field identifier
-  width?: number;          // Field width in points (default: full width)
-  height?: number;         // Field height in points (for textarea, default: 60)
+  fieldName: string; // Unique field identifier
+  width?: number; // Field width in points (default: full width)
+  height?: number; // Field height in points (for textarea, default: 60)
   options?: FieldOption[]; // For dropdown fields
   default?: string | boolean;
   placeholder?: string;

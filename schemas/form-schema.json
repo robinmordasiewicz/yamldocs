@@ -329,10 +329,7 @@
                 "description": "Options for dropdown fields"
               },
               "default": {
-                "oneOf": [
-                  { "type": "string" },
-                  { "type": "boolean" }
-                ],
+                "oneOf": [{ "type": "string" }, { "type": "boolean" }],
                 "description": "Default value for the field"
               },
               "placeholder": {
@@ -441,10 +438,7 @@
               "description": "Options for dropdown cells"
             },
             "default": {
-              "oneOf": [
-                { "type": "string" },
-                { "type": "boolean" }
-              ],
+              "oneOf": [{ "type": "string" }, { "type": "boolean" }],
               "description": "Default value for the cell field"
             }
           }
@@ -464,18 +458,12 @@
         "values": {
           "type": "array",
           "items": {
-            "oneOf": [
-              { "type": "string" },
-              { "type": "boolean" }
-            ]
+            "oneOf": [{ "type": "string" }, { "type": "boolean" }]
           },
           "description": "Compact format: array of label values or fieldNames (type inferred from column cellType)"
         }
       },
-      "anyOf": [
-        { "required": ["cells"] },
-        { "required": ["values"] }
-      ]
+      "anyOf": [{ "required": ["cells"] }, { "required": ["values"] }]
     },
     "fieldOption": {
       "oneOf": [
@@ -568,11 +556,7 @@
           "description": "Options for radio, dropdown fields"
         },
         "default": {
-          "oneOf": [
-            { "type": "string" },
-            { "type": "boolean" },
-            { "type": "number" }
-          ]
+          "oneOf": [{ "type": "string" }, { "type": "boolean" }, { "type": "number" }]
         },
         "validation": {
           "$ref": "#/definitions/validation"
@@ -653,11 +637,7 @@
               "type": "string"
             },
             "value": {
-              "oneOf": [
-                { "type": "string" },
-                { "type": "boolean" },
-                { "type": "number" }
-              ]
+              "oneOf": [{ "type": "string" }, { "type": "boolean" }, { "type": "number" }]
             },
             "operator": {
               "type": "string",

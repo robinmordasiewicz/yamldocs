@@ -45,7 +45,7 @@ describe('AcroForm Validation', () => {
 
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
-    const dropdown = fields.find(f => f.name === 'fruit');
+    const dropdown = fields.find((f) => f.name === 'fruit');
 
     expect(dropdown?.options).toEqual(options);
   });
@@ -61,7 +61,7 @@ describe('AcroForm Validation', () => {
 
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
-    const radio = fields.find(f => f.name === 'choice');
+    const radio = fields.find((f) => f.name === 'choice');
 
     expect(radio?.options).toContain('a');
     expect(radio?.options).toContain('b');
@@ -85,9 +85,9 @@ describe('AcroForm Validation', () => {
 
     const fields = await getFormFields(filled);
 
-    expect(fields.find(f => f.name === 'name')?.value).toBe('John Doe');
-    expect(fields.find(f => f.name === 'email')?.value).toBe('john@example.com');
-    expect(fields.find(f => f.name === 'phone')?.value).toBe('555-1234');
+    expect(fields.find((f) => f.name === 'name')?.value).toBe('John Doe');
+    expect(fields.find((f) => f.name === 'email')?.value).toBe('john@example.com');
+    expect(fields.find((f) => f.name === 'phone')?.value).toBe('555-1234');
   });
 
   it('checkbox fields can be checked', async () => {
@@ -102,7 +102,7 @@ describe('AcroForm Validation', () => {
     });
 
     const fields = await getFormFields(filled);
-    expect(fields.find(f => f.name === 'agree')?.value).toBe(true);
+    expect(fields.find((f) => f.name === 'agree')?.value).toBe(true);
   });
 
   it('checkbox fields can be unchecked', async () => {
@@ -117,7 +117,7 @@ describe('AcroForm Validation', () => {
     });
 
     const fields = await getFormFields(filled);
-    expect(fields.find(f => f.name === 'agree')?.value).toBe(false);
+    expect(fields.find((f) => f.name === 'agree')?.value).toBe(false);
   });
 
   it('dropdown selection can be changed', async () => {
@@ -132,7 +132,7 @@ describe('AcroForm Validation', () => {
     });
 
     const fields = await getFormFields(filled);
-    expect(fields.find(f => f.name === 'color')?.value).toBe('Green');
+    expect(fields.find((f) => f.name === 'color')?.value).toBe('Green');
   });
 
   it('radio selection can be changed', async () => {
@@ -151,7 +151,7 @@ describe('AcroForm Validation', () => {
     });
 
     const fields = await getFormFields(filled);
-    expect(fields.find(f => f.name === 'size')?.value).toBe('medium');
+    expect(fields.find((f) => f.name === 'size')?.value).toBe('medium');
   });
 
   it('verifies all expected fields exist', async () => {
@@ -174,7 +174,11 @@ describe('AcroForm Validation', () => {
       .build();
 
     const result = await generatePdf({ schema });
-    const verification = await verifyFieldsExist(result.bytes, ['existing', 'nonexistent', 'also_missing']);
+    const verification = await verifyFieldsExist(result.bytes, [
+      'existing',
+      'nonexistent',
+      'also_missing',
+    ]);
 
     expect(verification.found).toContain('existing');
     expect(verification.missing).toContain('nonexistent');
@@ -188,7 +192,7 @@ describe('AcroForm Validation', () => {
 
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
-    const limitedField = fields.find(f => f.name === 'limited');
+    const limitedField = fields.find((f) => f.name === 'limited');
 
     expect(limitedField?.maxLength).toBe(10);
   });
@@ -200,7 +204,7 @@ describe('AcroForm Validation', () => {
 
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
-    const textarea = fields.find(f => f.name === 'comments');
+    const textarea = fields.find((f) => f.name === 'comments');
 
     expect(textarea?.multiline).toBe(true);
   });
@@ -219,6 +223,6 @@ describe('AcroForm Validation', () => {
 
     // Reload and verify
     const reloadedFields = await getFormFields(filled);
-    expect(reloadedFields.find(f => f.name === 'name')?.value).toBe('Test User');
+    expect(reloadedFields.find((f) => f.name === 'name')?.value).toBe('Test User');
   });
 });

@@ -3,11 +3,7 @@
  * Handles page setup, content positioning, and layout calculations
  */
 
-import {
-  PDFDocument,
-  PDFPage,
-  StandardFonts,
-} from 'pdf-lib';
+import { PDFDocument, PDFPage, StandardFonts } from 'pdf-lib';
 import type { PdfConfig } from '../../types/index.js';
 import type { ResolvedStylesheet, FontFamily } from '../../types/stylesheet.js';
 import { PAGE_SIZES } from '../../types/index.js';
@@ -49,20 +45,22 @@ export interface LayoutContext {
 /**
  * Map FontFamily type to StandardFonts enum value
  */
-export function getFontName(fontFamily: FontFamily): typeof StandardFonts[keyof typeof StandardFonts] {
-  const fontMap: Record<FontFamily, typeof StandardFonts[keyof typeof StandardFonts]> = {
-    'Helvetica': StandardFonts.Helvetica,
-    'HelveticaBold': StandardFonts.HelveticaBold,
-    'HelveticaOblique': StandardFonts.HelveticaOblique,
-    'HelveticaBoldOblique': StandardFonts.HelveticaBoldOblique,
-    'Courier': StandardFonts.Courier,
-    'CourierBold': StandardFonts.CourierBold,
-    'CourierOblique': StandardFonts.CourierOblique,
-    'CourierBoldOblique': StandardFonts.CourierBoldOblique,
-    'TimesRoman': StandardFonts.TimesRoman,
-    'TimesRomanBold': StandardFonts.TimesRomanBold,
-    'TimesRomanItalic': StandardFonts.TimesRomanItalic,
-    'TimesRomanBoldItalic': StandardFonts.TimesRomanBoldItalic,
+export function getFontName(
+  fontFamily: FontFamily
+): (typeof StandardFonts)[keyof typeof StandardFonts] {
+  const fontMap: Record<FontFamily, (typeof StandardFonts)[keyof typeof StandardFonts]> = {
+    Helvetica: StandardFonts.Helvetica,
+    HelveticaBold: StandardFonts.HelveticaBold,
+    HelveticaOblique: StandardFonts.HelveticaOblique,
+    HelveticaBoldOblique: StandardFonts.HelveticaBoldOblique,
+    Courier: StandardFonts.Courier,
+    CourierBold: StandardFonts.CourierBold,
+    CourierOblique: StandardFonts.CourierOblique,
+    CourierBoldOblique: StandardFonts.CourierBoldOblique,
+    TimesRoman: StandardFonts.TimesRoman,
+    TimesRomanBold: StandardFonts.TimesRomanBold,
+    TimesRomanItalic: StandardFonts.TimesRomanItalic,
+    TimesRomanBoldItalic: StandardFonts.TimesRomanBoldItalic,
   };
   return fontMap[fontFamily];
 }
@@ -70,14 +68,13 @@ export function getFontName(fontFamily: FontFamily): typeof StandardFonts[keyof 
 /**
  * Initialize layout context
  */
-export async function initializeLayout(
+export function initializeLayout(
   doc: PDFDocument,
   config: Required<PdfConfig>,
-  pageCount: number = 1,
+  pageCount = 1,
   stylesheet: ResolvedStylesheet
-): Promise<LayoutContext> {
-  // Use stylesheet page settings, falling back to config for backwards compat during transition
-  const pageSize = PAGE_SIZES[stylesheet.page.size] || PAGE_SIZES[config.pageSize];
+): LayoutContext {
+  const pageSize = PAGE_SIZES[stylesheet.page.size];
   const margins = stylesheet.page.margins;
 
   // Create initial pages
@@ -195,10 +192,7 @@ export async function drawHeader(
 /**
  * Draw page footer
  */
-export async function drawFooter(
-  ctx: LayoutContext,
-  text: string
-): Promise<void> {
+export async function drawFooter(ctx: LayoutContext, text: string): Promise<void> {
   const style = ctx.stylesheet.footer;
   const font = await ctx.doc.embedFont(getFontName(style.fontFamily));
   const fontSize = style.fontSize;
@@ -271,7 +265,7 @@ export async function drawTitle(
 export async function drawSectionHeading(
   ctx: LayoutContext,
   text: string,
-  level: number = 2
+  level = 2
 ): Promise<void> {
   // Clamp level to 1-6
   const headingLevel = Math.max(1, Math.min(6, level)) as 1 | 2 | 3 | 4 | 5 | 6;
@@ -314,10 +308,7 @@ export async function drawSectionHeading(
 /**
  * Draw paragraph text
  */
-export async function drawParagraph(
-  ctx: LayoutContext,
-  text: string
-): Promise<void> {
+export async function drawParagraph(ctx: LayoutContext, text: string): Promise<void> {
   const style = ctx.stylesheet.paragraph;
   const font = await ctx.doc.embedFont(getFontName(style.fontFamily));
   const fontSize = style.fontSize;
@@ -401,10 +392,7 @@ export function drawHorizontalRule(ctx: LayoutContext): void {
 /**
  * Draw an admonition box (warning, note, info, tip, danger)
  */
-export async function drawAdmonition(
-  ctx: LayoutContext,
-  admonition: Admonition
-): Promise<void> {
+export async function drawAdmonition(ctx: LayoutContext, admonition: Admonition): Promise<void> {
   const page = getCurrentPage(ctx);
 
   // Get style for this admonition type
@@ -435,7 +423,8 @@ export async function drawAdmonition(
     fontSize
   );
   const contentHeight = contentLines.length * (fontSize * style.contentLineHeight);
-  const totalHeight = verticalPadding + titleFontSize + titleContentGap + contentHeight + verticalPadding;
+  const totalHeight =
+    verticalPadding + titleFontSize + titleContentGap + contentHeight + verticalPadding;
 
   // Check for page break
   if (ctx.cursor.y - totalHeight < ctx.stylesheet.page.margins.bottom) {
@@ -511,19 +500,6 @@ export async function drawAdmonition(
 }
 
 /**
- * Check if text contains an admonition start
- */
-function findAdmonitionInContent(content: string, admonitions: Admonition[]): Admonition | undefined {
-  for (const adm of admonitions) {
-    // Check if this content references the admonition
-    if (content.includes(`!!! ${adm.type}`) || content.includes(adm.title)) {
-      return adm;
-    }
-  }
-  return undefined;
-}
-
-/**
  * Draw markdown content to PDF with admonition support
  */
 export async function drawMarkdownContent(
@@ -554,13 +530,15 @@ export async function drawMarkdownContent(
       const trimmedParagraph = paragraph.trim();
 
       // Check for horizontal rule
-      if (trimmedParagraph === '---' || trimmedParagraph.match(/^-{3,}$/)) {
+      if (trimmedParagraph === '---' || /^-{3,}$/.exec(trimmedParagraph)) {
         drawHorizontalRule(ctx);
         continue;
       }
 
       // Check if this paragraph starts an admonition
-      const admonitionMatch = trimmedParagraph.match(/^!!!\s+(warning|note|info|tip|danger)\s+"([^"]+)"/);
+      const admonitionMatch = /^!!!\s+(warning|note|info|tip|danger)\s+"([^"]+)"/.exec(
+        trimmedParagraph
+      );
       if (admonitionMatch) {
         const admTitle = admonitionMatch[2];
         const admonition = admonitionMap.get(admTitle);

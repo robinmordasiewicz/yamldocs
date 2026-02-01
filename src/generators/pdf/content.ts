@@ -3,7 +3,7 @@
  * Renders content elements (headings, paragraphs, admonitions, rules) using flow positioning
  */
 
-import { PDFDocument, PDFPage, StandardFonts, rgb } from 'pdf-lib';
+import { PDFDocument, PDFPage } from 'pdf-lib';
 import type {
   SchemaContentElement,
   HeadingContent,
@@ -15,10 +15,9 @@ import type {
   TableCell,
   TableRow,
   TableColumn,
-  NormalizedFieldOption,
   FieldContent,
-  FieldOption,
 } from '../../types/index.js';
+import { normalizeFieldOptions } from '../../parsers/schema.js';
 import { wrapText, hexToRgb } from './utils.js';
 import type { LayoutContext } from './layout.js';
 import { getFontName, moveCursorDown, nextPage, getCurrentPage } from './layout.js';
@@ -82,14 +81,14 @@ export async function drawSchemaContent(
 function estimateElementHeight(ctx: LayoutContext, element: SchemaContentElement): number {
   switch (element.type) {
     case 'heading': {
-      const headingEl = element as HeadingContent;
+      const headingEl = element;
       const level = Math.max(1, Math.min(6, headingEl.level)) as 1 | 2 | 3 | 4 | 5 | 6;
       const style = ctx.stylesheet.headings[level];
       return style.fontSize + FLOW_SPACING.heading.marginTop + FLOW_SPACING.heading.marginBottom;
     }
 
     case 'paragraph': {
-      const paragraphEl = element as ParagraphContent;
+      const paragraphEl = element;
       const style = ctx.stylesheet.paragraph;
       const fontSize = paragraphEl.fontSize || style.fontSize;
       const lineHeight = fontSize * (style.lineHeight || 1.5);
@@ -99,8 +98,9 @@ function estimateElementHeight(ctx: LayoutContext, element: SchemaContentElement
     }
 
     case 'admonition': {
-      const admonitionEl = element as AdmonitionContent;
-      const style = ctx.stylesheet.admonitions[admonitionEl.variant] || ctx.stylesheet.admonitions.note;
+      const admonitionEl = element;
+      const style =
+        ctx.stylesheet.admonitions[admonitionEl.variant] || ctx.stylesheet.admonitions.note;
       const titleContentGap = 10; // Match drawAdmonitionContent
       const minPadding = 4; // Match drawAdmonitionContent
       const contentLines = wrapText(
@@ -110,12 +110,17 @@ function estimateElementHeight(ctx: LayoutContext, element: SchemaContentElement
       );
       // Content height: all lines with spacing, minus trailing space after last line
       const lineHeight = style.contentFontSize * style.contentLineHeight;
-      const contentHeight = contentLines.length > 0
-        ? (contentLines.length - 1) * lineHeight + style.contentFontSize
-        : 0;
+      const contentHeight =
+        contentLines.length > 0
+          ? (contentLines.length - 1) * lineHeight + style.contentFontSize
+          : 0;
       const textBlockHeight = style.titleFontSize + titleContentGap + contentHeight;
-      return textBlockHeight + minPadding * 2 +
-        FLOW_SPACING.admonition.marginTop + FLOW_SPACING.admonition.marginBottom;
+      return (
+        textBlockHeight +
+        minPadding * 2 +
+        FLOW_SPACING.admonition.marginTop +
+        FLOW_SPACING.admonition.marginBottom
+      );
     }
 
     case 'rule': {
@@ -124,12 +129,12 @@ function estimateElementHeight(ctx: LayoutContext, element: SchemaContentElement
     }
 
     case 'spacer': {
-      const spacerEl = element as SpacerContent;
+      const spacerEl = element;
       return spacerEl.height;
     }
 
     case 'table': {
-      const tableEl = element as TableContent;
+      const tableEl = element;
       const expandedEl = expandTableDefinition(tableEl);
       const style = ctx.stylesheet.table;
       const rowHeight = expandedEl.rowHeight ?? style.rowHeight;
@@ -139,16 +144,23 @@ function estimateElementHeight(ctx: LayoutContext, element: SchemaContentElement
         labelHeight = ctx.stylesheet.fields.label.fontSize - 4;
       }
       const rowCount = expandedEl.rows?.length ?? 0;
-      return headerHeight + rowCount * rowHeight + labelHeight +
-        FLOW_SPACING.table.marginTop + FLOW_SPACING.table.marginBottom;
+      return (
+        headerHeight +
+        rowCount * rowHeight +
+        labelHeight +
+        FLOW_SPACING.table.marginTop +
+        FLOW_SPACING.table.marginBottom
+      );
     }
 
     case 'field': {
-      const fieldEl = element as FieldContent;
+      const fieldEl = element;
       const labelHeight = ctx.stylesheet.fields.label.fontSize + 4;
       const defaultHeight = fieldEl.fieldType === 'textarea' ? 60 : 22;
       const fieldHeight = fieldEl.height ?? defaultHeight;
-      return labelHeight + fieldHeight + FLOW_SPACING.field.marginTop + FLOW_SPACING.field.marginBottom;
+      return (
+        labelHeight + fieldHeight + FLOW_SPACING.field.marginTop + FLOW_SPACING.field.marginBottom
+      );
     }
 
     default:
@@ -167,25 +179,25 @@ async function drawContentElement(
 ): Promise<void> {
   switch (element.type) {
     case 'heading':
-      await drawHeadingContent(ctx, page, element as HeadingContent, pageNum);
+      await drawHeadingContent(ctx, page, element, pageNum);
       break;
     case 'paragraph':
-      await drawParagraphContent(ctx, page, element as ParagraphContent, pageNum);
+      await drawParagraphContent(ctx, page, element, pageNum);
       break;
     case 'admonition':
-      await drawAdmonitionContent(ctx, page, element as AdmonitionContent, pageNum);
+      await drawAdmonitionContent(ctx, page, element, pageNum);
       break;
     case 'rule':
-      await drawRuleContent(ctx, page, element as RuleContent, pageNum);
+      await drawRuleContent(ctx, page, element, pageNum);
       break;
     case 'spacer':
-      await drawSpacerContent(ctx, element as SpacerContent);
+      await drawSpacerContent(ctx, element);
       break;
     case 'table':
-      await drawTableContent(ctx, page, element as TableContent, pageNum);
+      await drawTableContent(ctx, page, element, pageNum);
       break;
     case 'field':
-      await drawFieldContent(ctx, page, element as FieldContent, pageNum);
+      await drawFieldContent(ctx, page, element, pageNum);
       break;
     default:
       console.warn(`Unknown content element type: ${(element as SchemaContentElement).type}`);
@@ -319,12 +331,15 @@ async function drawAdmonitionContent(
   const contentWidth = ctx.contentArea.width;
 
   // Calculate content height (excluding trailing line space)
-  const contentLines = wrapText(element.text, contentWidth - horizontalPadding * 2 - borderWidth, fontSize);
+  const contentLines = wrapText(
+    element.text,
+    contentWidth - horizontalPadding * 2 - borderWidth,
+    fontSize
+  );
   const lineHeight = fontSize * style.contentLineHeight;
   // Content height: all lines with spacing, minus the trailing space after last line
-  const contentHeight = contentLines.length > 0
-    ? (contentLines.length - 1) * lineHeight + fontSize
-    : 0;
+  const contentHeight =
+    contentLines.length > 0 ? (contentLines.length - 1) * lineHeight + fontSize : 0;
 
   // Calculate text block height and box dimensions
   const textBlockHeight = titleFontSize + titleContentGap + contentHeight;
@@ -449,10 +464,7 @@ async function drawRuleContent(
 /**
  * Draw spacer - advances cursor by specified height
  */
-async function drawSpacerContent(
-  ctx: LayoutContext,
-  element: SpacerContent
-): Promise<void> {
+async function drawSpacerContent(ctx: LayoutContext, element: SpacerContent): Promise<void> {
   moveCursorDown(ctx, element.height);
 }
 
@@ -501,7 +513,7 @@ async function drawFieldContent(
     // Label on the left, field on the right - vertically centered
     fieldX = startX + labelWidth;
     fieldY = currentY - fieldHeight;
-    fieldWidth = element.width ?? (ctx.contentArea.width - labelWidth);
+    fieldWidth = element.width ?? ctx.contentArea.width - labelWidth;
     totalHeight = fieldHeight;
 
     // Center label vertically with the field
@@ -597,13 +609,7 @@ async function drawFieldContent(
       });
 
       // Add options
-      const options = element.options || [];
-      const normalizedOptions: NormalizedFieldOption[] = options.map((opt) => {
-        if (typeof opt === 'string') {
-          return { value: opt, label: opt };
-        }
-        return { value: opt.value, label: opt.label };
-      });
+      const normalizedOptions = normalizeFieldOptions(element.options);
       const optionLabels = normalizedOptions.map((opt) => opt.label);
       dropdown.addOptions(optionLabels);
 
@@ -668,14 +674,15 @@ function expandTableDefinition(table: TableContent): TableContent {
         if (col.cellType === 'label') {
           return { type: 'label' as const, value: '' };
         }
+        const prefix = table.fieldPrefix ?? 'field';
         const fieldName = col.fieldSuffix
-          ? `${table.fieldPrefix}_${col.fieldSuffix}_${i}`
-          : `${table.fieldPrefix}_col${table.columns.indexOf(col)}_${i}`;
+          ? `${prefix}_${col.fieldSuffix}_${i}`
+          : `${prefix}_col${table.columns.indexOf(col)}_${i}`;
         if (col.cellType === 'dropdown') {
           return {
             type: 'dropdown' as const,
             fieldName,
-            options: col.options as FieldOption[],
+            options: col.options ?? [],
           };
         }
         if (col.cellType === 'checkbox') {
@@ -717,7 +724,7 @@ function expandTableDefinition(table: TableContent): TableContent {
           return {
             type: 'dropdown' as const,
             fieldName,
-            options: col.options as FieldOption[],
+            options: col.options ?? [],
           };
         }
         if (col.cellType === 'checkbox') {
@@ -741,7 +748,7 @@ function expandTableDefinition(table: TableContent): TableContent {
         if (/^[a-zA-Z][a-zA-Z0-9_]*$/.test(fieldName)) {
           return { type: 'text' as const, fieldName };
         }
-        return { type: 'label' as const, value: String(value) };
+        return { type: 'label' as const, value: typeof value === 'string' ? value : String(value) };
       });
       return { cells };
     });
@@ -890,7 +897,11 @@ async function drawTableContent(
     // Draw cells
     colX = startX;
     const cells = row.cells || [];
-    for (let cellIndex = 0; cellIndex < cells.length && cellIndex < expandedTable.columns.length; cellIndex++) {
+    for (
+      let cellIndex = 0;
+      cellIndex < cells.length && cellIndex < expandedTable.columns.length;
+      cellIndex++
+    ) {
       const cell = cells[cellIndex];
       const column = expandedTable.columns[cellIndex];
 
@@ -909,7 +920,16 @@ async function drawTableContent(
           color: hexToRgb(style.cellTextColor),
         });
       } else {
-        await createTableCellField(ctx.doc, page, cell, cellX, cellY, cellWidth, cellHeight, ctx.stylesheet);
+        await createTableCellField(
+          ctx.doc,
+          page,
+          cell,
+          cellX,
+          cellY,
+          cellWidth,
+          cellHeight,
+          ctx.stylesheet
+        );
       }
 
       if (showBorders && colX !== startX) {
@@ -1032,14 +1052,8 @@ async function createTableCellField(
         color: undefined, // No fill, just border
       });
 
-      // Add options - normalize to FieldOption format
-      const options = cell.options || [];
-      const normalizedOptions: NormalizedFieldOption[] = options.map((opt) => {
-        if (typeof opt === 'string') {
-          return { value: opt, label: opt };
-        }
-        return { value: opt.value, label: opt.label };
-      });
+      // Add options
+      const normalizedOptions = normalizeFieldOptions(cell.options);
       const optionLabels = normalizedOptions.map((opt) => opt.label);
       dropdown.addOptions(optionLabels);
 

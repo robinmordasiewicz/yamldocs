@@ -43,7 +43,7 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
   // Parse markdown content
   const markdown = await parseMarkdown(contentPath);
   if (options.verbose) {
-    console.log(chalk.gray(`  Parsed markdown: ${markdown.title || 'Untitled'}`));
+    console.log(chalk.gray(`  Parsed markdown: ${markdown.title ?? 'Untitled'}`));
   }
 
   // Parse schema if provided
@@ -55,7 +55,9 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
     }
     schema = await parseSchema(schemaPath);
     if (options.verbose) {
-      console.log(chalk.gray(`  Parsed schema: ${schema.form.title} (${schema.fields.length} fields)`));
+      console.log(
+        chalk.gray(`  Parsed schema: ${schema.form.title} (${schema.fields.length} fields)`)
+      );
     }
   }
 
@@ -64,7 +66,7 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
 
   // Determine base output name
   const contentName = basename(contentPath, extname(contentPath));
-  const outputDir = resolve(options.output || config.output.directory);
+  const outputDir = resolve(options.output ?? config.output.directory);
 
   // Generate each format
   for (const format of formats) {
@@ -78,7 +80,7 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
 
     try {
       switch (format) {
-        case 'pdf':
+        case 'pdf': {
           if (!schema) {
             results.push({
               format,
@@ -102,6 +104,7 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
             },
           });
           break;
+        }
 
         case 'html':
           await generateAndSaveHtml({ markdown, schema, config: config.html }, outputPath);
@@ -113,10 +116,7 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
           break;
 
         case 'docx':
-          await generateAndSaveDocx(
-            { markdown, config: config.docx, contentPath },
-            outputPath
-          );
+          await generateAndSaveDocx({ markdown, config: config.docx, contentPath }, outputPath);
           results.push({
             format,
             outputPath,
@@ -124,13 +124,15 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
           });
           break;
 
-        default:
+        default: {
+          const unknownFormat = format as string;
           results.push({
             format,
             outputPath,
             success: false,
-            error: `Unknown format: ${format}`,
+            error: `Unknown format: ${unknownFormat}`,
           });
+        }
       }
     } catch (err) {
       const error = err as Error;
@@ -153,7 +155,7 @@ export function printGenerateResults(results: GenerateResult[]): void {
   console.log('');
   for (const result of results) {
     if (result.success) {
-      let message = chalk.green('✓') + ` Generated: ${chalk.cyan(result.outputPath)}`;
+      let message = `${chalk.green('✓')} Generated: ${chalk.cyan(result.outputPath)}`;
       if (result.details) {
         const details: string[] = [];
         if (result.details.fieldCount !== undefined) {
@@ -168,7 +170,9 @@ export function printGenerateResults(results: GenerateResult[]): void {
       }
       console.log(message);
     } else {
-      console.log(chalk.red('✗') + ` Failed: ${result.format} - ${result.error}`);
+      console.log(
+        `${chalk.red('✗')} Failed: ${result.format} - ${result.error ?? 'Unknown error'}`
+      );
     }
   }
   console.log('');

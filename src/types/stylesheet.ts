@@ -3,8 +3,6 @@
  * Defines the structure for parsed CSS stylesheets used in PDF generation
  */
 
-import type { StandardFonts } from 'pdf-lib';
-
 /**
  * Standard font family names that map to pdf-lib StandardFonts
  */
@@ -170,9 +168,7 @@ export interface LabelStyle {
 /**
  * Header/Footer text styles
  */
-export interface HeaderFooterStyle extends TextStyle {
-  // Inherits fontFamily, fontSize, color from TextStyle
-}
+export type HeaderFooterStyle = TextStyle;
 
 /**
  * Table content styles
