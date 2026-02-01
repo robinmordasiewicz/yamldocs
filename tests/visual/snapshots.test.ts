@@ -72,9 +72,9 @@ describe('Visual Snapshots', () => {
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
-      const topField = fields.find(f => f.name === 'top');
-      const middleField = fields.find(f => f.name === 'middle');
-      const bottomField = fields.find(f => f.name === 'bottom');
+      const topField = fields.find((f) => f.name === 'top');
+      const middleField = fields.find((f) => f.name === 'middle');
+      const bottomField = fields.find((f) => f.name === 'bottom');
 
       // Verify vertical ordering (y coordinates)
       expect(topField!.position.y).toBeGreaterThan(middleField!.position.y);
@@ -90,8 +90,8 @@ describe('Visual Snapshots', () => {
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
-      const smallField = fields.find(f => f.name === 'small');
-      const largeField = fields.find(f => f.name === 'large');
+      const smallField = fields.find((f) => f.name === 'small');
+      const largeField = fields.find((f) => f.name === 'large');
 
       // Allow small tolerance due to border rendering (±2pt)
       expect(Math.abs(smallField!.position.width - 100)).toBeLessThanOrEqual(2);
@@ -129,7 +129,7 @@ describe('Visual Snapshots', () => {
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
-      const names = fields.map(f => f.name);
+      const names = fields.map((f) => f.name);
 
       // Verify all fields present
       expect(names).toContain('alpha');
@@ -153,8 +153,8 @@ describe('Visual Snapshots', () => {
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
-      const page1Field = fields.find(f => f.name === 'page1_field');
-      const page2Field = fields.find(f => f.name === 'page2_field');
+      const page1Field = fields.find((f) => f.name === 'page1_field');
+      const page2Field = fields.find((f) => f.name === 'page2_field');
 
       // Verify fields exist and x positions match
       expect(page1Field).toBeDefined();
@@ -169,15 +169,19 @@ describe('Visual Snapshots', () => {
   describe('Form Field Visual States', () => {
     it('default values are visually present', async () => {
       const schema = new SchemaBuilder('defaults-visual', 'Defaults Visual Test')
-        .addTextField('prefilled', { x: 72, y: -30, width: 200, height: 24 }, { default: 'Pre-filled Value' })
+        .addTextField(
+          'prefilled',
+          { x: 72, y: -30, width: 200, height: 24 },
+          { default: 'Pre-filled Value' }
+        )
         .addCheckbox('checked', { x: 72, y: -80 }, 'Pre-checked', { default: true })
         .build();
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
-      const textField = fields.find(f => f.name === 'prefilled');
-      const checkbox = fields.find(f => f.name === 'checked');
+      const textField = fields.find((f) => f.name === 'prefilled');
+      const checkbox = fields.find((f) => f.name === 'checked');
 
       expect(textField?.value).toBe('Pre-filled Value');
       expect(checkbox?.value).toBe(true);
@@ -185,15 +189,19 @@ describe('Visual Snapshots', () => {
 
     it('read-only fields have correct state', async () => {
       const schema = new SchemaBuilder('readonly-visual', 'Read-Only Visual Test')
-        .addTextField('readonly', { x: 72, y: -30, width: 200, height: 24 }, { readOnly: true, default: 'Cannot Edit' })
+        .addTextField(
+          'readonly',
+          { x: 72, y: -30, width: 200, height: 24 },
+          { readOnly: true, default: 'Cannot Edit' }
+        )
         .addTextField('editable', { x: 72, y: -80, width: 200, height: 24 }, { readOnly: false })
         .build();
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
-      const readonlyField = fields.find(f => f.name === 'readonly');
-      const editableField = fields.find(f => f.name === 'editable');
+      const readonlyField = fields.find((f) => f.name === 'readonly');
+      const editableField = fields.find((f) => f.name === 'editable');
 
       expect(readonlyField?.readOnly).toBe(true);
       expect(editableField?.readOnly).toBe(false);

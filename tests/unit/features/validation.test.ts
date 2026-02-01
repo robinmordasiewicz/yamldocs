@@ -12,7 +12,6 @@ import {
   generateValidationScript,
   generateValidationStyles,
   ValidationPatterns,
-  type ValidationResult,
 } from '../../../src/features/validation.js';
 import type { NormalizedFormField, ParsedFormSchema } from '../../../src/types/schema.js';
 
@@ -206,9 +205,7 @@ describe('Validation Feature', () => {
       const schemaWithRules: ParsedFormSchema = {
         ...mockSchema,
         validation: {
-          rules: [
-            { if: 'age < 18', then: 'error: Must be 18 or older' },
-          ],
+          rules: [{ if: 'age < 18', then: 'error: Must be 18 or older' }],
         },
       };
 
@@ -224,14 +221,9 @@ describe('Validation Feature', () => {
   });
 
   describe('evaluateValidationRule', () => {
-    const mockSchema: ParsedFormSchema = {
-      form: { id: 'test', title: 'Test' },
-      fields: [],
-    };
-
     it('evaluates less than condition', () => {
       const rule = { if: 'value < 100', then: 'error: Value must be at least 100' };
-      const errors = evaluateValidationRule(rule, { value: 50 }, mockSchema);
+      const errors = evaluateValidationRule(rule, { value: 50 });
 
       expect(errors.length).toBe(1);
       expect(errors[0].message).toBe('Value must be at least 100');
@@ -239,28 +231,28 @@ describe('Validation Feature', () => {
 
     it('evaluates greater than condition', () => {
       const rule = { if: 'amount > 1000', then: 'error: Amount exceeds limit' };
-      const errors = evaluateValidationRule(rule, { amount: 500 }, mockSchema);
+      const errors = evaluateValidationRule(rule, { amount: 500 });
 
       expect(errors.length).toBe(0);
     });
 
     it('evaluates equals condition', () => {
       const rule = { if: 'status == pending', then: 'error: Cannot submit pending status' };
-      const errors = evaluateValidationRule(rule, { status: 'pending' }, mockSchema);
+      const errors = evaluateValidationRule(rule, { status: 'pending' });
 
       expect(errors.length).toBe(1);
     });
 
     it('evaluates not equals condition', () => {
       const rule = { if: 'type != valid', then: 'error: Type must be valid' };
-      const errors = evaluateValidationRule(rule, { type: 'invalid' }, mockSchema);
+      const errors = evaluateValidationRule(rule, { type: 'invalid' });
 
       expect(errors.length).toBe(1);
     });
 
     it('handles malformed rules gracefully', () => {
       const rule = { if: 'invalid rule syntax', then: 'error: Should not match' };
-      const errors = evaluateValidationRule(rule, {}, mockSchema);
+      const errors = evaluateValidationRule(rule, {});
 
       expect(errors.length).toBe(0);
     });

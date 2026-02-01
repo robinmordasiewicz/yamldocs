@@ -29,7 +29,7 @@ describe('Text Field Generator', () => {
       position: { x: 72, y: 700, width: 200, height: 24 },
     };
 
-    const textField = await createTextField(doc, page, field, stylesheet);
+    const textField = createTextField(doc, page, field, stylesheet);
 
     expect(textField).toBeDefined();
     expect(textField.getName()).toBe('test_field');
@@ -45,7 +45,7 @@ describe('Text Field Generator', () => {
       position: { x: 72, y: 700, width: 200, height: 24 },
     };
 
-    const textField = await createTextField(doc, page, field, stylesheet);
+    const textField = createTextField(doc, page, field, stylesheet);
 
     expect(textField.getMaxLength()).toBe(50);
   });
@@ -60,7 +60,7 @@ describe('Text Field Generator', () => {
       position: { x: 72, y: 700, width: 200, height: 24 },
     };
 
-    const textField = await createTextField(doc, page, field, stylesheet);
+    const textField = createTextField(doc, page, field, stylesheet);
 
     expect(textField.getText()).toBe('Hello World');
   });
@@ -75,7 +75,7 @@ describe('Text Field Generator', () => {
       position: { x: 72, y: 700, width: 200, height: 24 },
     };
 
-    const textField = await createTextField(doc, page, field, stylesheet);
+    const textField = createTextField(doc, page, field, stylesheet);
 
     expect(textField.isReadOnly()).toBe(true);
   });
@@ -90,7 +90,7 @@ describe('Text Field Generator', () => {
       position: { x: 72, y: 700, width: 200, height: 100 },
     };
 
-    const textField = await createTextField(doc, page, field, stylesheet);
+    const textField = createTextField(doc, page, field, stylesheet);
 
     expect(textField.isMultiline()).toBe(true);
   });
@@ -104,7 +104,7 @@ describe('Text Field Generator', () => {
       position: { x: 72, y: 700 }, // No width/height
     };
 
-    const textField = await createTextField(doc, page, field, stylesheet);
+    const textField = createTextField(doc, page, field, stylesheet);
 
     // Field should be created without error
     expect(textField).toBeDefined();
@@ -146,7 +146,7 @@ describe('Text Field Generator', () => {
       position: { x: 72, y: 700, width: 200, height: 24 },
     };
 
-    await createTextField(doc, page, field, stylesheet);
+    createTextField(doc, page, field, stylesheet);
     const pdfBytes = await doc.save();
 
     expect(pdfBytes).toBeInstanceOf(Uint8Array);
@@ -155,13 +155,31 @@ describe('Text Field Generator', () => {
 
   it('creates multiple text fields without name conflicts', async () => {
     const fields: NormalizedFormField[] = [
-      { name: 'field_1', type: 'text', label: 'Field 1', page: 1, position: { x: 72, y: 700, width: 200, height: 24 } },
-      { name: 'field_2', type: 'text', label: 'Field 2', page: 1, position: { x: 72, y: 650, width: 200, height: 24 } },
-      { name: 'field_3', type: 'text', label: 'Field 3', page: 1, position: { x: 72, y: 600, width: 200, height: 24 } },
+      {
+        name: 'field_1',
+        type: 'text',
+        label: 'Field 1',
+        page: 1,
+        position: { x: 72, y: 700, width: 200, height: 24 },
+      },
+      {
+        name: 'field_2',
+        type: 'text',
+        label: 'Field 2',
+        page: 1,
+        position: { x: 72, y: 650, width: 200, height: 24 },
+      },
+      {
+        name: 'field_3',
+        type: 'text',
+        label: 'Field 3',
+        page: 1,
+        position: { x: 72, y: 600, width: 200, height: 24 },
+      },
     ];
 
     for (const field of fields) {
-      await createTextField(doc, page, field, stylesheet);
+      createTextField(doc, page, field, stylesheet);
     }
 
     const form = doc.getForm();

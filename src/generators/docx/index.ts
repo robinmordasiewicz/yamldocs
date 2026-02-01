@@ -61,13 +61,7 @@ export async function generateDocx(
   await mkdir(dirname(outputPath), { recursive: true });
 
   // Build Pandoc arguments
-  const args: string[] = [
-    contentPath,
-    '-o',
-    outputPath,
-    '--from=markdown',
-    '--to=docx',
-  ];
+  const args: string[] = [contentPath, '-o', outputPath, '--from=markdown', '--to=docx'];
 
   // Add reference document if specified
   if (docxConfig.referenceDoc && existsSync(docxConfig.referenceDoc)) {
@@ -86,7 +80,7 @@ export async function generateDocx(
 
     let stderr = '';
 
-    proc.stderr.on('data', (data) => {
+    proc.stderr.on('data', (data: Buffer) => {
       stderr += data.toString();
     });
 
@@ -98,7 +92,7 @@ export async function generateDocx(
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error(`Pandoc exited with code ${code}: ${stderr}`));
+        reject(new Error(`Pandoc exited with code ${String(code)}: ${stderr}`));
       }
     });
   });

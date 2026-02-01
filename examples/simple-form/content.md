@@ -20,4 +20,4 @@ Tell us how we can help you today.
 
 After completing the form, click the Submit button to send your message. We typically respond within 1-2 business days.
 
-*Required fields are marked with an asterisk.
+\*Required fields are marked with an asterisk.

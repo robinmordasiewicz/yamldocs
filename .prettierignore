@@ -1,0 +1,23 @@
+# Build outputs
+dist/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.pdf
+*.min.js
+*.min.css
+
+# Lock files
+package-lock.json
+
+# IDE
+.idea/
+.vscode/
+
+# Test artifacts
+tests/visual/baselines/
+tests/visual/current/
+tests/visual/diff/

@@ -29,7 +29,7 @@ describe('Layout Cursor', () => {
   });
 
   it('initializes cursor at top of content area', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     // Letter size is 792pt height, minus 72pt top margin = 720
     expect(ctx.cursor.y).toBe(720);
@@ -37,7 +37,7 @@ describe('Layout Cursor', () => {
   });
 
   it('tracks vertical position correctly when moving down', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
     const initialY = ctx.cursor.y;
 
     moveCursorDown(ctx, 100);
@@ -46,7 +46,7 @@ describe('Layout Cursor', () => {
   });
 
   it('cursor x position stays constant when moving down', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     moveCursorDown(ctx, 50);
     expect(ctx.cursor.x).toBe(72);
@@ -56,7 +56,7 @@ describe('Layout Cursor', () => {
   });
 
   it('calculates content area correctly', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     // Letter size: 612 x 792
     // Content width: 612 - 72 - 72 = 468
@@ -68,7 +68,7 @@ describe('Layout Cursor', () => {
   });
 
   it('triggers page break when exceeding bottom margin', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     // Move cursor close to bottom margin
     ctx.cursor.y = 80; // Just above bottom margin (72)
@@ -83,7 +83,7 @@ describe('Layout Cursor', () => {
   });
 
   it('creates new page when moving past existing pages', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     expect(ctx.pages.length).toBe(1);
 
@@ -96,7 +96,7 @@ describe('Layout Cursor', () => {
   });
 
   it('nextPage advances to next page', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 2, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 2, stylesheet);
 
     expect(ctx.currentPage).toBe(0);
 
@@ -107,7 +107,7 @@ describe('Layout Cursor', () => {
   });
 
   it('getCurrentPage returns correct page', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 3, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 3, stylesheet);
 
     expect(getCurrentPage(ctx)).toBe(ctx.pages[0]);
 
@@ -119,7 +119,7 @@ describe('Layout Cursor', () => {
   });
 
   it('handles multiple page breaks', async () => {
-    const ctx = await initializeLayout(doc, testConfig, 1, stylesheet);
+    const ctx = initializeLayout(doc, testConfig, 1, stylesheet);
 
     // Force multiple page breaks
     for (let i = 0; i < 5; i++) {
@@ -145,7 +145,7 @@ describe('Layout Cursor', () => {
       margins: { top: 100, bottom: 100, left: 50, right: 50 },
     };
 
-    const ctx = await initializeLayout(doc, customConfig, 1, customStylesheet);
+    const ctx = initializeLayout(doc, customConfig, 1, customStylesheet);
 
     // Content width: 612 - 50 - 50 = 512
     // Content height: 792 - 100 - 100 = 592

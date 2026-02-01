@@ -3,7 +3,14 @@
  * Extract text content, metadata, and structure from PDF
  */
 
-import { PDFDocument, PDFPage, PDFTextField, PDFCheckBox, PDFDropdown, PDFRadioGroup } from 'pdf-lib';
+import {
+  PDFDocument,
+  PDFPage,
+  PDFTextField,
+  PDFCheckBox,
+  PDFDropdown,
+  PDFRadioGroup,
+} from 'pdf-lib';
 
 export interface PdfMetadata {
   title?: string;
@@ -72,7 +79,7 @@ export async function readPdf(pdfBytes: Uint8Array): Promise<PdfContent> {
   }
 
   return {
-    text: pages.map(p => p.text).join('\n'),
+    text: pages.map((p) => p.text).join('\n'),
     pages,
     metadata,
     pageCount: pdfPages.length,

@@ -62,8 +62,8 @@ describe('Flow Positioning Mode', () => {
       expect(result.drawnElements?.length).toBeGreaterThan(0);
 
       // Find the drawn elements
-      const heading = result.drawnElements?.find(el => el.type === 'heading');
-      const paragraphs = result.drawnElements?.filter(el => el.type === 'paragraph');
+      const heading = result.drawnElements?.find((el) => el.type === 'heading');
+      const paragraphs = result.drawnElements?.filter((el) => el.type === 'paragraph');
 
       expect(heading).toBeDefined();
       expect(paragraphs?.length).toBe(2);
@@ -111,11 +111,11 @@ describe('Flow Positioning Mode', () => {
       expect(result.bytes).toBeDefined();
       expect(result.drawnElements).toBeDefined();
 
-      const headings = result.drawnElements?.filter(el => el.type === 'heading');
+      const headings = result.drawnElements?.filter((el) => el.type === 'heading');
       expect(headings?.length).toBe(2);
 
       // The gap between headings should include the spacer height
-      if (headings && headings.length === 2) {
+      if (headings?.length === 2) {
         const gap = headings[0].bounds.y - headings[1].bounds.y;
         // Gap should be at least the spacer height (50) plus heading heights and margins
         expect(gap).toBeGreaterThan(50);
@@ -153,14 +153,14 @@ describe('Flow Positioning Mode', () => {
 
       expect(result.bytes).toBeDefined();
 
-      const rule = result.drawnElements?.find(el => el.type === 'rule');
-      const paragraphs = result.drawnElements?.filter(el => el.type === 'paragraph');
+      const rule = result.drawnElements?.find((el) => el.type === 'rule');
+      const paragraphs = result.drawnElements?.filter((el) => el.type === 'paragraph');
 
       expect(rule).toBeDefined();
       expect(paragraphs?.length).toBe(2);
 
       // Rule should be between the two paragraphs
-      if (rule && paragraphs && paragraphs.length === 2) {
+      if (rule && paragraphs?.length === 2) {
         expect(paragraphs[0].bounds.y).toBeGreaterThan(rule.bounds.y);
         expect(rule.bounds.y).toBeGreaterThan(paragraphs[1].bounds.y);
       }
@@ -204,13 +204,13 @@ describe('Flow Positioning Mode', () => {
 
       expect(result.bytes).toBeDefined();
 
-      const paragraphs = result.drawnElements?.filter(el => el.type === 'paragraph');
+      const paragraphs = result.drawnElements?.filter((el) => el.type === 'paragraph');
       expect(paragraphs?.length).toBe(2);
 
       // The absolute positioned paragraph should be at approximately y=200
       // (accounting for text height)
       if (paragraphs && paragraphs.length >= 1) {
-        const absoluteParagraph = paragraphs.find(p =>
+        const absoluteParagraph = paragraphs.find((p) =>
           p.content?.includes('Absolute positioned')
         );
         expect(absoluteParagraph).toBeDefined();
@@ -276,13 +276,13 @@ describe('Flow Positioning Mode', () => {
       const form = doc.getForm();
       const fields = form.getFields();
       expect(fields.length).toBe(2);
-      expect(fields.map(f => f.getName())).toContain('value_1');
-      expect(fields.map(f => f.getName())).toContain('value_2');
+      expect(fields.map((f) => f.getName())).toContain('value_1');
+      expect(fields.map((f) => f.getName())).toContain('value_2');
 
       // Check element ordering
-      const heading = result.drawnElements?.find(el => el.type === 'heading');
-      const table = result.drawnElements?.find(el => el.type === 'table');
-      const paragraph = result.drawnElements?.find(el => el.type === 'paragraph');
+      const heading = result.drawnElements?.find((el) => el.type === 'heading');
+      const table = result.drawnElements?.find((el) => el.type === 'table');
+      const paragraph = result.drawnElements?.find((el) => el.type === 'paragraph');
 
       expect(heading).toBeDefined();
       expect(table).toBeDefined();
@@ -331,8 +331,8 @@ describe('Flow Positioning Mode', () => {
 
       expect(result.bytes).toBeDefined();
 
-      const paragraphs = result.drawnElements?.filter(el => el.type === 'paragraph');
-      const admonition = result.drawnElements?.find(el => el.type === 'admonition');
+      const paragraphs = result.drawnElements?.filter((el) => el.type === 'paragraph');
+      const admonition = result.drawnElements?.find((el) => el.type === 'admonition');
 
       expect(paragraphs?.length).toBe(2);
       expect(admonition).toBeDefined();
@@ -378,7 +378,7 @@ describe('Flow Positioning Mode', () => {
       expect(result.pageCount).toBe(1);
 
       // Elements should be rendered at their specified positions
-      const heading = result.drawnElements?.find(el => el.type === 'heading');
+      const heading = result.drawnElements?.find((el) => el.type === 'heading');
       expect(heading).toBeDefined();
     });
 
@@ -451,8 +451,8 @@ describe('Flow Positioning Mode', () => {
       expect(result.pageCount).toBe(2);
 
       // Verify content on both pages
-      const page1Elements = result.drawnElements?.filter(el => el.page === 1);
-      const page2Elements = result.drawnElements?.filter(el => el.page === 2);
+      const page1Elements = result.drawnElements?.filter((el) => el.page === 1);
+      const page2Elements = result.drawnElements?.filter((el) => el.page === 2);
 
       expect(page1Elements?.length).toBeGreaterThan(0);
       expect(page2Elements?.length).toBeGreaterThan(0);
@@ -523,11 +523,11 @@ describe('Flow Positioning Mode', () => {
       expect(result.pageCount).toBe(1);
 
       // Verify all tracked element types (spacer doesn't create a drawn element)
-      expect(result.drawnElements?.some(el => el.type === 'heading')).toBe(true);
-      expect(result.drawnElements?.some(el => el.type === 'paragraph')).toBe(true);
-      expect(result.drawnElements?.some(el => el.type === 'admonition')).toBe(true);
-      expect(result.drawnElements?.some(el => el.type === 'rule')).toBe(true);
-      expect(result.drawnElements?.some(el => el.type === 'table')).toBe(true);
+      expect(result.drawnElements?.some((el) => el.type === 'heading')).toBe(true);
+      expect(result.drawnElements?.some((el) => el.type === 'paragraph')).toBe(true);
+      expect(result.drawnElements?.some((el) => el.type === 'admonition')).toBe(true);
+      expect(result.drawnElements?.some((el) => el.type === 'rule')).toBe(true);
+      expect(result.drawnElements?.some((el) => el.type === 'table')).toBe(true);
     });
   });
 });

@@ -1,9 +1,9 @@
 # Empty Form Schema (no fields)
-$schema: "form-schema/v1"
+$schema: 'form-schema/v1'
 form:
-  id: "empty-form"
-  title: "Empty Form"
-  version: "1.0.0"
+  id: 'empty-form'
+  title: 'Empty Form'
+  version: '1.0.0'
   pages: 1
 
 fields: []

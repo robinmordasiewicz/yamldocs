@@ -1,15 +1,15 @@
 # All Field Types Test Schema
-$schema: "form-schema/v1"
+$schema: 'form-schema/v1'
 form:
-  id: "all-types-form"
-  title: "All Field Types Test"
-  version: "1.0.0"
+  id: 'all-types-form'
+  title: 'All Field Types Test'
+  version: '1.0.0'
   pages: 1
 
 fields:
-  - name: "text_field"
-    type: "text"
-    label: "Text Input"
+  - name: 'text_field'
+    type: 'text'
+    label: 'Text Input'
     page: 1
     position:
       x: 72
@@ -17,46 +17,46 @@ fields:
       width: 200
       height: 24
 
-  - name: "checkbox_field"
-    type: "checkbox"
-    label: "Checkbox Option"
+  - name: 'checkbox_field'
+    type: 'checkbox'
+    label: 'Checkbox Option'
     page: 1
     position:
       x: 72
       y: 650
 
-  - name: "radio_field"
-    type: "radio"
-    label: "Radio Selection"
+  - name: 'radio_field'
+    type: 'radio'
+    label: 'Radio Selection'
     page: 1
     options:
-      - value: "option1"
-        label: "Option 1"
-      - value: "option2"
-        label: "Option 2"
-      - value: "option3"
-        label: "Option 3"
+      - value: 'option1'
+        label: 'Option 1'
+      - value: 'option2'
+        label: 'Option 2'
+      - value: 'option3'
+        label: 'Option 3'
     position:
       x: 72
       y: 580
 
-  - name: "dropdown_field"
-    type: "dropdown"
-    label: "Dropdown Selection"
+  - name: 'dropdown_field'
+    type: 'dropdown'
+    label: 'Dropdown Selection'
     page: 1
     options:
-      - "Choice A"
-      - "Choice B"
-      - "Choice C"
+      - 'Choice A'
+      - 'Choice B'
+      - 'Choice C'
     position:
       x: 72
       y: 450
       width: 150
       height: 24
 
-  - name: "textarea_field"
-    type: "textarea"
-    label: "Multi-line Text"
+  - name: 'textarea_field'
+    type: 'textarea'
+    label: 'Multi-line Text'
     page: 1
     position:
       x: 72
@@ -64,9 +64,9 @@ fields:
       width: 400
       height: 100
 
-  - name: "signature_field"
-    type: "signature"
-    label: "Signature"
+  - name: 'signature_field'
+    type: 'signature'
+    label: 'Signature'
     page: 1
     position:
       x: 72

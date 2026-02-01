@@ -48,7 +48,7 @@ export interface AlignmentIssue {
  * Convert AcroFormFields to LayoutElements
  */
 export function fieldsToLayoutElements(fields: AcroFormField[]): LayoutElement[] {
-  return fields.map(field => ({
+  return fields.map((field) => ({
     type: 'field' as const,
     name: field.name,
     bounds: field.position,
@@ -148,7 +148,7 @@ export function checkBoundaries(
       violations.push({
         element,
         violation: 'right',
-        overflow: (x + width) - contentArea.right,
+        overflow: x + width - contentArea.right,
       });
     }
 
@@ -166,7 +166,7 @@ export function checkBoundaries(
       violations.push({
         element,
         violation: 'top',
-        overflow: (y + height) - contentArea.top,
+        overflow: y + height - contentArea.top,
       });
     }
   }
@@ -177,7 +177,7 @@ export function checkBoundaries(
 /**
  * Verify element alignment within tolerance
  */
-export function verifyAlignment(elements: LayoutElement[], tolerance: number = 2): AlignmentIssue[] {
+export function verifyAlignment(elements: LayoutElement[], tolerance = 2): AlignmentIssue[] {
   const issues: AlignmentIssue[] = [];
 
   // Group elements by page
@@ -269,7 +269,7 @@ export function validateDimensions(elements: LayoutElement[]): LayoutElement[] {
  * Check for elements with zero area
  */
 export function findZeroAreaElements(elements: LayoutElement[]): LayoutElement[] {
-  return elements.filter(elem => getArea(elem.bounds) === 0);
+  return elements.filter((elem) => getArea(elem.bounds) === 0);
 }
 
 /**
@@ -310,10 +310,8 @@ export function getBoundingBox(elements: LayoutElement[]): {
 /**
  * Convert DrawnElements from PDF generator to LayoutElements
  */
-export function drawnElementsToLayoutElements(
-  drawnElements: DrawnElement[]
-): LayoutElement[] {
-  return drawnElements.map(elem => ({
+export function drawnElementsToLayoutElements(drawnElements: DrawnElement[]): LayoutElement[] {
+  return drawnElements.map((elem) => ({
     type: elem.type as LayoutElement['type'],
     name: elem.content?.substring(0, 30),
     bounds: elem.bounds,

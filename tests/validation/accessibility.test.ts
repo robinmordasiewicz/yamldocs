@@ -6,10 +6,7 @@ import { describe, it, expect } from 'vitest';
 import { generatePdf } from '../../src/generators/pdf/index.js';
 import { getFormFields } from '../helpers/acroform-inspector.js';
 import { readPdf } from '../helpers/pdf-reader.js';
-import {
-  fieldsToLayoutElements,
-  getBoundingBox,
-} from '../helpers/layout-analyzer.js';
+import { fieldsToLayoutElements, getBoundingBox } from '../helpers/layout-analyzer.js';
 import { SchemaBuilder, createAllFieldTypesSchema } from '../helpers/schema-builder.js';
 
 describe('Accessibility Compliance', () => {
@@ -54,7 +51,11 @@ describe('Accessibility Compliance', () => {
     it('all fields have labels', async () => {
       const schema = new SchemaBuilder('labeled-fields', 'Labeled Fields Test')
         .addTextField('name', { x: 72, y: 700, width: 200, height: 24 }, { label: 'Full Name' })
-        .addTextField('email', { x: 72, y: 650, width: 200, height: 24 }, { label: 'Email Address' })
+        .addTextField(
+          'email',
+          { x: 72, y: 650, width: 200, height: 24 },
+          { label: 'Email Address' }
+        )
         .addCheckbox('agree', { x: 72, y: 600 }, 'I agree to terms')
         .build();
 
@@ -69,8 +70,16 @@ describe('Accessibility Compliance', () => {
 
     it('labels are descriptive', async () => {
       const schema = new SchemaBuilder('descriptive-labels', 'Descriptive Labels Test')
-        .addTextField('first_name', { x: 72, y: 700, width: 200, height: 24 }, { label: 'First Name' })
-        .addTextField('last_name', { x: 72, y: 650, width: 200, height: 24 }, { label: 'Last Name' })
+        .addTextField(
+          'first_name',
+          { x: 72, y: 700, width: 200, height: 24 },
+          { label: 'First Name' }
+        )
+        .addTextField(
+          'last_name',
+          { x: 72, y: 650, width: 200, height: 24 },
+          { label: 'Last Name' }
+        )
         .addTextField('phone', { x: 72, y: 600, width: 200, height: 24 }, { label: 'Phone Number' })
         .build();
 
@@ -85,12 +94,20 @@ describe('Accessibility Compliance', () => {
   describe('Required Field Indication', () => {
     it('required fields are marked', async () => {
       const schema = new SchemaBuilder('required-indication', 'Required Indication Test')
-        .addTextField('required_name', { x: 72, y: 700, width: 200, height: 24 }, { required: true, label: 'Name' })
-        .addTextField('optional_phone', { x: 72, y: 650, width: 200, height: 24 }, { required: false, label: 'Phone' })
+        .addTextField(
+          'required_name',
+          { x: 72, y: 700, width: 200, height: 24 },
+          { required: true, label: 'Name' }
+        )
+        .addTextField(
+          'optional_phone',
+          { x: 72, y: 650, width: 200, height: 24 },
+          { required: false, label: 'Phone' }
+        )
         .build();
 
-      const requiredFields = schema.fields.filter(f => f.required);
-      const optionalFields = schema.fields.filter(f => !f.required);
+      const requiredFields = schema.fields.filter((f) => f.required);
+      const optionalFields = schema.fields.filter((f) => !f.required);
 
       expect(requiredFields.length).toBeGreaterThan(0);
       expect(optionalFields.length).toBeGreaterThan(0);
@@ -101,8 +118,16 @@ describe('Accessibility Compliance', () => {
 
     it('distinguishes required from optional', async () => {
       const schema = new SchemaBuilder('required-distinction', 'Required Distinction Test')
-        .addTextField('email', { x: 72, y: 700, width: 200, height: 24 }, { required: true, label: 'Email (Required)' })
-        .addTextField('website', { x: 72, y: 650, width: 200, height: 24 }, { required: false, label: 'Website (Optional)' })
+        .addTextField(
+          'email',
+          { x: 72, y: 700, width: 200, height: 24 },
+          { required: true, label: 'Email (Required)' }
+        )
+        .addTextField(
+          'website',
+          { x: 72, y: 650, width: 200, height: 24 },
+          { required: false, label: 'Website (Optional)' }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -136,8 +161,8 @@ describe('Accessibility Compliance', () => {
       const fields = await getFormFields(result.bytes);
 
       // All fields should have same x position (left alignment)
-      const xPositions = fields.map(f => f.position.x);
-      const allSameX = xPositions.every(x => x === xPositions[0]);
+      const xPositions = fields.map((f) => f.position.x);
+      const allSameX = xPositions.every((x) => x === xPositions[0]);
       expect(allSameX).toBe(true);
     });
 
@@ -170,7 +195,7 @@ describe('Accessibility Compliance', () => {
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
-      const dropdown = fields.find(f => f.name === 'choice');
+      const dropdown = fields.find((f) => f.name === 'choice');
 
       // All options should be present
       expect(dropdown?.options).toEqual(options);
@@ -187,7 +212,7 @@ describe('Accessibility Compliance', () => {
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
-      const radio = fields.find(f => f.name === 'preference');
+      const radio = fields.find((f) => f.name === 'preference');
 
       expect(radio?.type).toBe('radio');
       expect(radio?.options?.length).toBe(3);

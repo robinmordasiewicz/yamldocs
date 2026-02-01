@@ -26,4 +26,4 @@ By signing this form, you certify that all information provided is accurate and 
 
 ---
 
-*Equal Opportunity Employer - We consider all applicants regardless of race, color, religion, sex, national origin, disability, or veteran status.*
+_Equal Opportunity Employer - We consider all applicants regardless of race, color, religion, sex, national origin, disability, or veteran status._

@@ -4,7 +4,7 @@
  */
 
 import { writeFile, mkdir, readFile } from 'fs/promises';
-import { dirname, resolve } from 'path';
+import { dirname } from 'path';
 import { existsSync } from 'fs';
 import type { ParsedFormSchema, NormalizedFormField, HtmlConfig } from '../../types/index.js';
 import { DEFAULT_CONFIG } from '../../types/index.js';
@@ -33,8 +33,8 @@ export async function generateHtml(options: HtmlGeneratorOptions): Promise<strin
   if (htmlConfig.template && existsSync(htmlConfig.template)) {
     html = await readFile(htmlConfig.template, 'utf-8');
     // Replace placeholders in template
-    html = html.replace('{{title}}', markdown?.title || schema?.form.title || 'Document');
-    html = html.replace('{{content}}', markdown?.html || '');
+    html = html.replace('{{title}}', markdown?.title ?? schema?.form.title ?? 'Document');
+    html = html.replace('{{content}}', markdown?.html ?? '');
     if (schema) {
       html = html.replace('{{form}}', generateFormHtml(schema));
     }
@@ -93,7 +93,9 @@ function generateDefaultHtml(
     <main>
       ${contentHtml}
 
-      ${formHtml ? `
+      ${
+        formHtml
+          ? `
       <form id="form-${schema?.form.id || 'main'}" class="form">
         ${formHtml}
         <div class="form-actions">
@@ -101,7 +103,9 @@ function generateDefaultHtml(
           <button type="reset" class="btn btn-secondary">Reset</button>
         </div>
       </form>
-      ` : ''}
+      `
+          : ''
+      }
     </main>
 
     <footer>
@@ -117,7 +121,7 @@ function generateDefaultHtml(
  * Generate HTML for form fields
  */
 function generateFormHtml(schema: ParsedFormSchema): string {
-  const fieldsByPage: Map<number, NormalizedFormField[]> = new Map();
+  const fieldsByPage = new Map<number, NormalizedFormField[]>();
 
   // Group fields by page
   for (const field of schema.fields) {
@@ -188,14 +192,18 @@ function generateFieldHtml(field: NormalizedFormField): string {
         <label for="${field.name}">${escapeHtml(field.label)}${requiredMark}</label>
       </div>`;
 
-    case 'radio':
-      const radioOptions = (field.options || []).map((opt, index) => `
+    case 'radio': {
+      const radioOptions = (field.options ?? [])
+        .map(
+          (opt, index) => `
         <div class="form-check">
           <input type="radio" id="${field.name}_${index}" name="${field.name}" value="${escapeHtml(opt.value)}"
             ${field.default === opt.value ? 'checked' : ''}
             ${field.readOnly ? 'disabled' : ''}>
           <label for="${field.name}_${index}">${escapeHtml(opt.label)}</label>
-        </div>`).join('');
+        </div>`
+        )
+        .join('');
 
       return `
       <div class="form-group">
@@ -204,11 +212,15 @@ function generateFieldHtml(field: NormalizedFormField): string {
           ${radioOptions}
         </div>
       </div>`;
+    }
 
-    case 'dropdown':
-      const selectOptions = (field.options || []).map(opt =>
-        `<option value="${escapeHtml(opt.value)}" ${field.default === opt.value ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
-      ).join('\n          ');
+    case 'dropdown': {
+      const selectOptions = (field.options ?? [])
+        .map(
+          (opt) =>
+            `<option value="${escapeHtml(opt.value)}" ${field.default === opt.value ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
+        )
+        .join('\n          ');
 
       return `
       <div class="form-group">
@@ -220,6 +232,7 @@ function generateFieldHtml(field: NormalizedFormField): string {
           ${selectOptions}
         </select>
       </div>`;
+    }
 
     case 'signature':
       return `
@@ -232,8 +245,10 @@ function generateFieldHtml(field: NormalizedFormField): string {
         <button type="button" class="btn btn-small clear-signature" data-canvas="${field.name}_canvas">Clear</button>
       </div>`;
 
-    default:
-      return `<!-- Unknown field type: ${field.type} -->`;
+    default: {
+      const unknownType = field.type as string;
+      return `<!-- Unknown field type: ${unknownType} -->`;
+    }
   }
 }
 

@@ -4,7 +4,10 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
-import { createDropdownField, drawDropdownLabel } from '../../../src/generators/pdf/fields/dropdown.js';
+import {
+  createDropdownField,
+  drawDropdownLabel,
+} from '../../../src/generators/pdf/fields/dropdown.js';
 import { getDefaultStylesheet } from '../../../src/parsers/stylesheet.js';
 import type { NormalizedFormField } from '../../../src/types/schema.js';
 import type { ResolvedStylesheet } from '../../../src/types/stylesheet.js';
@@ -195,8 +198,22 @@ describe('Dropdown Field Generator', () => {
 
   it('creates multiple dropdowns without conflicts', async () => {
     const fields: NormalizedFormField[] = [
-      { name: 'dd_1', type: 'dropdown', label: 'Dropdown 1', page: 1, options: sampleOptions, position: { x: 72, y: 700, width: 150, height: 24 } },
-      { name: 'dd_2', type: 'dropdown', label: 'Dropdown 2', page: 1, options: sampleOptions, position: { x: 72, y: 650, width: 150, height: 24 } },
+      {
+        name: 'dd_1',
+        type: 'dropdown',
+        label: 'Dropdown 1',
+        page: 1,
+        options: sampleOptions,
+        position: { x: 72, y: 700, width: 150, height: 24 },
+      },
+      {
+        name: 'dd_2',
+        type: 'dropdown',
+        label: 'Dropdown 2',
+        page: 1,
+        options: sampleOptions,
+        position: { x: 72, y: 650, width: 150, height: 24 },
+      },
     ];
 
     for (const field of fields) {

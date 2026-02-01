@@ -1,25 +1,25 @@
 # Flow Positioning Mode Test Schema
 # Content elements stack vertically without requiring explicit y coordinates
 
-$schema: "../schemas/form-schema.json"
+$schema: '../schemas/form-schema.json'
 
 form:
   id: flow-positioning-demo
   title: Flow Positioning Demo
-  version: "1.0.0"
+  version: '1.0.0'
   pages: 1
-  positioning: flow  # Elements stack automatically
+  positioning: flow # Elements stack automatically
 
 content:
   # Main title - flows from top of page
   - type: heading
     level: 1
-    text: "Flow Positioning Demo Form"
+    text: 'Flow Positioning Demo Form'
     page: 1
 
   # Introduction paragraph
   - type: paragraph
-    text: "This form demonstrates the flow positioning mode. Content elements stack vertically without requiring explicit y coordinates. The system automatically manages spacing and cursor advancement."
+    text: 'This form demonstrates the flow positioning mode. Content elements stack vertically without requiring explicit y coordinates. The system automatically manages spacing and cursor advancement.'
     page: 1
 
   # Add some vertical space
@@ -30,8 +30,8 @@ content:
   # Warning admonition
   - type: admonition
     variant: warning
-    title: "Important Notice"
-    text: "Flow mode simplifies form layout by automatically positioning elements. You only need to specify page numbers and element types."
+    title: 'Important Notice'
+    text: 'Flow mode simplifies form layout by automatically positioning elements. You only need to specify page numbers and element types.'
     page: 1
 
   # Horizontal rule separator
@@ -41,51 +41,51 @@ content:
   # Section heading
   - type: heading
     level: 2
-    text: "Section 1: Data Entry"
+    text: 'Section 1: Data Entry'
     page: 1
 
   # Instruction text
   - type: paragraph
-    text: "Please fill in the table below with your information:"
+    text: 'Please fill in the table below with your information:'
     page: 1
 
   # Data entry table
   - type: table
     page: 1
-    label: "Personal Information"
+    label: 'Personal Information'
     columns:
-      - label: "Field"
+      - label: 'Field'
         width: 120
-      - label: "Value"
+      - label: 'Value'
         width: 200
     rows:
       - cells:
           - type: label
-            value: "Full Name"
+            value: 'Full Name'
           - type: text
             fieldName: full_name
       - cells:
           - type: label
-            value: "Email"
+            value: 'Email'
           - type: text
             fieldName: email
       - cells:
           - type: label
-            value: "Department"
+            value: 'Department'
           - type: dropdown
             fieldName: department
             options:
               - value: engineering
-                label: "Engineering"
+                label: 'Engineering'
               - value: sales
-                label: "Sales"
+                label: 'Sales'
               - value: marketing
-                label: "Marketing"
+                label: 'Marketing'
               - value: hr
-                label: "Human Resources"
+                label: 'Human Resources'
       - cells:
           - type: label
-            value: "Active"
+            value: 'Active'
           - type: checkbox
             fieldName: is_active
             default: true
@@ -98,25 +98,25 @@ content:
   # Another section
   - type: heading
     level: 2
-    text: "Section 2: Additional Notes"
+    text: 'Section 2: Additional Notes'
     page: 1
 
   - type: paragraph
-    text: "The flow positioning mode is ideal for forms where content order is more important than pixel-perfect positioning. Elements automatically flow down the page, and page breaks are handled automatically when content exceeds available space."
+    text: 'The flow positioning mode is ideal for forms where content order is more important than pixel-perfect positioning. Elements automatically flow down the page, and page breaks are handled automatically when content exceeds available space.'
     page: 1
 
   # Info admonition
   - type: admonition
     variant: info
-    title: "Tip"
-    text: "You can still use explicit y positions in flow mode to override automatic positioning for specific elements."
+    title: 'Tip'
+    text: 'You can still use explicit y positions in flow mode to override automatic positioning for specific elements.'
     page: 1
 
   - type: rule
     page: 1
 
   - type: paragraph
-    text: "Thank you for reviewing this demo of flow positioning mode."
+    text: 'Thank you for reviewing this demo of flow positioning mode.'
     page: 1
 
 fields: []

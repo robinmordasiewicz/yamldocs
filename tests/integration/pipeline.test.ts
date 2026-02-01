@@ -11,7 +11,11 @@ import {
   createMultiPageTestSchema,
   createAllFieldTypesSchema,
 } from '../helpers/schema-builder.js';
-import { fieldsToLayoutElements, detectOverlaps, checkBoundaries } from '../helpers/layout-analyzer.js';
+import {
+  fieldsToLayoutElements,
+  detectOverlaps,
+  checkBoundaries,
+} from '../helpers/layout-analyzer.js';
 
 describe('PDF Generation Pipeline', () => {
   it('generates valid PDF from simple schema', async () => {
@@ -34,7 +38,7 @@ describe('PDF Generation Pipeline', () => {
     expect(fields.length).toBe(6);
 
     // Verify each field type exists
-    const fieldNames = fields.map(f => f.name);
+    const fieldNames = fields.map((f) => f.name);
     expect(fieldNames).toContain('text_field');
     expect(fieldNames).toContain('checkbox_field');
     expect(fieldNames).toContain('radio_field');
@@ -81,9 +85,7 @@ describe('PDF Generation Pipeline', () => {
   });
 
   it('handles empty schema with no fields', async () => {
-    const schema = new SchemaBuilder('empty-form', 'Empty Form')
-      .setPages(1)
-      .build();
+    const schema = new SchemaBuilder('empty-form', 'Empty Form').setPages(1).build();
 
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
@@ -128,8 +130,16 @@ describe('PDF Generation Pipeline', () => {
 
   it('handles required fields', async () => {
     const schema = new SchemaBuilder('required-test', 'Required Fields Test')
-      .addTextField('required_name', { x: 72, y: -30, width: 200, height: 24 }, { required: true, label: 'Name' })
-      .addTextField('optional_phone', { x: 72, y: -80, width: 200, height: 24 }, { required: false, label: 'Phone' })
+      .addTextField(
+        'required_name',
+        { x: 72, y: -30, width: 200, height: 24 },
+        { required: true, label: 'Name' }
+      )
+      .addTextField(
+        'optional_phone',
+        { x: 72, y: -80, width: 200, height: 24 },
+        { required: false, label: 'Phone' }
+      )
       .build();
 
     const result = await generatePdf({ schema });
@@ -140,15 +150,19 @@ describe('PDF Generation Pipeline', () => {
 
   it('handles fields with default values', async () => {
     const schema = new SchemaBuilder('defaults-test', 'Default Values Test')
-      .addTextField('prefilled', { x: 72, y: -30, width: 200, height: 24 }, { default: 'Default Text' })
+      .addTextField(
+        'prefilled',
+        { x: 72, y: -30, width: 200, height: 24 },
+        { default: 'Default Text' }
+      )
       .addCheckbox('checked', { x: 72, y: -80 }, 'Pre-checked', { default: true })
       .build();
 
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
 
-    const textField = fields.find(f => f.name === 'prefilled');
-    const checkboxField = fields.find(f => f.name === 'checked');
+    const textField = fields.find((f) => f.name === 'prefilled');
+    const checkboxField = fields.find((f) => f.name === 'checked');
 
     expect(textField?.value).toBe('Default Text');
     expect(checkboxField?.value).toBe(true);
@@ -156,13 +170,17 @@ describe('PDF Generation Pipeline', () => {
 
   it('handles read-only fields', async () => {
     const schema = new SchemaBuilder('readonly-test', 'Read-Only Test')
-      .addTextField('readonly_field', { x: 72, y: -30, width: 200, height: 24 }, { readOnly: true, default: 'Cannot edit' })
+      .addTextField(
+        'readonly_field',
+        { x: 72, y: -30, width: 200, height: 24 },
+        { readOnly: true, default: 'Cannot edit' }
+      )
       .build();
 
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
 
-    const readOnlyField = fields.find(f => f.name === 'readonly_field');
+    const readOnlyField = fields.find((f) => f.name === 'readonly_field');
     expect(readOnlyField?.readOnly).toBe(true);
   });
 
@@ -176,7 +194,7 @@ describe('PDF Generation Pipeline', () => {
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
 
-    const dropdown = fields.find(f => f.name === 'big_dropdown');
+    const dropdown = fields.find((f) => f.name === 'big_dropdown');
     expect(dropdown?.options?.length).toBe(50);
   });
 

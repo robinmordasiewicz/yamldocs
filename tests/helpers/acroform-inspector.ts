@@ -141,9 +141,12 @@ export async function isFieldFillable(pdfBytes: Uint8Array, fieldName: string): 
 /**
  * Get a specific field by name
  */
-export async function getFieldByName(pdfBytes: Uint8Array, fieldName: string): Promise<AcroFormField | null> {
+export async function getFieldByName(
+  pdfBytes: Uint8Array,
+  fieldName: string
+): Promise<AcroFormField | null> {
   const fields = await getFormFields(pdfBytes);
-  return fields.find(f => f.name === fieldName) || null;
+  return fields.find((f) => f.name === fieldName) || null;
 }
 
 /**
@@ -182,7 +185,9 @@ export async function fillAndExtract(
 /**
  * Count fields by type
  */
-export async function countFieldsByType(pdfBytes: Uint8Array): Promise<Record<AcroFieldType, number>> {
+export async function countFieldsByType(
+  pdfBytes: Uint8Array
+): Promise<Record<AcroFieldType, number>> {
   const fields = await getFormFields(pdfBytes);
   const counts: Record<AcroFieldType, number> = {
     text: 0,
@@ -208,7 +213,7 @@ export async function verifyFieldsExist(
   expectedFieldNames: string[]
 ): Promise<{ found: string[]; missing: string[] }> {
   const fields = await getFormFields(pdfBytes);
-  const existingNames = new Set(fields.map(f => f.name));
+  const existingNames = new Set(fields.map((f) => f.name));
 
   const found: string[] = [];
   const missing: string[] = [];

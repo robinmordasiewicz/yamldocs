@@ -3,12 +3,7 @@
  * Creates AcroForm text input fields
  */
 
-import {
-  PDFDocument,
-  PDFPage,
-  PDFTextField,
-  StandardFonts,
-} from 'pdf-lib';
+import { PDFDocument, PDFPage, PDFTextField } from 'pdf-lib';
 import type { NormalizedFormField } from '../../../types/index.js';
 import type { ResolvedStylesheet } from '../../../types/stylesheet.js';
 import { hexToRgb } from '../utils.js';
@@ -17,12 +12,12 @@ import { getFontName } from '../layout.js';
 /**
  * Create a text input field
  */
-export async function createTextField(
+export function createTextField(
   doc: PDFDocument,
   page: PDFPage,
   field: NormalizedFormField,
   stylesheet: ResolvedStylesheet
-): Promise<PDFTextField> {
+): PDFTextField {
   const form = doc.getForm();
   const style = stylesheet.fields.text;
 
@@ -30,7 +25,7 @@ export async function createTextField(
   const textField = form.createTextField(field.name);
 
   // Set position and size - use stylesheet defaults if not specified
-  const width = field.position.width || 200;
+  const width = field.position.width ?? 200;
   const height = field.position.height || style.height;
 
   textField.addToPage(page, {
@@ -40,7 +35,9 @@ export async function createTextField(
     height,
     borderWidth: style.borderWidth,
     borderColor: field.borderColor ? hexToRgb(field.borderColor) : hexToRgb(style.borderColor),
-    backgroundColor: field.backgroundColor ? hexToRgb(field.backgroundColor) : hexToRgb(style.backgroundColor),
+    backgroundColor: field.backgroundColor
+      ? hexToRgb(field.backgroundColor)
+      : hexToRgb(style.backgroundColor),
   });
 
   // Configure field properties - use stylesheet default if not specified

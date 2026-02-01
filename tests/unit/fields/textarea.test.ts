@@ -4,7 +4,10 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
-import { createTextareaField, drawTextareaLabel } from '../../../src/generators/pdf/fields/textarea.js';
+import {
+  createTextareaField,
+  drawTextareaLabel,
+} from '../../../src/generators/pdf/fields/textarea.js';
 import { getDefaultStylesheet } from '../../../src/parsers/stylesheet.js';
 import type { NormalizedFormField } from '../../../src/types/schema.js';
 import type { ResolvedStylesheet } from '../../../src/types/stylesheet.js';
@@ -29,7 +32,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 500, width: 400, height: 100 },
     };
 
-    const textarea = await createTextareaField(doc, page, field, stylesheet);
+    const textarea = createTextareaField(doc, page, field, stylesheet);
 
     expect(textarea).toBeDefined();
     expect(textarea.getName()).toBe('test_textarea');
@@ -44,7 +47,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 500, width: 400, height: 100 },
     };
 
-    const textarea = await createTextareaField(doc, page, field, stylesheet);
+    const textarea = createTextareaField(doc, page, field, stylesheet);
 
     expect(textarea.isMultiline()).toBe(true);
   });
@@ -59,7 +62,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 500, width: 400, height: 100 },
     };
 
-    const textarea = await createTextareaField(doc, page, field, stylesheet);
+    const textarea = createTextareaField(doc, page, field, stylesheet);
 
     expect(textarea.getMaxLength()).toBe(500);
   });
@@ -74,7 +77,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 500, width: 400, height: 100 },
     };
 
-    const textarea = await createTextareaField(doc, page, field, stylesheet);
+    const textarea = createTextareaField(doc, page, field, stylesheet);
 
     expect(textarea.getText()).toBe('This is default text\nWith multiple lines');
   });
@@ -89,7 +92,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 500, width: 400, height: 100 },
     };
 
-    const textarea = await createTextareaField(doc, page, field, stylesheet);
+    const textarea = createTextareaField(doc, page, field, stylesheet);
 
     expect(textarea.isReadOnly()).toBe(true);
   });
@@ -103,7 +106,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 500 },
     };
 
-    const textarea = await createTextareaField(doc, page, field, stylesheet);
+    const textarea = createTextareaField(doc, page, field, stylesheet);
 
     expect(textarea).toBeDefined();
   });
@@ -129,7 +132,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 500, width: 400, height: 100 },
     };
 
-    const textarea = await createTextareaField(doc, page, field, stylesheet);
+    const textarea = createTextareaField(doc, page, field, stylesheet);
     const multilineText = 'Line 1\nLine 2\nLine 3';
 
     textarea.setText(multilineText);
@@ -146,7 +149,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 500, width: 400, height: 100 },
     };
 
-    await createTextareaField(doc, page, field, stylesheet);
+    createTextareaField(doc, page, field, stylesheet);
     const pdfBytes = await doc.save();
 
     expect(pdfBytes).toBeInstanceOf(Uint8Array);
@@ -162,7 +165,7 @@ describe('Textarea Field Generator', () => {
       position: { x: 72, y: 300, width: 468, height: 200 },
     };
 
-    const textarea = await createTextareaField(doc, page, field, stylesheet);
+    const textarea = createTextareaField(doc, page, field, stylesheet);
     const largeText = 'Lorem ipsum dolor sit amet. '.repeat(50);
 
     textarea.setText(largeText);
@@ -172,12 +175,24 @@ describe('Textarea Field Generator', () => {
 
   it('creates multiple textareas without conflicts', async () => {
     const fields: NormalizedFormField[] = [
-      { name: 'ta_1', type: 'textarea', label: 'Textarea 1', page: 1, position: { x: 72, y: 600, width: 400, height: 80 } },
-      { name: 'ta_2', type: 'textarea', label: 'Textarea 2', page: 1, position: { x: 72, y: 400, width: 400, height: 80 } },
+      {
+        name: 'ta_1',
+        type: 'textarea',
+        label: 'Textarea 1',
+        page: 1,
+        position: { x: 72, y: 600, width: 400, height: 80 },
+      },
+      {
+        name: 'ta_2',
+        type: 'textarea',
+        label: 'Textarea 2',
+        page: 1,
+        position: { x: 72, y: 400, width: 400, height: 80 },
+      },
     ];
 
     for (const field of fields) {
-      await createTextareaField(doc, page, field, stylesheet);
+      createTextareaField(doc, page, field, stylesheet);
     }
 
     const form = doc.getForm();

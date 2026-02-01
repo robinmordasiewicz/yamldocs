@@ -99,8 +99,7 @@ describe('Invalid Position Handling', () => {
   });
 
   it('handles missing position properties', async () => {
-    const schema = new SchemaBuilder('missing-props', 'Missing Props Test')
-      .build();
+    const schema = new SchemaBuilder('missing-props', 'Missing Props Test').build();
 
     // Add a field with minimal position
     schema.fields.push({

@@ -3,7 +3,7 @@
  * Enables formula-based field values in forms
  */
 
-import type { ParsedFormSchema, NormalizedFormField } from '../types/schema.js';
+import type { ParsedFormSchema } from '../types/schema.js';
 
 export interface CalculationDefinition {
   name: string;
@@ -12,9 +12,7 @@ export interface CalculationDefinition {
   decimals?: number;
 }
 
-export interface CalculationContext {
-  [fieldName: string]: string | number | boolean | undefined;
-}
+export type CalculationContext = Record<string, string | number | boolean | undefined>;
 
 /**
  * Parse a formula string into tokens
@@ -31,10 +29,7 @@ function tokenize(formula: string): string[] {
  * Evaluate a simple arithmetic formula
  * Supports: +, -, *, /, parentheses, field references
  */
-export function evaluateFormula(
-  formula: string,
-  context: CalculationContext
-): number | null {
+export function evaluateFormula(formula: string, context: CalculationContext): number | null {
   try {
     const tokens = tokenize(formula);
     const expression = tokens
@@ -62,7 +57,8 @@ export function evaluateFormula(
     }
 
     // Use Function constructor for safe evaluation (only arithmetic)
-    const result = new Function(`return (${expression})`)();
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval, @typescript-eslint/no-unsafe-call
+    const result = new Function(`return (${expression})`)() as unknown;
     return typeof result === 'number' && isFinite(result) ? result : null;
   } catch (error) {
     console.warn(`Failed to evaluate formula: ${formula}`, error);
@@ -76,7 +72,7 @@ export function evaluateFormula(
 export function formatCalculatedValue(
   value: number,
   format: CalculationDefinition['format'] = 'number',
-  decimals: number = 2
+  decimals = 2
 ): string {
   switch (format) {
     case 'currency':
@@ -114,7 +110,7 @@ export function calculateAllFields(
   currentValues: CalculationContext
 ): Map<string, string> {
   const results = new Map<string, string>();
-  const calculations = schema.calculations || [];
+  const calculations = schema.calculations ?? [];
 
   for (const calc of calculations) {
     const value = evaluateFormula(calc.formula, currentValues);
@@ -200,8 +196,7 @@ export function generateCalculationScript(calculations: CalculationDefinition[])
     .flatMap((calc) => {
       const deps = getCalculationDependencies(calc.formula);
       return deps.map(
-        (dep) =>
-          `document.getElementById('${dep}')?.addEventListener('input', calc_${calc.name});`
+        (dep) => `document.getElementById('${dep}')?.addEventListener('input', calc_${calc.name});`
       );
     })
     .join('\n    ');
@@ -226,7 +221,7 @@ export function generateCalculationScript(calculations: CalculationDefinition[])
  */
 function formatFunctionCode(
   format: CalculationDefinition['format'] = 'number',
-  decimals: number = 2
+  decimals = 2
 ): string {
   switch (format) {
     case 'currency':

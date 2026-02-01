@@ -1,15 +1,15 @@
 # Simple Test Form Schema
-$schema: "form-schema/v1"
+$schema: 'form-schema/v1'
 form:
-  id: "simple-test-form"
-  title: "Simple Test Form"
-  version: "1.0.0"
+  id: 'simple-test-form'
+  title: 'Simple Test Form'
+  version: '1.0.0'
   pages: 1
 
 fields:
-  - name: "name"
-    type: "text"
-    label: "Full Name"
+  - name: 'name'
+    type: 'text'
+    label: 'Full Name'
     page: 1
     required: true
     position:
@@ -18,9 +18,9 @@ fields:
       width: 200
       height: 24
 
-  - name: "email"
-    type: "text"
-    label: "Email"
+  - name: 'email'
+    type: 'text'
+    label: 'Email'
     page: 1
     position:
       x: 72
@@ -28,9 +28,9 @@ fields:
       width: 200
       height: 24
 
-  - name: "agree"
-    type: "checkbox"
-    label: "I agree"
+  - name: 'agree'
+    type: 'checkbox'
+    label: 'I agree'
     page: 1
     position:
       x: 72

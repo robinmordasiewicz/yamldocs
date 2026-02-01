@@ -154,9 +154,9 @@ export async function initProject(directory: string): Promise<void> {
     const dirPath = join(targetDir, dir);
     if (!existsSync(dirPath)) {
       await mkdir(dirPath, { recursive: true });
-      console.log(chalk.green('✓') + ` Created: ${chalk.gray(dir + '/')}`);
+      console.log(`${chalk.green('✓')} Created: ${chalk.gray(`${dir}/`)}`);
     } else {
-      console.log(chalk.yellow('○') + ` Exists: ${chalk.gray(dir + '/')}`);
+      console.log(`${chalk.yellow('○')} Exists: ${chalk.gray(`${dir}/`)}`);
     }
   }
 
@@ -184,9 +184,9 @@ export async function initProject(directory: string): Promise<void> {
     const filePath = join(targetDir, file.path);
     if (!existsSync(filePath)) {
       await writeFile(filePath, file.content);
-      console.log(chalk.green('✓') + ` Created: ${chalk.gray(file.path)}`);
+      console.log(`${chalk.green('✓')} Created: ${chalk.gray(file.path)}`);
     } else {
-      console.log(chalk.yellow('○') + ` Exists: ${chalk.gray(file.path)}`);
+      console.log(`${chalk.yellow('○')} Exists: ${chalk.gray(file.path)}`);
     }
   }
 
@@ -196,6 +196,10 @@ export async function initProject(directory: string): Promise<void> {
   console.log('Next steps:');
   console.log(chalk.gray('  1. Edit content/sample.md with your content'));
   console.log(chalk.gray('  2. Edit schemas/sample-form.yaml to define your form fields'));
-  console.log(chalk.gray('  3. Run: markdown-2pdf generate content/sample.md --schema schemas/sample-form.yaml'));
+  console.log(
+    chalk.gray(
+      '  3. Run: markdown-2pdf generate content/sample.md --schema schemas/sample-form.yaml'
+    )
+  );
   console.log('');
 }

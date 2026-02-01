@@ -25,16 +25,16 @@ const __dirname = dirname(__filename);
 async function loadJsonSchema(): Promise<object> {
   const schemaPath = resolve(__dirname, '../../schemas/form-schema.json');
   const schemaContent = await readFile(schemaPath, 'utf-8');
-  return JSON.parse(schemaContent);
+  return JSON.parse(schemaContent) as object;
 }
 
 /**
  * Normalize field options to always have value and label
  */
-function normalizeFieldOptions(
+export function normalizeFieldOptions(
   options: (FieldOption | string)[] | undefined
-): NormalizedFieldOption[] | undefined {
-  if (!options) return undefined;
+): NormalizedFieldOption[] {
+  if (!options) return [];
 
   return options.map((opt) => {
     if (typeof opt === 'string') {
@@ -111,11 +111,11 @@ export async function parseSchema(filePath: string): Promise<ParsedFormSchema> {
     for (const element of schema.content) {
       if (element.type === 'field') {
         counter++;
-        const fieldElement = element as import('../types/index.js').FieldContent;
+        const fieldElement = element;
         fieldElement.label = `${counter}. ${fieldElement.label}`;
       } else if (element.type === 'table') {
         counter++;
-        const tableElement = element as import('../types/index.js').TableContent;
+        const tableElement = element;
         // Prepend number to existing label, or create label with just the number
         tableElement.label = tableElement.label
           ? `${counter}. ${tableElement.label}`
@@ -178,15 +178,12 @@ export async function parseSchema(filePath: string): Promise<ParsedFormSchema> {
 
       for (const fieldName of referencedFields) {
         if (!fieldNames.has(fieldName)) {
-          throw new SchemaValidationError(
-            `Conditional references unknown field: ${fieldName}`,
-            [
-              {
-                path: '/conditionalFields',
-                message: `Referenced field "${fieldName}" does not exist`,
-              },
-            ]
-          );
+          throw new SchemaValidationError(`Conditional references unknown field: ${fieldName}`, [
+            {
+              path: '/conditionalFields',
+              message: `Referenced field "${fieldName}" does not exist`,
+            },
+          ]);
         }
       }
     }

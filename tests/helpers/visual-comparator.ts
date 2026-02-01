@@ -15,13 +15,13 @@ export interface ComparisonResult {
 }
 
 export interface VisualTestConfig {
-  threshold: number;  // 0-1, percentage of allowed difference
+  threshold: number; // 0-1, percentage of allowed difference
   baselineDir: string;
   diffDir: string;
 }
 
 const DEFAULT_CONFIG: VisualTestConfig = {
-  threshold: 0.01,  // 1% tolerance
+  threshold: 0.01, // 1% tolerance
   baselineDir: 'tests/visual/baselines',
   diffDir: 'tests/visual/__diff__',
 };
@@ -33,7 +33,7 @@ const DEFAULT_CONFIG: VisualTestConfig = {
 export function compareImages(
   actual: Buffer,
   expected: Buffer,
-  threshold: number = 0.01
+  threshold = 0.01
 ): ComparisonResult {
   // Simple size comparison first
   if (actual.length !== expected.length) {
@@ -197,7 +197,7 @@ export async function deleteBaseline(
  * Generate a simple placeholder image buffer for testing
  * This creates a simple PNG-like buffer for testing purposes
  */
-export function generateTestImageBuffer(width: number, height: number, color: number = 255): Buffer {
+export function generateTestImageBuffer(width: number, height: number, color = 255): Buffer {
   // Create a simple grayscale buffer
   const pixels = width * height;
   const buffer = Buffer.alloc(pixels);

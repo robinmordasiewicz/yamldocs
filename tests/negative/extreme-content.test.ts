@@ -29,13 +29,13 @@ describe('Extreme Content Handling', () => {
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
-      const textarea = fields.find(f => f.name === 'field');
+      const textarea = fields.find((f) => f.name === 'field');
 
       expect(textarea?.value).toContain('This is a very long');
     });
 
     it('handles long field names', async () => {
-      const longName = 'field_with_a_very_long_name_that_exceeds_normal_expectations_' + 'x'.repeat(100);
+      const longName = `field_with_a_very_long_name_that_exceeds_normal_expectations_${'x'.repeat(100)}`;
 
       const schema = new SchemaBuilder('long-name', 'Long Name Test')
         .addTextField(longName, { x: 72, y: 700, width: 200, height: 24 })
@@ -60,7 +60,7 @@ describe('Extreme Content Handling', () => {
       });
 
       const fields = await getFormFields(filled);
-      expect(fields.find(f => f.name === 'comments')?.value).toContain('Lorem ipsum');
+      expect(fields.find((f) => f.name === 'comments')?.value).toContain('Lorem ipsum');
     });
   });
 
@@ -72,19 +72,27 @@ describe('Extreme Content Handling', () => {
     it('handles unicode field names (ASCII portion)', async () => {
       // Field names can be unicode, but labels in standard fonts cannot
       const schema = new SchemaBuilder('unicode-name', 'Unicode Name Test')
-        .addTextField('field_unicode', { x: 72, y: 700, width: 200, height: 24 }, { label: 'Unicode Field' })
+        .addTextField(
+          'field_unicode',
+          { x: 72, y: 700, width: 200, height: 24 },
+          { label: 'Unicode Field' }
+        )
         .build();
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
-      expect(fields.find(f => f.name === 'field_unicode')).toBeDefined();
+      expect(fields.find((f) => f.name === 'field_unicode')).toBeDefined();
     });
 
     it.skip('handles unicode in labels (requires custom font embedding)', async () => {
       // This test is skipped because standard fonts cannot encode CJK characters
       const schema = new SchemaBuilder('unicode-label', 'Test Form')
-        .addTextField('name', { x: 72, y: 700, width: 200, height: 24 }, { label: 'お名前 (Full Name)' })
+        .addTextField(
+          'name',
+          { x: 72, y: 700, width: 200, height: 24 },
+          { label: 'お名前 (Full Name)' }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -94,7 +102,11 @@ describe('Extreme Content Handling', () => {
     it.skip('handles emoji in labels (requires custom font embedding)', async () => {
       // This test is skipped because standard fonts cannot encode emoji
       const schema = new SchemaBuilder('emoji-label', 'Emoji Test')
-        .addTextField('happy_field', { x: 72, y: 700, width: 200, height: 24 }, { label: 'Happy Field' })
+        .addTextField(
+          'happy_field',
+          { x: 72, y: 700, width: 200, height: 24 },
+          { label: 'Happy Field' }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -104,9 +116,13 @@ describe('Extreme Content Handling', () => {
     it.skip('handles mixed unicode scripts (requires custom font embedding)', async () => {
       // This test is skipped because standard fonts cannot encode CJK/Arabic
       const schema = new SchemaBuilder('mixed-unicode', 'Mixed Scripts')
-        .addTextField('mixed', { x: 72, y: 700, width: 200, height: 24 }, {
-          label: 'English only',
-        })
+        .addTextField(
+          'mixed',
+          { x: 72, y: 700, width: 200, height: 24 },
+          {
+            label: 'English only',
+          }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -116,9 +132,13 @@ describe('Extreme Content Handling', () => {
     it.skip('handles unicode in default values (requires custom font embedding)', async () => {
       // This test is skipped because standard fonts cannot encode Japanese
       const schema = new SchemaBuilder('unicode-value', 'Unicode Value Test')
-        .addTextField('greeting', { x: 72, y: 700, width: 200, height: 24 }, {
-          default: 'Hello World',
-        })
+        .addTextField(
+          'greeting',
+          { x: 72, y: 700, width: 200, height: 24 },
+          {
+            default: 'Hello World',
+          }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -128,10 +148,14 @@ describe('Extreme Content Handling', () => {
     it('handles extended ASCII characters', async () => {
       // Extended ASCII (Latin-1) should work with standard fonts
       const schema = new SchemaBuilder('extended-ascii', 'Extended ASCII Test')
-        .addTextField('name', { x: 72, y: 700, width: 200, height: 24 }, {
-          label: 'Name with accents',
-          default: 'Jose Garcia',
-        })
+        .addTextField(
+          'name',
+          { x: 72, y: 700, width: 200, height: 24 },
+          {
+            label: 'Name with accents',
+            default: 'Jose Garcia',
+          }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -150,16 +174,20 @@ describe('Extreme Content Handling', () => {
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
-      expect(fields.find(f => f.name === 'field-with-dashes')).toBeDefined();
-      expect(fields.find(f => f.name === 'field_with_underscores')).toBeDefined();
-      expect(fields.find(f => f.name === 'field.with.dots')).toBeDefined();
+      expect(fields.find((f) => f.name === 'field-with-dashes')).toBeDefined();
+      expect(fields.find((f) => f.name === 'field_with_underscores')).toBeDefined();
+      expect(fields.find((f) => f.name === 'field.with.dots')).toBeDefined();
     });
 
     it('handles HTML-like content in labels', async () => {
       const schema = new SchemaBuilder('html-content', 'HTML Content Test')
-        .addTextField('html_field', { x: 72, y: 700, width: 200, height: 24 }, {
-          label: '<b>Bold</b> and <i>italic</i>',
-        })
+        .addTextField(
+          'html_field',
+          { x: 72, y: 700, width: 200, height: 24 },
+          {
+            label: '<b>Bold</b> and <i>italic</i>',
+          }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -168,9 +196,13 @@ describe('Extreme Content Handling', () => {
 
     it('handles newlines in labels', async () => {
       const schema = new SchemaBuilder('newline-label', 'Newline Test')
-        .addTextField('multiline_label', { x: 72, y: 700, width: 200, height: 24 }, {
-          label: 'Line 1\nLine 2',
-        })
+        .addTextField(
+          'multiline_label',
+          { x: 72, y: 700, width: 200, height: 24 },
+          {
+            label: 'Line 1\nLine 2',
+          }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -179,9 +211,13 @@ describe('Extreme Content Handling', () => {
 
     it('handles tabs in content', async () => {
       const schema = new SchemaBuilder('tab-content', 'Tab Test')
-        .addTextField('tabbed', { x: 72, y: 700, width: 200, height: 24 }, {
-          default: 'Column1\tColumn2\tColumn3',
-        })
+        .addTextField(
+          'tabbed',
+          { x: 72, y: 700, width: 200, height: 24 },
+          {
+            default: 'Column1\tColumn2\tColumn3',
+          }
+        )
         .build();
 
       const result = await generatePdf({ schema });
@@ -191,9 +227,7 @@ describe('Extreme Content Handling', () => {
 
   describe('Edge Cases', () => {
     it('handles empty schema gracefully', async () => {
-      const schema = new SchemaBuilder('empty', 'Empty Form')
-        .setPages(1)
-        .build();
+      const schema = new SchemaBuilder('empty', 'Empty Form').setPages(1).build();
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
@@ -236,7 +270,7 @@ describe('Extreme Content Handling', () => {
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
-      expect(fields.find(f => f.name === 'letter')?.value).toBe('X');
+      expect(fields.find((f) => f.name === 'letter')?.value).toBe('X');
     });
 
     it('handles whitespace-only values', async () => {
@@ -264,7 +298,7 @@ describe('Extreme Content Handling', () => {
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
-      const dropdown = fields.find(f => f.name === 'solo');
+      const dropdown = fields.find((f) => f.name === 'solo');
 
       expect(dropdown?.options).toHaveLength(1);
     });
@@ -276,21 +310,19 @@ describe('Extreme Content Handling', () => {
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
-      const dropdown = fields.find(f => f.name === 'empty');
+      const dropdown = fields.find((f) => f.name === 'empty');
 
       expect(dropdown?.options).toHaveLength(0);
     });
 
     it('handles radio with single option', async () => {
       const schema = new SchemaBuilder('single-radio', 'Single Radio Test')
-        .addRadioGroup('solo_radio', { x: 72, y: 700 }, [
-          { value: 'only', label: 'Only Choice' },
-        ])
+        .addRadioGroup('solo_radio', { x: 72, y: 700 }, [{ value: 'only', label: 'Only Choice' }])
         .build();
 
       const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
-      const radio = fields.find(f => f.name === 'solo_radio');
+      const radio = fields.find((f) => f.name === 'solo_radio');
 
       expect(radio?.options).toHaveLength(1);
     });

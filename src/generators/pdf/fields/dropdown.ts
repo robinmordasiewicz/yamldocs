@@ -3,13 +3,7 @@
  * Creates AcroForm dropdown/select fields
  */
 
-import {
-  PDFDocument,
-  PDFPage,
-  PDFDropdown,
-  rgb,
-  StandardFonts,
-} from 'pdf-lib';
+import { PDFDocument, PDFPage, PDFDropdown, rgb } from 'pdf-lib';
 import type { NormalizedFormField } from '../../../types/index.js';
 import type { ResolvedStylesheet } from '../../../types/stylesheet.js';
 import { hexToRgb } from '../utils.js';
@@ -72,7 +66,7 @@ export async function createDropdownField(
   const dropdown = form.createDropdown(field.name);
 
   // Set position and size - use stylesheet defaults if not specified
-  const width = field.position.width || 150;
+  const width = field.position.width ?? 150;
   const height = field.position.height || style.height;
 
   dropdown.addToPage(page, {
@@ -82,7 +76,9 @@ export async function createDropdownField(
     height,
     borderWidth: style.borderWidth,
     borderColor: field.borderColor ? hexToRgb(field.borderColor) : hexToRgb(style.borderColor),
-    backgroundColor: field.backgroundColor ? hexToRgb(field.backgroundColor) : hexToRgb(style.backgroundColor),
+    backgroundColor: field.backgroundColor
+      ? hexToRgb(field.backgroundColor)
+      : hexToRgb(style.backgroundColor),
   });
 
   // Add options
@@ -109,7 +105,15 @@ export async function createDropdownField(
   dropdown.setFontSize(field.fontSize || style.fontSize);
 
   // Draw visual dropdown "(select)" indicator
-  await drawDropdownIndicator(doc, page, field.position.x, field.position.y, width, height, stylesheet);
+  await drawDropdownIndicator(
+    doc,
+    page,
+    field.position.x,
+    field.position.y,
+    width,
+    height,
+    stylesheet
+  );
 
   return dropdown;
 }

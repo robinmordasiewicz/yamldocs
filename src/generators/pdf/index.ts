@@ -4,7 +4,7 @@
  */
 
 import { writeFile, mkdir } from 'fs/promises';
-import { dirname, resolve, dirname as pathDirname } from 'path';
+import { dirname, resolve } from 'path';
 import { PDFDocument } from 'pdf-lib';
 import type { ParsedFormSchema, NormalizedFormField, PdfConfig } from '../../types/index.js';
 import type { ResolvedStylesheet } from '../../types/stylesheet.js';
@@ -28,7 +28,6 @@ import {
 } from './fields/index.js';
 import {
   initializeLayout,
-  getCurrentPage,
   drawTitle,
   drawHeader,
   drawFooter,
@@ -65,8 +64,8 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
   const pdfConfig: Required<PdfConfig> = {
     ...DEFAULT_CONFIG.pdf,
     ...config,
-    margins: { ...DEFAULT_CONFIG.pdf.margins, ...(config.margins || {}) },
-    fonts: { ...DEFAULT_CONFIG.pdf.fonts, ...(config.fonts || {}) },
+    margins: { ...DEFAULT_CONFIG.pdf.margins, ...(config.margins ?? {}) },
+    fonts: { ...DEFAULT_CONFIG.pdf.fonts, ...(config.fonts ?? {}) },
   };
 
   // Auto-extract form fields from markdown if no schema provided
@@ -74,21 +73,19 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
     const extractedFields = extractFormFields(markdown.content);
     if (extractedFields.length > 0) {
       const pageSize = PAGE_SIZES[pdfConfig.pageSize];
-      schema = fieldsToSchema(extractedFields, markdown.title || 'Form', pageSize.height);
+      schema = fieldsToSchema(extractedFields, markdown.title ?? 'Form', pageSize.height);
     }
   }
 
   // If still no schema, create a minimal one
-  if (!schema) {
-    schema = {
-      form: {
-        id: 'generated',
-        title: markdown?.title || 'Document',
-        pages: 1,
-      },
-      fields: [],
-    };
-  }
+  schema ??= {
+    form: {
+      id: 'generated',
+      title: markdown?.title ?? 'Document',
+      pages: 1,
+    },
+    fields: [],
+  };
 
   // Load stylesheet - from schema path or use defaults
   let stylesheet: ResolvedStylesheet;
@@ -112,8 +109,8 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
   doc.setCreationDate(new Date());
 
   // Initialize layout with stylesheet
-  const pageCount = schema.form.pages || 1;
-  const ctx = await initializeLayout(doc, pdfConfig, pageCount, stylesheet);
+  const pageCount = schema.form.pages ?? 1;
+  const ctx = initializeLayout(doc, pdfConfig, pageCount, stylesheet);
 
   // Draw header and footer
   await drawHeader(ctx, schema.form.title, { pageNumber: true });
@@ -189,7 +186,7 @@ async function addFieldToDocument(
   doc: PDFDocument,
   ctx: LayoutContext,
   field: NormalizedFormField,
-  skipLabels: boolean = false
+  skipLabels = false
 ): Promise<void> {
   // Get the appropriate page (1-indexed in schema, 0-indexed in array)
   const pageIndex = Math.min(field.page - 1, ctx.pages.length - 1);
@@ -198,20 +195,20 @@ async function addFieldToDocument(
 
   switch (field.type) {
     case 'text':
-      await createTextField(doc, page, field, stylesheet);
+      createTextField(doc, page, field, stylesheet);
       if (!skipLabels) {
         await drawFieldLabel(doc, page, field, stylesheet);
       }
       break;
 
     case 'checkbox':
-      await createCheckboxField(doc, page, field, stylesheet);
+      createCheckboxField(doc, page, field, stylesheet);
       // Checkbox labels are drawn next to the checkbox, always needed
       await drawCheckboxLabel(doc, page, field, stylesheet);
       break;
 
     case 'radio':
-      await createRadioGroup(doc, page, field, stylesheet);
+      createRadioGroup(doc, page, field, stylesheet);
       // Radio labels are drawn next to options, always needed
       await drawRadioGroupLabels(doc, page, field, stylesheet);
       break;
@@ -223,22 +220,24 @@ async function addFieldToDocument(
       break;
 
     case 'textarea':
-      await createTextareaField(doc, page, field, stylesheet);
+      createTextareaField(doc, page, field, stylesheet);
       if (!skipLabels) {
         await drawTextareaLabel(doc, page, field, stylesheet);
       }
       break;
 
     case 'signature':
-      await createSignatureField(doc, page, field, stylesheet);
+      createSignatureField(doc, page, field, stylesheet);
       await drawSignatureFieldWithLabel(doc, page, field, stylesheet, {
         includeDate: true,
         includeLine: true,
       });
       break;
 
-    default:
-      console.warn(`Unknown field type: ${(field as NormalizedFormField).type}`);
+    default: {
+      const unknownType = field.type as string;
+      console.warn(`Unknown field type: ${unknownType}`);
+    }
   }
 }
 

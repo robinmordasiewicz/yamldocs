@@ -45,9 +45,10 @@ marked.setOptions({
  */
 function parseAdmonitions(content: string): { admonitions: Admonition[]; cleanedContent: string } {
   const admonitions: Admonition[] = [];
-  const admonitionRegex = /^!!!\s+(warning|note|info|tip|danger)\s+"([^"]+)"\s*\n((?:\s{4}.*\n?)*)/gm;
+  const admonitionRegex =
+    /^!!!\s+(warning|note|info|tip|danger)\s+"([^"]+)"\s*\n((?:\s{4}.*\n?)*)/gm;
 
-  let cleanedContent = content;
+  const cleanedContent = content;
   let match;
 
   while ((match = admonitionRegex.exec(content)) !== null) {
@@ -70,16 +71,18 @@ function parseAdmonitions(content: string): { admonitions: Admonition[]; cleaned
  * Strip form HTML elements from content (they become form fields)
  */
 function stripFormHtml(content: string): string {
-  return content
-    // Remove checkbox-option spans but keep text for reading
-    .replace(/<span\s+class="checkbox-option">([^<]+)<\/span>/g, '[ ] $1')
-    // Remove radio-option spans but keep text for reading
-    .replace(/<span\s+class="radio-option">([^<]+)<\/span>/g, '($1)')
-    // Remove form container divs
-    .replace(/<div\s+class="form-[^"]*"[^>]*>/g, '')
-    .replace(/<\/div>/g, '')
-    // Clean up extra whitespace
-    .replace(/\n{3,}/g, '\n\n');
+  return (
+    content
+      // Remove checkbox-option spans but keep text for reading
+      .replace(/<span\s+class="checkbox-option">([^<]+)<\/span>/g, '[ ] $1')
+      // Remove radio-option spans but keep text for reading
+      .replace(/<span\s+class="radio-option">([^<]+)<\/span>/g, '($1)')
+      // Remove form container divs
+      .replace(/<div\s+class="form-[^"]*"[^>]*>/g, '')
+      .replace(/<\/div>/g, '')
+      // Clean up extra whitespace
+      .replace(/\n{3,}/g, '\n\n')
+  );
 }
 
 /**
@@ -93,7 +96,7 @@ function extractSections(content: string): MarkdownSection[] {
   let contentLines: string[] = [];
 
   for (const line of lines) {
-    const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
+    const headingMatch = /^(#{1,6})\s+(.+)$/.exec(line);
 
     if (headingMatch) {
       // Save previous section
@@ -136,7 +139,7 @@ function extractTitle(content: string, frontmatter: Record<string, unknown>): st
   }
 
   // Look for first h1
-  const h1Match = content.match(/^#\s+(.+)$/m);
+  const h1Match = /^#\s+(.+)$/m.exec(content);
   if (h1Match) {
     return h1Match[1].trim();
   }
@@ -194,30 +197,32 @@ export function parseMarkdownString(content: string): ParsedMarkdown {
  * Convert markdown to plain text (strip formatting)
  */
 export function markdownToPlainText(content: string): string {
-  return content
-    // Remove headers
-    .replace(/^#{1,6}\s+/gm, '')
-    // Remove bold/italic
-    .replace(/\*\*(.+?)\*\*/g, '$1')
-    .replace(/\*(.+?)\*/g, '$1')
-    .replace(/__(.+?)__/g, '$1')
-    .replace(/_(.+?)_/g, '$1')
-    // Remove links but keep text
-    .replace(/\[(.+?)\]\(.+?\)/g, '$1')
-    // Remove inline code
-    .replace(/`(.+?)`/g, '$1')
-    // Remove code blocks
-    .replace(/```[\s\S]*?```/g, '')
-    // Remove images
-    .replace(/!\[.*?\]\(.*?\)/g, '')
-    // Remove horizontal rules
-    .replace(/^---+$/gm, '')
-    // Remove list markers
-    .replace(/^[\s]*[-*+]\s+/gm, '')
-    .replace(/^[\s]*\d+\.\s+/gm, '')
-    // Clean up whitespace
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  return (
+    content
+      // Remove headers
+      .replace(/^#{1,6}\s+/gm, '')
+      // Remove bold/italic
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1')
+      .replace(/__(.+?)__/g, '$1')
+      .replace(/_(.+?)_/g, '$1')
+      // Remove links but keep text
+      .replace(/\[(.+?)\]\(.+?\)/g, '$1')
+      // Remove inline code
+      .replace(/`(.+?)`/g, '$1')
+      // Remove code blocks
+      .replace(/```[\s\S]*?```/g, '')
+      // Remove images
+      .replace(/!\[.*?\]\(.*?\)/g, '')
+      // Remove horizontal rules
+      .replace(/^---+$/gm, '')
+      // Remove list markers
+      .replace(/^[\s]*[-*+]\s+/gm, '')
+      .replace(/^[\s]*\d+\.\s+/gm, '')
+      // Clean up whitespace
+      .replace(/\n{3,}/g, '\n\n')
+      .trim()
+  );
 }
 
 /**
@@ -228,7 +233,7 @@ export function extractHeadings(content: string): { level: number; text: string 
   const lines = content.split('\n');
 
   for (const line of lines) {
-    const match = line.match(/^(#{1,6})\s+(.+)$/);
+    const match = /^(#{1,6})\s+(.+)$/.exec(line);
     if (match) {
       headings.push({
         level: match[1].length,

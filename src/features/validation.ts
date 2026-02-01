@@ -31,9 +31,7 @@ export interface ValidationError {
   rule: string;
 }
 
-export interface FieldValues {
-  [fieldName: string]: string | number | boolean | undefined;
-}
+export type FieldValues = Record<string, string | number | boolean | undefined>;
 
 /**
  * Built-in validation patterns
@@ -64,7 +62,7 @@ export function validateField(
   const stringValue = value !== undefined ? String(value) : '';
 
   // Required validation
-  if (field.required && (value === undefined || value === '' || value === null)) {
+  if (field.required && (value === undefined || value === '')) {
     errors.push({
       field: field.name,
       message: `${field.label || field.name} is required`,
@@ -74,7 +72,7 @@ export function validateField(
   }
 
   // Skip other validations if value is empty and not required
-  if (value === undefined || value === '' || value === null) {
+  if (value === undefined || value === '') {
     return errors;
   }
 
@@ -138,10 +136,7 @@ export function validateField(
 /**
  * Validate all fields in a schema
  */
-export function validateAllFields(
-  schema: ParsedFormSchema,
-  values: FieldValues
-): ValidationResult {
+export function validateAllFields(schema: ParsedFormSchema, values: FieldValues): ValidationResult {
   const errors: ValidationError[] = [];
 
   for (const field of schema.fields) {
@@ -152,7 +147,7 @@ export function validateAllFields(
   // Evaluate custom validation rules
   if (schema.validation?.rules) {
     for (const rule of schema.validation.rules) {
-      const ruleErrors = evaluateValidationRule(rule, values, schema);
+      const ruleErrors = evaluateValidationRule(rule, values);
       errors.push(...ruleErrors);
     }
   }
@@ -168,14 +163,13 @@ export function validateAllFields(
  */
 export function evaluateValidationRule(
   rule: ValidationRule,
-  values: FieldValues,
-  schema: ParsedFormSchema
+  values: FieldValues
 ): ValidationError[] {
   const errors: ValidationError[] = [];
 
   try {
     // Parse the condition
-    const conditionMatch = rule.if.match(/^(\w+)\s*(<=?|>=?|==|!=|<|>)\s*(.+)$/);
+    const conditionMatch = /^(\w+)\s*(<=?|>=?|==|!=|<|>)\s*(.+)$/.exec(rule.if);
     if (!conditionMatch) {
       console.warn(`Invalid validation rule condition: ${rule.if}`);
       return errors;
@@ -191,10 +185,10 @@ export function evaluateValidationRule(
 
     // Handle special functions like today()
     const compareString = compareValue.trim();
-    let resolvedCompareValue: string | number = compareString;
+    let resolvedCompareValue = compareString;
 
     if (compareString === 'today()') {
-      resolvedCompareValue = new Date().toISOString().split('T')[0];
+      resolvedCompareValue = new Date().toISOString().split('T')[0] ?? '';
     }
 
     switch (operator) {
@@ -211,16 +205,16 @@ export function evaluateValidationRule(
         conditionMet = !isNaN(numFieldValue) && numFieldValue >= numCompareValue;
         break;
       case '==':
-        conditionMet = String(fieldValue) === String(resolvedCompareValue);
+        conditionMet = String(fieldValue) === resolvedCompareValue;
         break;
       case '!=':
-        conditionMet = String(fieldValue) !== String(resolvedCompareValue);
+        conditionMet = String(fieldValue) !== resolvedCompareValue;
         break;
     }
 
     // If condition is met, parse and return the error
     if (conditionMet) {
-      const errorMatch = rule.then.match(/^(error|warning|info):\s*(.+)$/);
+      const errorMatch = /^(error|warning|info):\s*(.+)$/.exec(rule.then);
       if (errorMatch) {
         const [, severity, message] = errorMatch;
         if (severity === 'error') {

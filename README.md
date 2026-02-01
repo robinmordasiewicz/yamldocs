@@ -33,7 +33,6 @@ cd my-forms
 ```
 
 2. **Edit your content and schema:**
-
    - `content/sample.md` - Your form content in markdown
    - `schemas/sample-form.yaml` - Form field definitions
 
@@ -88,17 +87,17 @@ markdown-2pdf init [directory]
 Form fields are defined in YAML:
 
 ```yaml
-$schema: "form-schema/v1"
+$schema: 'form-schema/v1'
 form:
-  id: "my-form"
-  title: "My Form"
-  version: "1.0.0"
+  id: 'my-form'
+  title: 'My Form'
+  version: '1.0.0'
   pages: 1
 
 fields:
-  - name: "full_name"
-    type: "text"
-    label: "Full Name"
+  - name: 'full_name'
+    type: 'text'
+    label: 'Full Name'
     page: 1
     required: true
     maxLength: 100
@@ -108,9 +107,9 @@ fields:
       width: 250
       height: 24
 
-  - name: "email"
-    type: "text"
-    label: "Email"
+  - name: 'email'
+    type: 'text'
+    label: 'Email'
     page: 1
     required: true
     validation:
@@ -121,23 +120,23 @@ fields:
       width: 250
       height: 24
 
-  - name: "department"
-    type: "dropdown"
-    label: "Department"
+  - name: 'department'
+    type: 'dropdown'
+    label: 'Department'
     page: 1
     options:
-      - "Engineering"
-      - "Marketing"
-      - "Sales"
+      - 'Engineering'
+      - 'Marketing'
+      - 'Sales'
     position:
       x: 72
       y: 530
       width: 150
       height: 24
 
-  - name: "subscribe"
-    type: "checkbox"
-    label: "Subscribe to newsletter"
+  - name: 'subscribe'
+    type: 'checkbox'
+    label: 'Subscribe to newsletter'
     page: 1
     position:
       x: 72
@@ -146,33 +145,33 @@ fields:
 
 ## Field Types
 
-| Type | Description | Options |
-|------|-------------|---------|
-| `text` | Single-line text input | `maxLength`, `placeholder`, `validation` |
-| `textarea` | Multi-line text area | `maxLength`, `multiline` |
-| `checkbox` | Boolean checkbox | `default` |
-| `radio` | Radio button group | `options`, `default` |
-| `dropdown` | Dropdown select | `options`, `default` |
-| `signature` | Signature field | - |
+| Type        | Description            | Options                                  |
+| ----------- | ---------------------- | ---------------------------------------- |
+| `text`      | Single-line text input | `maxLength`, `placeholder`, `validation` |
+| `textarea`  | Multi-line text area   | `maxLength`, `multiline`                 |
+| `checkbox`  | Boolean checkbox       | `default`                                |
+| `radio`     | Radio button group     | `options`, `default`                     |
+| `dropdown`  | Dropdown select        | `options`, `default`                     |
+| `signature` | Signature field        | -                                        |
 
 ## Field Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `name` | string | Unique field identifier |
-| `type` | string | Field type (see above) |
-| `label` | string | Display label |
-| `page` | number | Page number (1-indexed) |
-| `required` | boolean | Whether field is required |
-| `position` | object | `{x, y, width, height}` in points |
-| `fontSize` | number | Font size in points |
-| `default` | any | Default value |
-| `readOnly` | boolean | Make field read-only |
-| `validation` | object | Validation rules |
-| `minLength` | number | Minimum text length |
-| `maxLength` | number | Maximum text length |
-| `min` | number | Minimum numeric value |
-| `max` | number | Maximum numeric value |
+| Property     | Type    | Description                       |
+| ------------ | ------- | --------------------------------- |
+| `name`       | string  | Unique field identifier           |
+| `type`       | string  | Field type (see above)            |
+| `label`      | string  | Display label                     |
+| `page`       | number  | Page number (1-indexed)           |
+| `required`   | boolean | Whether field is required         |
+| `position`   | object  | `{x, y, width, height}` in points |
+| `fontSize`   | number  | Font size in points               |
+| `default`    | any     | Default value                     |
+| `readOnly`   | boolean | Make field read-only              |
+| `validation` | object  | Validation rules                  |
+| `minLength`  | number  | Minimum text length               |
+| `maxLength`  | number  | Maximum text length               |
+| `min`        | number  | Minimum numeric value             |
+| `max`        | number  | Maximum numeric value             |
 
 ## Advanced Features
 
@@ -182,18 +181,18 @@ Define fields that automatically compute values based on other fields:
 
 ```yaml
 calculations:
-  - name: "total"
-    formula: "price * quantity"
-    format: "currency"
+  - name: 'total'
+    formula: 'price * quantity'
+    format: 'currency'
     decimals: 2
 
-  - name: "tax"
-    formula: "total * 0.1"
-    format: "currency"
+  - name: 'tax'
+    formula: 'total * 0.1'
+    format: 'currency'
 
-  - name: "grand_total"
-    formula: "total + tax"
-    format: "currency"
+  - name: 'grand_total'
+    formula: 'total + tax'
+    format: 'currency'
 ```
 
 Supported formats: `number`, `currency`, `percentage`, `text`
@@ -205,21 +204,21 @@ Show or hide fields based on other field values:
 ```yaml
 conditionalFields:
   - trigger:
-      field: "employment_type"
-      value: "contract"
-    show: ["contract_duration", "hourly_rate"]
-    hide: ["annual_salary"]
+      field: 'employment_type'
+      value: 'contract'
+    show: ['contract_duration', 'hourly_rate']
+    hide: ['annual_salary']
 
   - trigger:
-      field: "include_shipping"
+      field: 'include_shipping'
       value: true
-    show: ["shipping_address"]
+    show: ['shipping_address']
 
   - trigger:
-      field: "age"
-      value: "18"
-      operator: "greaterThan"
-    show: ["adult_options"]
+      field: 'age'
+      value: '18'
+      operator: 'greaterThan'
+    show: ['adult_options']
 ```
 
 Supported operators: `equals`, `notEquals`, `contains`, `greaterThan`, `lessThan`, `isEmpty`, `isNotEmpty`
@@ -231,14 +230,14 @@ Define custom validation rules with conditional logic:
 ```yaml
 validation:
   rules:
-    - if: "start_date < today()"
-      then: "error: Start date must be in the future"
+    - if: 'start_date < today()'
+      then: 'error: Start date must be in the future'
 
-    - if: "end_date < start_date"
-      then: "error: End date must be after start date"
+    - if: 'end_date < start_date'
+      then: 'error: End date must be after start date'
 
-    - if: "quantity > 100"
-      then: "error: Maximum quantity is 100"
+    - if: 'quantity > 100'
+      then: 'error: Maximum quantity is 100'
 ```
 
 ### Field Validation Patterns
@@ -247,23 +246,23 @@ Built-in validation patterns:
 
 ```yaml
 fields:
-  - name: "email"
-    type: "text"
+  - name: 'email'
+    type: 'text'
     validation:
       pattern: "^[\\w.-]+@[\\w.-]+\\.\\w+$"
-      message: "Please enter a valid email address"
+      message: 'Please enter a valid email address'
 
-  - name: "phone"
-    type: "text"
+  - name: 'phone'
+    type: 'text'
     validation:
       pattern: "^\\+?[\\d\\s()-]{10,}$"
-      message: "Please enter a valid phone number"
+      message: 'Please enter a valid phone number'
 
-  - name: "zip_code"
-    type: "text"
+  - name: 'zip_code'
+    type: 'text'
     validation:
       pattern: "^\\d{5}(-\\d{4})?$"
-      message: "Please enter a valid ZIP code"
+      message: 'Please enter a valid ZIP code'
 ```
 
 ## Configuration
@@ -272,18 +271,18 @@ Create `markdown-2pdf.config.yaml`:
 
 ```yaml
 input:
-  content: "./content"
-  schemas: "./schemas"
-  styles: "./styles"
+  content: './content'
+  schemas: './schemas'
+  styles: './styles'
 
 output:
-  directory: "./dist"
+  directory: './dist'
   formats:
     - pdf
     - html
 
 pdf:
-  pageSize: "letter"  # or "a4"
+  pageSize: 'letter' # or "a4"
   margins:
     top: 72
     bottom: 72

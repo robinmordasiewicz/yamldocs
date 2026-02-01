@@ -21,8 +21,6 @@ import type {
   DropdownFieldStyle,
   SignatureFieldStyle,
   LabelStyle,
-  HeaderFooterStyle,
-  PageStyles,
   FieldBaseStyle,
   TableStyle,
 } from '../types/stylesheet.js';
@@ -31,30 +29,30 @@ import type {
  * Font family mapping from CSS names to pdf-lib StandardFonts names
  */
 const FONT_FAMILY_MAP: Record<string, FontFamily> = {
-  'helvetica': 'Helvetica',
-  'helveticabold': 'HelveticaBold',
+  helvetica: 'Helvetica',
+  helveticabold: 'HelveticaBold',
   'helvetica-bold': 'HelveticaBold',
-  'helveticaoblique': 'HelveticaOblique',
+  helveticaoblique: 'HelveticaOblique',
   'helvetica-oblique': 'HelveticaOblique',
-  'helveticaboldoblique': 'HelveticaBoldOblique',
+  helveticaboldoblique: 'HelveticaBoldOblique',
   'helvetica-bold-oblique': 'HelveticaBoldOblique',
-  'courier': 'Courier',
-  'courierbold': 'CourierBold',
+  courier: 'Courier',
+  courierbold: 'CourierBold',
   'courier-bold': 'CourierBold',
-  'courieroblique': 'CourierOblique',
+  courieroblique: 'CourierOblique',
   'courier-oblique': 'CourierOblique',
-  'courierboldoblique': 'CourierBoldOblique',
+  courierboldoblique: 'CourierBoldOblique',
   'courier-bold-oblique': 'CourierBoldOblique',
-  'timesroman': 'TimesRoman',
+  timesroman: 'TimesRoman',
   'times-roman': 'TimesRoman',
-  'times': 'TimesRoman',
-  'timesromanbold': 'TimesRomanBold',
+  times: 'TimesRoman',
+  timesromanbold: 'TimesRomanBold',
   'times-roman-bold': 'TimesRomanBold',
   'times-bold': 'TimesRomanBold',
-  'timesromanitalic': 'TimesRomanItalic',
+  timesromanitalic: 'TimesRomanItalic',
   'times-roman-italic': 'TimesRomanItalic',
   'times-italic': 'TimesRomanItalic',
-  'timesromanbolditalic': 'TimesRomanBoldItalic',
+  timesromanbolditalic: 'TimesRomanBoldItalic',
   'times-roman-bold-italic': 'TimesRomanBoldItalic',
   'times-bold-italic': 'TimesRomanBoldItalic',
 };
@@ -114,10 +112,7 @@ export function parseStylesheetContent(cssContent: string): ResolvedStylesheet {
 /**
  * Extract CSS variables from a :root rule
  */
-function extractVariables(
-  node: csstree.Rule,
-  variables: Record<string, string>
-): void {
+function extractVariables(node: csstree.Rule, variables: Record<string, string>): void {
   if (node.block.type !== 'Block') return;
 
   for (const declaration of node.block.children) {
@@ -131,11 +126,7 @@ function extractVariables(
 /**
  * Process a CSS rule and update the stylesheet
  */
-function processRule(
-  selectors: string,
-  node: csstree.Rule,
-  stylesheet: ResolvedStylesheet
-): void {
+function processRule(selectors: string, node: csstree.Rule, stylesheet: ResolvedStylesheet): void {
   const declarations = extractDeclarations(node, stylesheet.variables);
 
   // Handle multiple selectors (e.g., "h1, h2, h3")
@@ -250,24 +241,23 @@ function processRule(
  * Process @page rule for page size and margins
  */
 function processPageRule(node: csstree.Atrule, stylesheet: ResolvedStylesheet): void {
-  if (!node.block || node.block.type !== 'Block') return;
+  if (node.block?.type !== 'Block') return;
 
   for (const declaration of node.block.children) {
     if (declaration.type === 'Declaration') {
-      const value = resolveVariables(
-        csstree.generate(declaration.value),
-        stylesheet.variables
-      );
+      const value = resolveVariables(csstree.generate(declaration.value), stylesheet.variables);
 
       switch (declaration.property) {
-        case 'size':
+        case 'size': {
           const size = parsePageSize(value);
           if (size) stylesheet.page.size = size;
           break;
-        case 'margin':
+        }
+        case 'margin': {
           const margins = parseMargins(value);
           if (margins) stylesheet.page.margins = margins;
           break;
+        }
         case 'margin-top':
           stylesheet.page.margins.top = parseSize(value);
           break;
@@ -311,17 +301,20 @@ function extractDeclarations(
  */
 export function resolveVariables(value: string, variables: Record<string, string>): string {
   // Match var(--name) or var(--name, fallback)
-  return value.replace(/var\(\s*(--[\w-]+)(?:\s*,\s*([^)]+))?\s*\)/g, (_, name, fallback) => {
-    const resolved = variables[name];
-    if (resolved !== undefined) {
-      // Recursively resolve in case of nested vars
-      return resolveVariables(resolved, variables);
+  return value.replace(
+    /var\(\s*(--[\w-]+)(?:\s*,\s*([^)]+))?\s*\)/g,
+    (_match: string, name: string, fallback: string | undefined) => {
+      const resolved = variables[name];
+      if (resolved !== undefined) {
+        // Recursively resolve in case of nested vars
+        return resolveVariables(resolved, variables);
+      }
+      if (fallback !== undefined) {
+        return resolveVariables(fallback.trim(), variables);
+      }
+      return '';
     }
-    if (fallback !== undefined) {
-      return resolveVariables(fallback.trim(), variables);
-    }
-    return '';
-  });
+  );
 }
 
 /**
@@ -340,7 +333,7 @@ export function parseColor(value: string): string {
   }
 
   // RGB/RGBA
-  const rgbMatch = value.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  const rgbMatch = /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/.exec(value);
   if (rgbMatch) {
     const r = parseInt(rgbMatch[1]).toString(16).padStart(2, '0');
     const g = parseInt(rgbMatch[2]).toString(16).padStart(2, '0');
@@ -373,27 +366,27 @@ export function parseSize(value: string): number {
   value = value.trim();
 
   // Points
-  const ptMatch = value.match(/^([\d.]+)\s*pt$/i);
+  const ptMatch = /^([\d.]+)\s*pt$/i.exec(value);
   if (ptMatch) return parseFloat(ptMatch[1]);
 
   // Pixels (approximate: 1px ≈ 0.75pt)
-  const pxMatch = value.match(/^([\d.]+)\s*px$/i);
+  const pxMatch = /^([\d.]+)\s*px$/i.exec(value);
   if (pxMatch) return parseFloat(pxMatch[1]) * 0.75;
 
   // Inches
-  const inMatch = value.match(/^([\d.]+)\s*in$/i);
+  const inMatch = /^([\d.]+)\s*in$/i.exec(value);
   if (inMatch) return parseFloat(inMatch[1]) * 72;
 
   // Centimeters
-  const cmMatch = value.match(/^([\d.]+)\s*cm$/i);
+  const cmMatch = /^([\d.]+)\s*cm$/i.exec(value);
   if (cmMatch) return parseFloat(cmMatch[1]) * 28.3465;
 
   // Millimeters
-  const mmMatch = value.match(/^([\d.]+)\s*mm$/i);
+  const mmMatch = /^([\d.]+)\s*mm$/i.exec(value);
   if (mmMatch) return parseFloat(mmMatch[1]) * 2.83465;
 
   // Ems (approximate: 1em ≈ 12pt base)
-  const emMatch = value.match(/^([\d.]+)\s*em$/i);
+  const emMatch = /^([\d.]+)\s*em$/i.exec(value);
   if (emMatch) return parseFloat(emMatch[1]) * 12;
 
   // Unitless number (assume points)
@@ -424,16 +417,16 @@ export function parseLineHeight(value: string): number {
 
   // Unitless number
   const num = parseFloat(value);
-  if (!isNaN(num) && !value.match(/[a-z%]/i)) {
+  if (!isNaN(num) && !/[a-z%]/i.exec(value)) {
     return num;
   }
 
   // Percentage
-  const pctMatch = value.match(/^([\d.]+)%$/);
+  const pctMatch = /^([\d.]+)%$/.exec(value);
   if (pctMatch) return parseFloat(pctMatch[1]) / 100;
 
   // Em
-  const emMatch = value.match(/^([\d.]+)em$/i);
+  const emMatch = /^([\d.]+)em$/i.exec(value);
   if (emMatch) return parseFloat(emMatch[1]);
 
   return 1.5; // Default
@@ -453,7 +446,9 @@ function parsePageSize(value: string): StylesheetPageSize | null {
 /**
  * Parse margin shorthand
  */
-function parseMargins(value: string): { top: number; bottom: number; left: number; right: number } | null {
+function parseMargins(
+  value: string
+): { top: number; bottom: number; left: number; right: number } | null {
   const parts = value.trim().split(/\s+/);
   const sizes = parts.map(parseSize);
 
@@ -473,10 +468,13 @@ function parseMargins(value: string): { top: number; bottom: number; left: numbe
 
 // Style application functions
 
-function applyTextStyles(decl: Record<string, string>, style: { fontFamily?: FontFamily; fontSize?: number; color?: string }): void {
+function applyTextStyles(
+  decl: Record<string, string>,
+  style: { fontFamily?: FontFamily; fontSize?: number; color?: string }
+): void {
   if (decl['font-family']) style.fontFamily = parseFontFamily(decl['font-family']);
   if (decl['font-size']) style.fontSize = parseSize(decl['font-size']);
-  if (decl['color']) style.color = parseColor(decl['color']);
+  if (decl.color) style.color = parseColor(decl.color);
 }
 
 function applyHeadingStyles(decl: Record<string, string>, style: HeadingStyle): void {
@@ -502,34 +500,47 @@ function applyRuleStyles(decl: Record<string, string>, style: RuleStyle): void {
   if (decl['border-top']) {
     const parts = decl['border-top'].split(/\s+/);
     for (const part of parts) {
-      if (part.match(/^\d/)) style.thickness = parseSize(part);
-      else if (part.startsWith('#') || part.match(/^[a-z]+$/i)) style.color = parseColor(part);
+      if (/^\d/.exec(part)) style.thickness = parseSize(part);
+      else if (part.startsWith('#') || /^[a-z]+$/i.exec(part)) style.color = parseColor(part);
     }
   }
 }
 
-function applyAdmonitionBaseStyles(decl: Record<string, string>, admonitions: Record<AdmonitionVariant, AdmonitionStyle>): void {
+function applyAdmonitionBaseStyles(
+  decl: Record<string, string>,
+  admonitions: Record<AdmonitionVariant, AdmonitionStyle>
+): void {
   const variants: AdmonitionVariant[] = ['warning', 'note', 'info', 'tip', 'danger'];
   for (const variant of variants) {
-    if (decl['padding']) admonitions[variant].padding = parseSize(decl['padding']);
-    if (decl['border-left-width']) admonitions[variant].borderWidth = parseSize(decl['border-left-width']);
+    if (decl.padding) admonitions[variant].padding = parseSize(decl.padding);
+    if (decl['border-left-width'])
+      admonitions[variant].borderWidth = parseSize(decl['border-left-width']);
   }
 }
 
-function applyAdmonitionTitleStyles(decl: Record<string, string>, admonitions: Record<AdmonitionVariant, AdmonitionStyle>): void {
+function applyAdmonitionTitleStyles(
+  decl: Record<string, string>,
+  admonitions: Record<AdmonitionVariant, AdmonitionStyle>
+): void {
   const variants: AdmonitionVariant[] = ['warning', 'note', 'info', 'tip', 'danger'];
   for (const variant of variants) {
-    if (decl['font-family']) admonitions[variant].titleFontFamily = parseFontFamily(decl['font-family']);
+    if (decl['font-family'])
+      admonitions[variant].titleFontFamily = parseFontFamily(decl['font-family']);
     if (decl['font-size']) admonitions[variant].titleFontSize = parseSize(decl['font-size']);
   }
 }
 
-function applyAdmonitionContentStyles(decl: Record<string, string>, admonitions: Record<AdmonitionVariant, AdmonitionStyle>): void {
+function applyAdmonitionContentStyles(
+  decl: Record<string, string>,
+  admonitions: Record<AdmonitionVariant, AdmonitionStyle>
+): void {
   const variants: AdmonitionVariant[] = ['warning', 'note', 'info', 'tip', 'danger'];
   for (const variant of variants) {
-    if (decl['font-family']) admonitions[variant].contentFontFamily = parseFontFamily(decl['font-family']);
+    if (decl['font-family'])
+      admonitions[variant].contentFontFamily = parseFontFamily(decl['font-family']);
     if (decl['font-size']) admonitions[variant].contentFontSize = parseSize(decl['font-size']);
-    if (decl['line-height']) admonitions[variant].contentLineHeight = parseLineHeight(decl['line-height']);
+    if (decl['line-height'])
+      admonitions[variant].contentLineHeight = parseLineHeight(decl['line-height']);
   }
 }
 
@@ -537,17 +548,23 @@ function applyAdmonitionVariantStyles(decl: Record<string, string>, style: Admon
   if (decl['background-color']) style.backgroundColor = parseColor(decl['background-color']);
   if (decl['border-left-color']) style.borderColor = parseColor(decl['border-left-color']);
   if (decl['border-left-width']) style.borderWidth = parseSize(decl['border-left-width']);
-  if (decl['padding']) style.padding = parseSize(decl['padding']);
+  if (decl.padding) style.padding = parseSize(decl.padding);
 }
 
-function applyAdmonitionVariantTitleStyles(decl: Record<string, string>, style: AdmonitionStyle): void {
-  if (decl['color']) style.titleColor = parseColor(decl['color']);
+function applyAdmonitionVariantTitleStyles(
+  decl: Record<string, string>,
+  style: AdmonitionStyle
+): void {
+  if (decl.color) style.titleColor = parseColor(decl.color);
   if (decl['font-family']) style.titleFontFamily = parseFontFamily(decl['font-family']);
   if (decl['font-size']) style.titleFontSize = parseSize(decl['font-size']);
 }
 
-function applyAdmonitionVariantContentStyles(decl: Record<string, string>, style: AdmonitionStyle): void {
-  if (decl['color']) style.contentColor = parseColor(decl['color']);
+function applyAdmonitionVariantContentStyles(
+  decl: Record<string, string>,
+  style: AdmonitionStyle
+): void {
+  if (decl.color) style.contentColor = parseColor(decl.color);
   if (decl['font-family']) style.contentFontFamily = parseFontFamily(decl['font-family']);
   if (decl['font-size']) style.contentFontSize = parseSize(decl['font-size']);
   if (decl['line-height']) style.contentLineHeight = parseLineHeight(decl['line-height']);
@@ -562,34 +579,34 @@ function applyFieldBaseStyles(decl: Record<string, string>, style: FieldBaseStyl
 function applyTextFieldStyles(decl: Record<string, string>, style: TextFieldStyle): void {
   applyFieldBaseStyles(decl, style);
   if (decl['font-size']) style.fontSize = parseSize(decl['font-size']);
-  if (decl['height']) style.height = parseSize(decl['height']);
-  if (decl['padding']) style.padding = parseSize(decl['padding']);
+  if (decl.height) style.height = parseSize(decl.height);
+  if (decl.padding) style.padding = parseSize(decl.padding);
 }
 
 function applyTextareaFieldStyles(decl: Record<string, string>, style: TextareaFieldStyle): void {
   applyFieldBaseStyles(decl, style);
   if (decl['font-size']) style.fontSize = parseSize(decl['font-size']);
-  if (decl['padding']) style.padding = parseSize(decl['padding']);
+  if (decl.padding) style.padding = parseSize(decl.padding);
   if (decl['line-height']) style.lineHeight = parseLineHeight(decl['line-height']);
 }
 
 function applyCheckboxFieldStyles(decl: Record<string, string>, style: CheckboxFieldStyle): void {
   applyFieldBaseStyles(decl, style);
-  if (decl['width']) style.size = parseSize(decl['width']);
-  if (decl['height']) style.size = parseSize(decl['height']);
+  if (decl.width) style.size = parseSize(decl.width);
+  if (decl.height) style.size = parseSize(decl.height);
 }
 
 function applyRadioFieldStyles(decl: Record<string, string>, style: RadioFieldStyle): void {
   applyFieldBaseStyles(decl, style);
-  if (decl['width']) style.size = parseSize(decl['width']);
-  if (decl['height']) style.size = parseSize(decl['height']);
+  if (decl.width) style.size = parseSize(decl.width);
+  if (decl.height) style.size = parseSize(decl.height);
 }
 
 function applyDropdownFieldStyles(decl: Record<string, string>, style: DropdownFieldStyle): void {
   applyFieldBaseStyles(decl, style);
   if (decl['font-size']) style.fontSize = parseSize(decl['font-size']);
-  if (decl['height']) style.height = parseSize(decl['height']);
-  if (decl['padding']) style.padding = parseSize(decl['padding']);
+  if (decl.height) style.height = parseSize(decl.height);
+  if (decl.padding) style.padding = parseSize(decl.padding);
 }
 
 function applySignatureFieldStyles(decl: Record<string, string>, style: SignatureFieldStyle): void {
@@ -597,7 +614,10 @@ function applySignatureFieldStyles(decl: Record<string, string>, style: Signatur
   if (decl['font-size']) style.fontSize = parseSize(decl['font-size']);
 }
 
-function applySignatureRequiredStyles(decl: Record<string, string>, style: SignatureFieldStyle): void {
+function applySignatureRequiredStyles(
+  decl: Record<string, string>,
+  style: SignatureFieldStyle
+): void {
   if (decl['border-color']) style.requiredBorderColor = parseColor(decl['border-color']);
   if (decl['border-width']) style.requiredBorderWidth = parseSize(decl['border-width']);
 }
@@ -605,7 +625,7 @@ function applySignatureRequiredStyles(decl: Record<string, string>, style: Signa
 function applyLabelStyles(decl: Record<string, string>, style: LabelStyle): void {
   if (decl['font-family']) style.fontFamily = parseFontFamily(decl['font-family']);
   if (decl['font-size']) style.fontSize = parseSize(decl['font-size']);
-  if (decl['color']) style.color = parseColor(decl['color']);
+  if (decl.color) style.color = parseColor(decl.color);
   if (decl['margin-bottom']) style.marginBottom = parseSize(decl['margin-bottom']);
 }
 
@@ -614,28 +634,28 @@ function applyLabelStyles(decl: Record<string, string>, style: LabelStyle): void
 function applyTableBaseStyles(decl: Record<string, string>, style: TableStyle): void {
   if (decl['border-color']) style.borderColor = parseColor(decl['border-color']);
   if (decl['border-width']) style.borderWidth = parseSize(decl['border-width']);
-  if (decl['padding']) style.cellPadding = parseSize(decl['padding']);
+  if (decl.padding) style.cellPadding = parseSize(decl.padding);
 }
 
 function applyTableHeaderStyles(decl: Record<string, string>, style: TableStyle): void {
   if (decl['background-color']) style.headerBackgroundColor = parseColor(decl['background-color']);
-  if (decl['color']) style.headerTextColor = parseColor(decl['color']);
+  if (decl.color) style.headerTextColor = parseColor(decl.color);
   if (decl['font-family']) style.headerFontFamily = parseFontFamily(decl['font-family']);
   if (decl['font-size']) style.headerFontSize = parseSize(decl['font-size']);
-  if (decl['height']) style.headerHeight = parseSize(decl['height']);
+  if (decl.height) style.headerHeight = parseSize(decl.height);
 }
 
 function applyTableRowStyles(decl: Record<string, string>, style: TableStyle): void {
   if (decl['background-color']) style.rowBackgroundColor = parseColor(decl['background-color']);
-  if (decl['height']) style.rowHeight = parseSize(decl['height']);
+  if (decl.height) style.rowHeight = parseSize(decl.height);
   // Handle alternate row color via a special property or class
 }
 
 function applyTableCellStyles(decl: Record<string, string>, style: TableStyle): void {
   if (decl['font-family']) style.cellFontFamily = parseFontFamily(decl['font-family']);
   if (decl['font-size']) style.cellFontSize = parseSize(decl['font-size']);
-  if (decl['color']) style.cellTextColor = parseColor(decl['color']);
-  if (decl['padding']) style.cellPadding = parseSize(decl['padding']);
+  if (decl.color) style.cellTextColor = parseColor(decl.color);
+  if (decl.padding) style.cellPadding = parseSize(decl.padding);
 }
 
 function applyTableAlternateRowStyles(decl: Record<string, string>, style: TableStyle): void {

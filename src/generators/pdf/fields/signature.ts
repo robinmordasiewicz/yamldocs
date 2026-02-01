@@ -3,11 +3,7 @@
  * Creates signature fields (implemented as styled text fields)
  */
 
-import {
-  PDFDocument,
-  PDFPage,
-  PDFTextField,
-} from 'pdf-lib';
+import { PDFDocument, PDFPage, PDFTextField } from 'pdf-lib';
 import type { NormalizedFormField } from '../../../types/index.js';
 import type { ResolvedStylesheet } from '../../../types/stylesheet.js';
 import { hexToRgb } from '../utils.js';
@@ -19,12 +15,12 @@ import { getFontName } from '../layout.js';
  * This creates a styled text field intended for typed signatures or a placeholder
  * for manual signatures when printed.
  */
-export async function createSignatureField(
+export function createSignatureField(
   doc: PDFDocument,
   page: PDFPage,
   field: NormalizedFormField,
   stylesheet: ResolvedStylesheet
-): Promise<PDFTextField> {
+): PDFTextField {
   const form = doc.getForm();
   const style = stylesheet.fields.signature;
 
@@ -32,16 +28,14 @@ export async function createSignatureField(
   const signatureField = form.createTextField(field.name);
 
   // Set position and size
-  const width = field.position.width || 200;
-  const height = field.position.height || 50;
+  const width = field.position.width ?? 200;
+  const height = field.position.height ?? 50;
 
   // Use required styling if field is required
   const borderColor = field.required
     ? style.requiredBorderColor
-    : (field.borderColor || style.borderColor);
-  const borderWidth = field.required
-    ? style.requiredBorderWidth
-    : style.borderWidth;
+    : field.borderColor || style.borderColor;
+  const borderWidth = field.required ? style.requiredBorderWidth : style.borderWidth;
 
   signatureField.addToPage(page, {
     x: field.position.x,
@@ -50,7 +44,9 @@ export async function createSignatureField(
     height,
     borderWidth,
     borderColor: hexToRgb(borderColor),
-    backgroundColor: field.backgroundColor ? hexToRgb(field.backgroundColor) : hexToRgb(style.backgroundColor),
+    backgroundColor: field.backgroundColor
+      ? hexToRgb(field.backgroundColor)
+      : hexToRgb(style.backgroundColor),
   });
 
   // Configure field properties - use stylesheet default if not specified

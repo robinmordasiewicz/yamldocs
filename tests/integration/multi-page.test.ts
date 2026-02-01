@@ -55,8 +55,7 @@ describe('Multi-Page Document Generation', () => {
   });
 
   it('distributes many fields across multiple pages', async () => {
-    const builder = new SchemaBuilder('distributed-fields', 'Distributed Fields')
-      .setPages(3);
+    const builder = new SchemaBuilder('distributed-fields', 'Distributed Fields').setPages(3);
 
     // Add 5 fields per page
     for (let page = 1; page <= 3; page++) {
@@ -82,7 +81,7 @@ describe('Multi-Page Document Generation', () => {
     const result = await generatePdf({ schema });
     const fields = await getFormFields(result.bytes);
 
-    const fieldNames = fields.map(f => f.name);
+    const fieldNames = fields.map((f) => f.name);
 
     // Should contain fields from both pages
     expect(fieldNames).toContain('page1_field1');
@@ -113,7 +112,7 @@ describe('Multi-Page Document Generation', () => {
     expect(fields.length).toBe(4);
     expect(result.pageCount).toBe(2);
 
-    const types = fields.map(f => f.type);
+    const types = fields.map((f) => f.type);
     expect(types).toContain('text');
     expect(types).toContain('checkbox');
     expect(types).toContain('dropdown');
@@ -121,8 +120,7 @@ describe('Multi-Page Document Generation', () => {
   });
 
   it('handles single page with many fields', async () => {
-    const builder = new SchemaBuilder('dense-page', 'Dense Page')
-      .setPages(1);
+    const builder = new SchemaBuilder('dense-page', 'Dense Page').setPages(1);
 
     // Add 20 fields in a grid
     for (let row = 0; row < 5; row++) {

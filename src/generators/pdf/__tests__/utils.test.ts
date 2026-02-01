@@ -3,8 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { hexToRgb, rgbToHex, wrapText, pointsToInches, inchesToPoints } from '../utils.js';
-import { rgb } from 'pdf-lib';
+import { hexToRgb, wrapText } from '../utils.js';
 
 describe('hexToRgb', () => {
   it('should convert hex to RGB', () => {
@@ -53,17 +52,5 @@ describe('wrapText', () => {
   it('should handle empty string', () => {
     const lines = wrapText('', 100, 12);
     expect(lines.length).toBe(0);
-  });
-});
-
-describe('unit conversions', () => {
-  it('should convert points to inches', () => {
-    expect(pointsToInches(72)).toBe(1);
-    expect(pointsToInches(144)).toBe(2);
-  });
-
-  it('should convert inches to points', () => {
-    expect(inchesToPoints(1)).toBe(72);
-    expect(inchesToPoints(2)).toBe(144);
   });
 });

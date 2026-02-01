@@ -1,0 +1,17 @@
+#!/bin/sh
+
+echo "Running pre-push checks..."
+
+# Type checking
+echo "Type checking..."
+npm run typecheck
+
+# Full test suite
+echo "Running tests..."
+npm run test:run
+
+# Security audit (warn only, don't block)
+echo "Security audit..."
+npm run audit || echo "Security audit completed with warnings"
+
+echo "Pre-push checks passed!"

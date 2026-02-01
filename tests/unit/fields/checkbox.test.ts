@@ -4,7 +4,10 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
-import { createCheckboxField, drawCheckboxLabel } from '../../../src/generators/pdf/fields/checkbox.js';
+import {
+  createCheckboxField,
+  drawCheckboxLabel,
+} from '../../../src/generators/pdf/fields/checkbox.js';
 import { getDefaultStylesheet } from '../../../src/parsers/stylesheet.js';
 import type { NormalizedFormField } from '../../../src/types/schema.js';
 import type { ResolvedStylesheet } from '../../../src/types/stylesheet.js';
@@ -29,7 +32,7 @@ describe('Checkbox Field Generator', () => {
       position: { x: 72, y: 700, width: 16 },
     };
 
-    const checkbox = await createCheckboxField(doc, page, field, stylesheet);
+    const checkbox = createCheckboxField(doc, page, field, stylesheet);
 
     expect(checkbox).toBeDefined();
     expect(checkbox.getName()).toBe('test_checkbox');
@@ -44,7 +47,7 @@ describe('Checkbox Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const checkbox = await createCheckboxField(doc, page, field, stylesheet);
+    const checkbox = createCheckboxField(doc, page, field, stylesheet);
 
     expect(checkbox.isChecked()).toBe(false);
   });
@@ -59,7 +62,7 @@ describe('Checkbox Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const checkbox = await createCheckboxField(doc, page, field, stylesheet);
+    const checkbox = createCheckboxField(doc, page, field, stylesheet);
 
     expect(checkbox.isChecked()).toBe(true);
   });
@@ -74,7 +77,7 @@ describe('Checkbox Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const checkbox = await createCheckboxField(doc, page, field, stylesheet);
+    const checkbox = createCheckboxField(doc, page, field, stylesheet);
 
     expect(checkbox.isReadOnly()).toBe(true);
   });
@@ -88,7 +91,7 @@ describe('Checkbox Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const checkbox = await createCheckboxField(doc, page, field, stylesheet);
+    const checkbox = createCheckboxField(doc, page, field, stylesheet);
 
     expect(checkbox).toBeDefined();
   });
@@ -114,7 +117,7 @@ describe('Checkbox Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    const checkbox = await createCheckboxField(doc, page, field, stylesheet);
+    const checkbox = createCheckboxField(doc, page, field, stylesheet);
 
     expect(checkbox.isChecked()).toBe(false);
     checkbox.check();
@@ -132,7 +135,7 @@ describe('Checkbox Field Generator', () => {
       position: { x: 72, y: 700 },
     };
 
-    await createCheckboxField(doc, page, field, stylesheet);
+    createCheckboxField(doc, page, field, stylesheet);
     const pdfBytes = await doc.save();
 
     expect(pdfBytes).toBeInstanceOf(Uint8Array);
@@ -147,7 +150,7 @@ describe('Checkbox Field Generator', () => {
     ];
 
     for (const field of fields) {
-      await createCheckboxField(doc, page, field, stylesheet);
+      createCheckboxField(doc, page, field, stylesheet);
     }
 
     const form = doc.getForm();
