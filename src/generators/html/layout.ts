@@ -149,9 +149,17 @@ export function estimateHtmlElementHeight(
   switch (element.type) {
     case 'heading': {
       const headingEl = element;
-      const level = Math.max(1, Math.min(6, headingEl.level)) as 1 | 2 | 3 | 4 | 5 | 6;
-      const headingKey = `h${level}`;
-      const style = components.heading[headingKey] as { fontSize: number };
+      const level = Math.max(1, Math.min(6, headingEl.level));
+      // Get heading style based on level (1-6)
+      const headingStyles = {
+        1: components.heading.h1,
+        2: components.heading.h2,
+        3: components.heading.h3,
+        4: components.heading.h4,
+        5: components.heading.h5,
+        6: components.heading.h6,
+      } as const;
+      const style = headingStyles[level as 1 | 2 | 3 | 4 | 5 | 6];
       const fontSizePx = ptToPx(style.fontSize);
       const marginTopPx = ptToPx(FLOW_SPACING.heading.marginTop);
       const marginBottomPx = ptToPx(FLOW_SPACING.heading.marginBottom);
@@ -162,7 +170,7 @@ export function estimateHtmlElementHeight(
       const paragraphEl = element;
       const style = components.paragraph;
       const fontSize = paragraphEl.fontSize ?? style.fontSize;
-      const lineHeight = fontSize * (style.lineHeight ?? 1.5);
+      const lineHeight = fontSize * style.lineHeight;
       const maxWidth = paragraphEl.maxWidth ? ptToPx(paragraphEl.maxWidth) : contentWidthPx;
       const lineCount = estimateLineCount(paragraphEl.text, maxWidth, fontSize);
       const textHeightPx = lineCount * ptToPx(lineHeight);
