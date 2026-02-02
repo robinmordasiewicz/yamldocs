@@ -1,3 +1,4 @@
+---
 # Table Content Type Test Schema
 # Tests the new table content type with various cell configurations
 
@@ -16,120 +17,118 @@ content:
     level: 1
     text: 'Table Content Type Demo'
     page: 1
-    position: { y: 720 }
+    position: {y: 720}
 
   - type: paragraph
     text: 'This form demonstrates the new table content type with embedded form fields.'
     page: 1
-    position: { y: 695 }
+    position: {y: 695}
 
   - type: rule
     page: 1
-    position: { y: 670 }
+    position: {y: 670}
 
   - type: table
     page: 1
-    position: { y: 650 }
+    position: {y: 650}
     label: 'Attack History - Record recent DDoS attacks experienced by your organization'
     columns:
-      - { label: 'Date', width: 80 }
-      - { label: 'Attack Type', width: 120 }
-      - { label: 'Peak Size (Gbps)', width: 100 }
-      - { label: 'Severity', width: 100 }
+      - {label: 'Date', width: 80}
+      - {label: 'Attack Type', width: 120}
+      - {label: 'Peak Size (Gbps)', width: 100}
+      - {label: 'Severity', width: 100}
     rows:
       - cells:
-          - { type: text, fieldName: attack_date_1 }
-          - { type: text, fieldName: attack_type_1 }
-          - { type: text, fieldName: attack_size_1 }
+          - {type: text, fieldName: attack_date_1}
+          - {type: text, fieldName: attack_type_1}
+          - {type: text, fieldName: attack_size_1}
           - type: dropdown
             fieldName: severity_1
             options:
-              - { value: low, label: Low }
-              - { value: medium, label: Medium }
-              - { value: high, label: High }
-              - { value: critical, label: Critical }
+              - {value: low, label: Low}
+              - {value: medium, label: Medium}
+              - {value: high, label: High}
+              - {value: critical, label: Critical}
       - cells:
-          - { type: text, fieldName: attack_date_2 }
-          - { type: text, fieldName: attack_type_2 }
-          - { type: text, fieldName: attack_size_2 }
+          - {type: text, fieldName: attack_date_2}
+          - {type: text, fieldName: attack_type_2}
+          - {type: text, fieldName: attack_size_2}
           - type: dropdown
             fieldName: severity_2
             options:
-              - { value: low, label: Low }
-              - { value: medium, label: Medium }
-              - { value: high, label: High }
-              - { value: critical, label: Critical }
+              - {value: low, label: Low}
+              - {value: medium, label: Medium}
+              - {value: high, label: High}
+              - {value: critical, label: Critical}
       - cells:
-          - { type: text, fieldName: attack_date_3 }
-          - { type: text, fieldName: attack_type_3 }
-          - { type: text, fieldName: attack_size_3 }
+          - {type: text, fieldName: attack_date_3}
+          - {type: text, fieldName: attack_type_3}
+          - {type: text, fieldName: attack_size_3}
           - type: dropdown
             fieldName: severity_3
             options:
-              - { value: low, label: Low }
-              - { value: medium, label: Medium }
-              - { value: high, label: High }
-              - { value: critical, label: Critical }
+              - {value: low, label: Low}
+              - {value: medium, label: Medium}
+              - {value: high, label: High}
+              - {value: critical, label: Critical}
 
   - type: table
     page: 1
-    position: { y: 470 }
+    position: {y: 470}
     label: 'Network Prefixes - IP address blocks to protect'
     columns:
-      - { label: 'Prefix (CIDR)', width: 140 }
-      - { label: 'Size', width: 60 }
-      - { label: 'BGP Announced', width: 100 }
-      - { label: 'Active', width: 80 }
+      - {label: 'Prefix (CIDR)', width: 140}
+      - {label: 'Size', width: 60}
+      - {label: 'BGP Announced', width: 100}
+      - {label: 'Active', width: 80}
     rows:
       - cells:
-          - { type: text, fieldName: prefix_cidr_1, default: '192.168.0.0/24' }
-          - { type: label, value: '/24' }
-          - {
-              type: dropdown,
-              fieldName: prefix_bgp_1,
-              options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }],
-            }
-          - { type: checkbox, fieldName: prefix_active_1, default: true }
+          - {type: text, fieldName: prefix_cidr_1, default: '192.168.0.0/24'}
+          - {type: label, value: '/24'}
+          - type: dropdown
+            fieldName: prefix_bgp_1
+            options: [{value: 'yes', label: 'Yes'}, {value: 'no', label: 'No'}]
+          - {type: checkbox, fieldName: prefix_active_1, default: true}
       - cells:
-          - { type: text, fieldName: prefix_cidr_2 }
-          - { type: label, value: '/23' }
-          - {
-              type: dropdown,
-              fieldName: prefix_bgp_2,
-              options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }],
-            }
-          - { type: checkbox, fieldName: prefix_active_2 }
+          - {type: text, fieldName: prefix_cidr_2}
+          - {type: label, value: '/23'}
+          - type: dropdown
+            fieldName: prefix_bgp_2
+            options: [{value: 'yes', label: 'Yes'}, {value: 'no', label: 'No'}]
+          - {type: checkbox, fieldName: prefix_active_2}
 
   - type: table
     page: 1
-    position: { y: 330 }
+    position: {y: 330}
     label: 'Contact Information'
     rowHeight: 24
     headerHeight: 26
     columns:
-      - { label: 'Role', width: 100 }
-      - { label: 'Name', width: 150 }
-      - { label: 'Email', width: 180 }
+      - {label: 'Role', width: 100}
+      - {label: 'Name', width: 150}
+      - {label: 'Email', width: 180}
     rows:
       - cells:
-          - { type: label, value: 'Primary' }
-          - { type: text, fieldName: contact_primary_name }
-          - { type: text, fieldName: contact_primary_email }
+          - {type: label, value: 'Primary'}
+          - {type: text, fieldName: contact_primary_name}
+          - {type: text, fieldName: contact_primary_email}
       - cells:
-          - { type: label, value: 'Secondary' }
-          - { type: text, fieldName: contact_secondary_name }
-          - { type: text, fieldName: contact_secondary_email }
+          - {type: label, value: 'Secondary'}
+          - {type: text, fieldName: contact_secondary_name}
+          - {type: text, fieldName: contact_secondary_email}
       - cells:
-          - { type: label, value: 'Escalation' }
-          - { type: text, fieldName: contact_escalation_name }
-          - { type: text, fieldName: contact_escalation_email }
+          - {type: label, value: 'Escalation'}
+          - {type: text, fieldName: contact_escalation_name}
+          - {type: text, fieldName: contact_escalation_email}
 
   - type: admonition
     variant: info
     title: 'Table Features'
-    text: 'Tables support text input, dropdowns, checkboxes, and static labels in cells. Headers have distinct styling and borders are drawn automatically.'
+    text:
+      'Tables support text input, dropdowns, checkboxes, and static labels in cells. Headers have distinct styling and
+      borders are drawn automatically.'
     page: 1
-    position: { y: 180 }
+    position: {y: 180}
 
 # No separate fields needed - table cells define their own fields inline
 fields: []

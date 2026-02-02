@@ -1,3 +1,4 @@
+---
 # Simple Test Form Schema
 $schema: 'form-schema/v1'
 form:

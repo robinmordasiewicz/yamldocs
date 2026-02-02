@@ -7,5 +7,15 @@
   "bracketSpacing": true,
   "arrowParens": "always",
   "endOfLine": "lf",
-  "useTabs": false
+  "useTabs": false,
+  "overrides": [
+    {
+      "files": ["*.yaml", "*.yml"],
+      "options": {
+        "printWidth": 120,
+        "bracketSpacing": false,
+        "singleQuote": true
+      }
+    }
+  ]
 }

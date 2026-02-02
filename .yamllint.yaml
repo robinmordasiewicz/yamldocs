@@ -1,0 +1,62 @@
+---
+# yamllint configuration - YAML best practices
+# https://yamllint.readthedocs.io/
+
+extends: default
+
+rules:
+  # Structural
+  indentation:
+    spaces: 2
+    indent-sequences: true
+  document-start: enable
+  document-end: disable
+
+  # Spacing - best practice: no spaces inside braces/brackets
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
+  colons:
+    max-spaces-before: 0
+    max-spaces-after: 1
+  commas:
+    max-spaces-before: 0
+    min-spaces-after: 1
+    max-spaces-after: 1
+
+  # Quoting - only when necessary
+  quoted-strings:
+    quote-type: single
+    required: only-when-needed
+    extra-required: []
+    extra-allowed:
+      - '.*' # Allow quotes for any string (don't error on quoted)
+
+  # Line formatting
+  line-length:
+    max: 120
+    level: warning
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+
+  # Comments
+  comments:
+    require-starting-space: true
+    ignore-shebangs: true
+    min-spaces-from-content: 1
+  comments-indentation: enable
+
+  # Other
+  truthy:
+    level: warning
+    allowed-values: ['true', 'false', 'yes', 'no']
+  empty-lines:
+    max: 1
+    max-start: 0
+    max-end: 0
+  trailing-spaces: enable
+  new-line-at-end-of-file: enable
+  key-duplicates: enable

@@ -1,3 +1,4 @@
+---
 name: Generate Documentation
 
 on:
@@ -108,15 +109,37 @@ jobs:
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>PDF Generator - Documents</title>
             <style>
-              body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
-              h1 { color: #333; }
-              h2 { color: #555; margin-top: 2rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+              body {
+                font-family: system-ui, sans-serif;
+                max-width: 800px;
+                margin: 2rem auto;
+                padding: 0 1rem;
+                line-height: 1.6;
+              }
+              h1 { color: '#333'; }
+              h2 {
+                color: '#555';
+                margin-top: 2rem;
+                border-bottom: 1px solid '#eee';
+                padding-bottom: 0.5rem;
+              }
               ul { list-style: none; padding: 0; }
-              li { margin: 1rem 0; padding: 0.75rem; background: #f9f9f9; border-radius: 4px; }
-              a { color: #0066cc; text-decoration: none; }
+              li {
+                margin: 1rem 0;
+                padding: 0.75rem;
+                background: '#f9f9f9';
+                border-radius: 4px;
+              }
+              a { color: '#0066cc'; text-decoration: none; }
               a:hover { text-decoration: underline; }
-              .format { color: #666; font-size: 0.9em; }
-              footer { margin-top: 3rem; color: #999; font-size: 0.85em; border-top: 1px solid #eee; padding-top: 1rem; }
+              .format { color: '#666'; font-size: 0.9em; }
+              footer {
+                margin-top: 3rem;
+                color: '#999';
+                font-size: 0.85em;
+                border-top: 1px solid '#eee';
+                padding-top: 1rem;
+              }
             </style>
           </head>
           <body>

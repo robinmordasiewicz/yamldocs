@@ -1,3 +1,4 @@
+---
 # Empty Form Schema (no fields)
 $schema: 'form-schema/v1'
 form:

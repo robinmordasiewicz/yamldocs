@@ -14,7 +14,10 @@ content:
     text: 'Network DDoS Protection Questionnaire'
 
   - type: paragraph
-    text: 'F5 Distributed Cloud DDoS Mitigation provides multi-terabit protection against L3/L4 volumetric attacks with always-on or on-demand deployment options.'
+    text: >
+      F5 Distributed Cloud DDoS Mitigation provides multi-terabit protection
+      against L3/L4 volumetric attacks with always-on or on-demand deployment
+      options.
 
   - type: rule
 
@@ -41,7 +44,7 @@ content:
       - 'Weekly'
       - 'Monthly'
       - 'Annually'
-      - 'Unkown'
+      - 'Unknown'
 
   - type: field
     label: 'Network diagram:'
@@ -60,261 +63,261 @@ content:
     fieldPrefix: attack
     rowCount: 5
     columns:
-      - { label: 'Date', width: 65, cellType: text, fieldSuffix: date }
+      - {label: 'Date', width: 65, cellType: text, fieldSuffix: date}
       - label: 'Type'
         width: 160
         cellType: dropdown
         fieldSuffix: type
         options:
           # Volumetric Floods (L3/L4)
-          - { value: udp_flood, label: 'UDP Flood' }
-          - { value: icmp_flood, label: 'ICMP Flood' }
-          - { value: syn_flood, label: 'SYN Flood' }
-          - { value: syn_ack_flood, label: 'SYN-ACK Flood' }
-          - { value: ack_flood, label: 'ACK Flood' }
-          - { value: rst_flood, label: 'RST Flood' }
-          - { value: tcp_flood, label: 'TCP Flood' }
-          - { value: gre_flood, label: 'GRE Flood' }
-          - { value: esp_flood, label: 'ESP Flood' }
-          - { value: quic_flood, label: 'QUIC Flood' }
+          - {value: udp_flood, label: 'UDP Flood'}
+          - {value: icmp_flood, label: 'ICMP Flood'}
+          - {value: syn_flood, label: 'SYN Flood'}
+          - {value: syn_ack_flood, label: 'SYN-ACK Flood'}
+          - {value: ack_flood, label: 'ACK Flood'}
+          - {value: rst_flood, label: 'RST Flood'}
+          - {value: tcp_flood, label: 'TCP Flood'}
+          - {value: gre_flood, label: 'GRE Flood'}
+          - {value: esp_flood, label: 'ESP Flood'}
+          - {value: quic_flood, label: 'QUIC Flood'}
           # Protocol Attacks
-          - { value: ping_of_death, label: 'Ping of Death' }
-          - { value: smurf_attack, label: 'Smurf Attack' }
-          - { value: ip_fragmentation, label: 'IP Fragmentation' }
-          - { value: teardrop, label: 'Teardrop' }
-          - { value: tcp_session_exhaustion, label: 'TCP Session Exhaustion' }
+          - {value: ping_of_death, label: 'Ping of Death'}
+          - {value: smurf_attack, label: 'Smurf Attack'}
+          - {value: ip_fragmentation, label: 'IP Fragmentation'}
+          - {value: teardrop, label: 'Teardrop'}
+          - {value: tcp_session_exhaustion, label: 'TCP Session Exhaustion'}
           # Amplification/Reflection Attacks
-          - { value: dns_amplification, label: 'DNS Amplification' }
-          - { value: ntp_amplification, label: 'NTP Amplification' }
-          - { value: ssdp_amplification, label: 'SSDP Amplification' }
-          - { value: memcached_amplification, label: 'Memcached Amplification' }
-          - { value: chargen_reflection, label: 'CHARGEN Reflection' }
-          - { value: snmp_amplification, label: 'SNMP Amplification' }
-          - { value: mssql_reflection, label: 'MSSQL Reflection' }
-          - { value: ldap_reflection, label: 'LDAP/CLDAP Reflection' }
-          - { value: netbios_ddos, label: 'NetBIOS DDoS' }
+          - {value: dns_amplification, label: 'DNS Amplification'}
+          - {value: ntp_amplification, label: 'NTP Amplification'}
+          - {value: ssdp_amplification, label: 'SSDP Amplification'}
+          - {value: memcached_amplification, label: 'Memcached Amplification'}
+          - {value: chargen_reflection, label: 'CHARGEN Reflection'}
+          - {value: snmp_amplification, label: 'SNMP Amplification'}
+          - {value: mssql_reflection, label: 'MSSQL Reflection'}
+          - {value: ldap_reflection, label: 'LDAP/CLDAP Reflection'}
+          - {value: netbios_ddos, label: 'NetBIOS DDoS'}
           # Carpet Bombing
-          - { value: carpet_bombing, label: 'Carpet Bombing' }
+          - {value: carpet_bombing, label: 'Carpet Bombing'}
           # Multi-Vector
-          - { value: multi_vector, label: 'Multi-Vector Attack' }
-          - { value: other, label: 'Other' }
-      - { label: 'Gbps', width: 35, cellType: text, fieldSuffix: peak_size }
-      - { label: 'Duration', width: 65, cellType: text, fieldSuffix: duration }
+          - {value: multi_vector, label: 'Multi-Vector Attack'}
+          - {value: other, label: 'Other'}
+      - {label: 'Gbps', width: 35, cellType: text, fieldSuffix: peak_size}
+      - {label: 'Duration', width: 65, cellType: text, fieldSuffix: duration}
       - label: 'Impact'
         width: 143
         cellType: dropdown
         fieldSuffix: impact
         options:
           # Severity-Based Impact Levels
-          - { value: none, label: 'None' }
-          - { value: minimal, label: 'Minimal' }
-          - { value: minor, label: 'Minor' }
-          - { value: moderate, label: 'Moderate' }
-          - { value: significant, label: 'Significant' }
-          - { value: severe, label: 'Severe' }
-          - { value: critical, label: 'Critical' }
+          - {value: none, label: 'None'}
+          - {value: minimal, label: 'Minimal'}
+          - {value: minor, label: 'Minor'}
+          - {value: moderate, label: 'Moderate'}
+          - {value: significant, label: 'Significant'}
+          - {value: severe, label: 'Severe'}
+          - {value: critical, label: 'Critical'}
           # Service Impact Types
-          - { value: performance_degradation, label: 'Perf. Degradation' }
-          - { value: partial_outage, label: 'Partial Outage' }
-          - { value: complete_outage, label: 'Complete Outage' }
+          - {value: performance_degradation, label: 'Perf. Degradation'}
+          - {value: partial_outage, label: 'Partial Outage'}
+          - {value: complete_outage, label: 'Complete Outage'}
           # Business Impact Types
-          - { value: revenue_loss, label: 'Revenue Loss' }
-          - { value: sla_breach, label: 'SLA Breach' }
-          - { value: customer_churn, label: 'Customer Churn' }
-          - { value: reputation_damage, label: 'Reputation Damage' }
-          - { value: operational_disruption, label: 'Ops Disruption' }
-          - { value: regulatory_exposure, label: 'Regulatory Exposure' }
+          - {value: revenue_loss, label: 'Revenue Loss'}
+          - {value: sla_breach, label: 'SLA Breach'}
+          - {value: customer_churn, label: 'Customer Churn'}
+          - {value: reputation_damage, label: 'Reputation Damage'}
+          - {value: operational_disruption, label: 'Ops Disruption'}
+          - {value: regulatory_exposure, label: 'Regulatory Exposure'}
           # Secondary/Compound Impact
-          - { value: data_breach, label: 'Data Breach' }
-          - { value: ransom_demand, label: 'Ransom Demand' }
-          - { value: multi_dimensional, label: 'Multi-Dimensional' }
+          - {value: data_breach, label: 'Data Breach'}
+          - {value: ransom_demand, label: 'Ransom Demand'}
+          - {value: multi_dimensional, label: 'Multi-Dimensional'}
 
   - type: table
     label: 'ASN Information'
     fieldPrefix: asn
     rowCount: 4
     columns:
-      - { label: 'ASN Number', width: 93, cellType: text, fieldSuffix: number }
+      - {label: 'ASN Number', width: 93, cellType: text, fieldSuffix: number}
       - label: 'Type'
         width: 95
         cellType: dropdown
         fieldSuffix: type
         options:
-          - { value: public_2byte, label: 'Public 2-byte' }
-          - { value: public_4byte, label: 'Public 4-byte' }
-          - { value: private, label: 'Private' }
+          - {value: public_2byte, label: 'Public 2-byte'}
+          - {value: public_4byte, label: 'Public 4-byte'}
+          - {value: private, label: 'Private'}
       - label: 'Ownership'
         width: 120
         cellType: dropdown
         fieldSuffix: ownership
         options:
-          - { value: owned, label: 'Owned' }
-          - { value: leased, label: 'Leased' }
-          - { value: provider, label: 'Provider Assigned' }
+          - {value: owned, label: 'Owned'}
+          - {value: leased, label: 'Leased'}
+          - {value: provider, label: 'Provider Assigned'}
       - label: 'RPKI ROA'
         width: 80
         cellType: dropdown
         fieldSuffix: rpki
         options:
-          - { value: deployed, label: 'Deployed' }
-          - { value: planned, label: 'Planned' }
-          - { value: none, label: 'None' }
+          - {value: deployed, label: 'Deployed'}
+          - {value: planned, label: 'Planned'}
+          - {value: none, label: 'None'}
       - label: 'IRR Status'
         width: 80
         cellType: dropdown
         fieldSuffix: irr
         options:
-          - { value: current, label: 'Current' }
-          - { value: outdated, label: 'Outdated' }
-          - { value: none, label: 'None' }
+          - {value: current, label: 'Current'}
+          - {value: outdated, label: 'Outdated'}
+          - {value: none, label: 'None'}
 
   - type: table
     label: 'Primary Upstream Providers'
     fieldPrefix: upstream
     rowCount: 4
     columns:
-      - { label: 'Provider Name', width: 143, cellType: text, fieldSuffix: name }
-      - { label: 'Provider ASN', width: 100, cellType: text, fieldSuffix: asn }
+      - {label: 'Provider Name', width: 143, cellType: text, fieldSuffix: name}
+      - {label: 'Provider ASN', width: 100, cellType: text, fieldSuffix: asn}
       - label: 'Connection Type'
         width: 130
         cellType: dropdown
         fieldSuffix: type
         options:
-          - { value: transit, label: 'Transit' }
-          - { value: peering, label: 'Peering' }
-          - { value: ix, label: 'Internet Exchange' }
+          - {value: transit, label: 'Transit'}
+          - {value: peering, label: 'Peering'}
+          - {value: ix, label: 'Internet Exchange'}
       - label: 'BGP Communities'
         width: 95
         cellType: dropdown
         fieldSuffix: communities
         options:
-          - { value: yes, label: 'Yes' }
-          - { value: no, label: 'No' }
+          - {value: yes, label: 'Yes'}
+          - {value: no, label: 'No'}
 
   - type: table
     label: 'Network Prefixes'
     fieldPrefix: prefix
     rowCount: 8
     columns:
-      - { label: 'Prefix (CIDR)', width: 115, cellType: text, fieldSuffix: cidr }
+      - {label: 'Prefix (CIDR)', width: 115, cellType: text, fieldSuffix: cidr}
       - label: 'Ownership'
         width: 108
         cellType: dropdown
         fieldSuffix: ownership
         options:
-          - { value: pi, label: 'PI (Independent)' }
-          - { value: pa, label: 'PA (Assigned)' }
-          - { value: leased, label: 'Leased' }
+          - {value: pi, label: 'PI (Independent)'}
+          - {value: pa, label: 'PA (Assigned)'}
+          - {value: leased, label: 'Leased'}
       - label: 'RPKI ROA'
         width: 59
         cellType: dropdown
         fieldSuffix: rpki
         options:
-          - { value: valid, label: 'Valid' }
-          - { value: pending, label: 'Pending' }
-          - { value: none, label: 'None' }
+          - {value: valid, label: 'Valid'}
+          - {value: pending, label: 'Pending'}
+          - {value: none, label: 'None'}
       - label: 'Protection'
         width: 80
         cellType: dropdown
         fieldSuffix: protection
         options:
-          - { value: always_on, label: 'Always-On' }
-          - { value: on_demand, label: 'On-Demand' }
+          - {value: always_on, label: 'Always-On'}
+          - {value: on_demand, label: 'On-Demand'}
       - label: 'Environment'
         width: 105
         cellType: dropdown
         fieldSuffix: environment
         options:
-          - { value: production, label: 'Production' }
-          - { value: dr, label: 'Disaster Recovery' }
-          - { value: staging, label: 'Staging' }
-          - { value: development, label: 'Development' }
+          - {value: production, label: 'Production'}
+          - {value: dr, label: 'Disaster Recovery'}
+          - {value: staging, label: 'Staging'}
+          - {value: development, label: 'Development'}
 
   - type: table
     label: 'Prefix Traffic Return Configuration'
     fieldPrefix: prefix_return
     rowCount: 8
     columns:
-      - { label: 'Prefix (CIDR)', width: 125, cellType: text, fieldSuffix: cidr }
+      - {label: 'Prefix (CIDR)', width: 125, cellType: text, fieldSuffix: cidr}
       - label: 'Return Method'
         width: 115
         cellType: dropdown
         fieldSuffix: method
         options:
-          - { value: gre_tunnel, label: 'GRE Tunnel' }
-          - { value: direct_routing, label: 'Direct Routing' }
-          - { value: proxy_protocol, label: 'Proxy Protocol' }
-      - { label: 'GRE Endpoint IP', width: 124, cellType: text, fieldSuffix: gre_endpoint }
+          - {value: gre_tunnel, label: 'GRE Tunnel'}
+          - {value: direct_routing, label: 'Direct Routing'}
+          - {value: proxy_protocol, label: 'Proxy Protocol'}
+      - {label: 'GRE Endpoint IP', width: 124, cellType: text, fieldSuffix: gre_endpoint}
       - label: 'LOA Status'
         width: 104
         cellType: dropdown
         fieldSuffix: loa
         options:
-          - { value: submitted, label: 'Submitted' }
-          - { value: pending, label: 'Pending' }
-          - { value: not_required, label: 'Not Required' }
+          - {value: submitted, label: 'Submitted'}
+          - {value: pending, label: 'Pending'}
+          - {value: not_required, label: 'Not Required'}
 
   - type: table
     label: 'Data Center Infrastructure'
     fieldPrefix: dcinfra
     rowCount: 8
     columns:
-      - { label: 'Data Center', width: 100, cellType: text, fieldSuffix: datacenter }
+      - {label: 'Data Center', width: 100, cellType: text, fieldSuffix: datacenter}
       - label: 'Provider Type'
         width: 83
         cellType: dropdown
         fieldSuffix: provider
         options:
-          - { value: onprem, label: 'On-Prem' }
-          - { value: colo, label: 'Colo' }
-          - { value: cloud, label: 'Cloud' }
-      - { label: 'Router Name', width: 100, cellType: text, fieldSuffix: router_name }
+          - {value: onprem, label: 'On-Prem'}
+          - {value: colo, label: 'Colo'}
+          - {value: cloud, label: 'Cloud'}
+      - {label: 'Router Name', width: 100, cellType: text, fieldSuffix: router_name}
       - label: 'Router Type'
         width: 75
         cellType: dropdown
         fieldSuffix: router_type
         options:
-          - { value: edge, label: 'Edge' }
-          - { value: core, label: 'Core' }
-          - { value: border, label: 'Border' }
+          - {value: edge, label: 'Edge'}
+          - {value: core, label: 'Core'}
+          - {value: border, label: 'Border'}
       - label: 'Vendor'
         width: 110
         cellType: dropdown
         fieldSuffix: vendor
         options:
-          - { value: arista, label: 'Arista' }
-          - { value: cisco_asr, label: 'Cisco ASR' }
-          - { value: cisco_catalyst, label: 'Cisco Catalyst' }
-          - { value: cisco_isr, label: 'Cisco ISR' }
-          - { value: cisco_ncs, label: 'Cisco NCS' }
-          - { value: cisco_nexus, label: 'Cisco Nexus' }
-          - { value: dell_powerswitch, label: 'Dell PowerSwitch' }
-          - { value: extreme_slx, label: 'Extreme SLX' }
-          - { value: extreme_vsp, label: 'Extreme VSP' }
-          - { value: fortinet_fortigate, label: 'Fortinet FortiGate' }
-          - { value: h3c_cr, label: 'H3C CR' }
-          - { value: hpe_aruba, label: 'HPE Aruba' }
-          - { value: hpe_flexnetwork, label: 'HPE FlexNetwork' }
-          - { value: huawei_ar, label: 'Huawei AR' }
-          - { value: huawei_netengine, label: 'Huawei NetEngine' }
-          - { value: juniper_acx, label: 'Juniper ACX' }
-          - { value: juniper_mx, label: 'Juniper MX' }
-          - { value: juniper_ptx, label: 'Juniper PTX' }
-          - { value: juniper_srx, label: 'Juniper SRX' }
-          - { value: mikrotik_ccr, label: 'MikroTik CCR' }
-          - { value: mikrotik_routerboard, label: 'MikroTik RouterBOARD' }
-          - { value: nokia_ixr, label: 'Nokia IXR' }
-          - { value: nokia_sr, label: 'Nokia SR' }
-          - { value: paloalto, label: 'Palo Alto' }
-          - { value: ubiquiti_edgerouter, label: 'Ubiquiti EdgeRouter' }
-          - { value: zte_zxr, label: 'ZTE ZXR' }
-          - { value: other, label: 'Other' }
+          - {value: arista, label: 'Arista'}
+          - {value: cisco_asr, label: 'Cisco ASR'}
+          - {value: cisco_catalyst, label: 'Cisco Catalyst'}
+          - {value: cisco_isr, label: 'Cisco ISR'}
+          - {value: cisco_ncs, label: 'Cisco NCS'}
+          - {value: cisco_nexus, label: 'Cisco Nexus'}
+          - {value: dell_powerswitch, label: 'Dell PowerSwitch'}
+          - {value: extreme_slx, label: 'Extreme SLX'}
+          - {value: extreme_vsp, label: 'Extreme VSP'}
+          - {value: fortinet_fortigate, label: 'Fortinet FortiGate'}
+          - {value: h3c_cr, label: 'H3C CR'}
+          - {value: hpe_aruba, label: 'HPE Aruba'}
+          - {value: hpe_flexnetwork, label: 'HPE FlexNetwork'}
+          - {value: huawei_ar, label: 'Huawei AR'}
+          - {value: huawei_netengine, label: 'Huawei NetEngine'}
+          - {value: juniper_acx, label: 'Juniper ACX'}
+          - {value: juniper_mx, label: 'Juniper MX'}
+          - {value: juniper_ptx, label: 'Juniper PTX'}
+          - {value: juniper_srx, label: 'Juniper SRX'}
+          - {value: mikrotik_ccr, label: 'MikroTik CCR'}
+          - {value: mikrotik_routerboard, label: 'MikroTik RouterBOARD'}
+          - {value: nokia_ixr, label: 'Nokia IXR'}
+          - {value: nokia_sr, label: 'Nokia SR'}
+          - {value: paloalto, label: 'Palo Alto'}
+          - {value: ubiquiti_edgerouter, label: 'Ubiquiti EdgeRouter'}
+          - {value: zte_zxr, label: 'ZTE ZXR'}
+          - {value: other, label: 'Other'}
 
   - type: table
     label: 'Bandwidth Metrics'
     columns:
-      - { label: 'Metric', width: 240, cellType: label }
-      - { label: 'Value (Mbps)', width: 100, cellType: text }
+      - {label: 'Metric', width: 240, cellType: label}
+      - {label: 'Value (Mbps)', width: 100, cellType: text}
     rows:
       - values: ['95th Percentile Inbound Bandwidth', 'bandwidth_95th']
       - values: ['Peak Inbound Bandwidth', 'bandwidth_peak']
@@ -323,8 +326,8 @@ content:
   - type: table
     label: 'Activation Method for On-Demand)'
     columns:
-      - { label: 'Method', width: 240, cellType: label }
-      - { label: 'Select', width: 100, cellType: checkbox }
+      - {label: 'Method', width: 240, cellType: label}
+      - {label: 'Select', width: 100, cellType: checkbox}
     rows:
       - values: ['Automatic (F5 detects attack and activates)', 'activation_automatic']
       - values: ['Manual (Customer initiates activation)', 'activation_manual']
@@ -343,15 +346,17 @@ content:
     level: 3
 
   - type: paragraph
-    text: 'Select the attack types you require protection against. Cloud DDoS providers typically offer protection against all listed attack vectors as part of their L3/L4 mitigation services.'
+    text:
+      'Select the attack types you require protection against. Cloud DDoS providers typically offer protection against
+      all listed attack vectors as part of their L3/L4 mitigation services.'
 
   - type: table
     label: 'Volumetric Flood Attacks'
     columns:
-      - { label: 'Attack Type', width: 180, cellType: label }
-      - { label: 'Select', width: 60, cellType: checkbox }
-      - { label: 'Attack Type', width: 180, cellType: label }
-      - { label: 'Select', width: 60, cellType: checkbox }
+      - {label: 'Attack Type', width: 180, cellType: label}
+      - {label: 'Select', width: 60, cellType: checkbox}
+      - {label: 'Attack Type', width: 180, cellType: label}
+      - {label: 'Select', width: 60, cellType: checkbox}
     rows:
       - values: ['UDP Flood', 'attack_udp_flood', 'ICMP Flood', 'attack_icmp_flood']
       - values: ['IP Fragmentation Flood', 'attack_ip_frag', 'Smurf Attack', 'attack_smurf']
@@ -360,25 +365,23 @@ content:
   - type: table
     label: 'TCP Protocol Attacks'
     columns:
-      - { label: 'Attack Type', width: 180, cellType: label }
-      - { label: 'Select', width: 60, cellType: checkbox }
-      - { label: 'Attack Type', width: 180, cellType: label }
-      - { label: 'Select', width: 60, cellType: checkbox }
+      - {label: 'Attack Type', width: 180, cellType: label}
+      - {label: 'Select', width: 60, cellType: checkbox}
+      - {label: 'Attack Type', width: 180, cellType: label}
+      - {label: 'Select', width: 60, cellType: checkbox}
     rows:
       - values: ['TCP SYN Flood', 'attack_tcp_syn', 'TCP ACK Flood', 'attack_tcp_ack']
       - values: ['TCP RST Flood', 'attack_tcp_rst', 'TCP FIN Flood', 'attack_tcp_fin']
-      - values:
-          ['TCP SYN/ACK Reflection', 'attack_syn_ack_ref', 'TCP Out-of-State', 'attack_tcp_oos']
-      - values:
-          ['TCP Connection Exhaustion', 'attack_tcp_conn', 'Sockstress Attack', 'attack_sockstress']
+      - values: ['TCP SYN/ACK Reflection', 'attack_syn_ack_ref', 'TCP Out-of-State', 'attack_tcp_oos']
+      - values: ['TCP Connection Exhaustion', 'attack_tcp_conn', 'Sockstress Attack', 'attack_sockstress']
 
   - type: table
     label: 'Amplification/Reflection Attacks'
     columns:
-      - { label: 'Attack Type', width: 180, cellType: label }
-      - { label: 'Select', width: 60, cellType: checkbox }
-      - { label: 'Attack Type', width: 180, cellType: label }
-      - { label: 'Select', width: 60, cellType: checkbox }
+      - {label: 'Attack Type', width: 180, cellType: label}
+      - {label: 'Select', width: 60, cellType: checkbox}
+      - {label: 'Attack Type', width: 180, cellType: label}
+      - {label: 'Select', width: 60, cellType: checkbox}
     rows:
       - values: ['DNS Amplification', 'attack_dns_amp', 'NTP Amplification', 'attack_ntp_amp']
       - values: ['Memcached Amplification', 'attack_memcached', 'SSDP Amplification', 'attack_ssdp']
@@ -386,17 +389,16 @@ content:
       - values: ['CharGEN Amplification', 'attack_chargen', 'TFTP Amplification', 'attack_tftp']
       - values: ['RDP Reflection', 'attack_rdp_ref', 'mDNS Amplification', 'attack_mdns']
       - values: ['NetBIOS Amplification', 'attack_netbios', 'LDAP Amplification', 'attack_ldap']
-      - values:
-          ['WS-Discovery Amplification', 'attack_wsdiscovery', 'ARMS Amplification', 'attack_arms']
+      - values: ['WS-Discovery Amplification', 'attack_wsdiscovery', 'ARMS Amplification', 'attack_arms']
       - values: ['CoAP Amplification', 'attack_coap', 'Portmap Amplification', 'attack_portmap']
 
   - type: table
     label: 'Advanced/Multi-Vector Attacks'
     columns:
-      - { label: 'Attack Type', width: 180, cellType: label }
-      - { label: 'Select', width: 60, cellType: checkbox }
-      - { label: 'Attack Type', width: 180, cellType: label }
-      - { label: 'Select', width: 60, cellType: checkbox }
+      - {label: 'Attack Type', width: 180, cellType: label}
+      - {label: 'Select', width: 60, cellType: checkbox}
+      - {label: 'Attack Type', width: 180, cellType: label}
+      - {label: 'Select', width: 60, cellType: checkbox}
     rows:
       - values: ['Carpet Bombing', 'attack_carpet_bomb', 'Pulse Wave Attack', 'attack_pulse']
       - values: ['Multi-Vector DDoS', 'attack_multi_vector', 'Teardrop Attack', 'attack_teardrop']
@@ -406,8 +408,8 @@ content:
   - type: table
     label: 'Detection Methods'
     columns:
-      - { label: 'Detection Method', width: 240, cellType: label }
-      - { label: 'Select', width: 100, cellType: checkbox }
+      - {label: 'Detection Method', width: 240, cellType: label}
+      - {label: 'Select', width: 100, cellType: checkbox}
     rows:
       - values: ['Traffic analysis on edge routers (NetFlow/sFlow)', 'detect_netflow']
       - values: ['Inline detection (Always On mode)', 'detect_inline']
@@ -416,8 +418,8 @@ content:
   - type: table
     label: 'BGP Options'
     columns:
-      - { label: 'BGP Option', width: 240, cellType: label }
-      - { label: 'Select', width: 100, cellType: checkbox }
+      - {label: 'BGP Option', width: 240, cellType: label}
+      - {label: 'Select', width: 100, cellType: checkbox}
     rows:
       - values: ['Yes - Direct BGP peering', 'bgp_direct']
       - values: ['Yes - Through IX (Internet Exchange)', 'bgp_ix']
@@ -428,14 +430,14 @@ content:
     fieldPrefix: bgp
     rowCount: 8
     columns:
-      - { label: 'Peer Location', width: 240, cellType: text, fieldSuffix: peer_location }
-      - { label: 'Your Router IP', width: 100, cellType: text, fieldSuffix: router_ip }
+      - {label: 'Peer Location', width: 240, cellType: text, fieldSuffix: peer_location}
+      - {label: 'Your Router IP', width: 100, cellType: text, fieldSuffix: router_ip}
 
   - type: table
     label: 'GRE Tunnel Options'
     columns:
-      - { label: 'GRE Option', width: 240, cellType: label }
-      - { label: 'Select', width: 100, cellType: checkbox }
+      - {label: 'GRE Option', width: 240, cellType: label}
+      - {label: 'Select', width: 100, cellType: checkbox}
     rows:
       - values: ['Yes - GRE tunnels to our routers', 'gre_yes']
       - values: ['No - Direct routing', 'gre_no']
@@ -450,33 +452,33 @@ content:
         cellType: dropdown
         fieldSuffix: provider
         options:
-          - { value: akamai, label: 'Akamai Prolexic' }
-          - { value: aws, label: 'AWS Shield Advanced' }
-          - { value: azure, label: 'Azure DDoS Protection' }
-          - { value: cloudflare, label: 'Cloudflare Magic Transit' }
-          - { value: f5, label: 'F5 Distributed Cloud DDoS' }
-          - { value: fastly, label: 'Fastly DDoS Protection' }
-          - { value: gcore, label: 'Gcore DDoS Protection' }
-          - { value: google, label: 'Google Cloud Armor' }
-          - { value: imperva, label: 'Imperva DDoS Protection' }
-          - { value: link11, label: 'Link11 DDoS Protection' }
-          - { value: lumen, label: 'Lumen DDoS Mitigation' }
-          - { value: netscout, label: 'NETSCOUT Arbor Cloud' }
-          - { value: nexusguard, label: 'Nexusguard DDoS Protection' }
-          - { value: ovhcloud, label: 'OVHcloud Anti-DDoS' }
-          - { value: radware, label: 'Radware Cloud DDoS Protection' }
-          - { value: sucuri, label: 'Sucuri Website Firewall' }
-          - { value: vercara, label: 'Vercara UltraDDoS Protect' }
-          - { value: other, label: 'Other' }
-          - { value: none, label: 'None' }
+          - {value: akamai, label: 'Akamai Prolexic'}
+          - {value: aws, label: 'AWS Shield Advanced'}
+          - {value: azure, label: 'Azure DDoS Protection'}
+          - {value: cloudflare, label: 'Cloudflare Magic Transit'}
+          - {value: f5, label: 'F5 Distributed Cloud DDoS'}
+          - {value: fastly, label: 'Fastly DDoS Protection'}
+          - {value: gcore, label: 'Gcore DDoS Protection'}
+          - {value: google, label: 'Google Cloud Armor'}
+          - {value: imperva, label: 'Imperva DDoS Protection'}
+          - {value: link11, label: 'Link11 DDoS Protection'}
+          - {value: lumen, label: 'Lumen DDoS Mitigation'}
+          - {value: netscout, label: 'NETSCOUT Arbor Cloud'}
+          - {value: nexusguard, label: 'Nexusguard DDoS Protection'}
+          - {value: ovhcloud, label: 'OVHcloud Anti-DDoS'}
+          - {value: radware, label: 'Radware Cloud DDoS Protection'}
+          - {value: sucuri, label: 'Sucuri Website Firewall'}
+          - {value: vercara, label: 'Vercara UltraDDoS Protect'}
+          - {value: other, label: 'Other'}
+          - {value: none, label: 'None'}
       - label: 'Action'
         width: 100
         cellType: dropdown
         fieldSuffix: action
         options:
-          - { value: replace, label: 'Replace' }
-          - { value: layer, label: 'Layer' }
-          - { value: keep, label: 'Keep' }
+          - {value: replace, label: 'Replace'}
+          - {value: layer, label: 'Layer'}
+          - {value: keep, label: 'Keep'}
 
   - type: table
     label: 'Existing Hardware DDoS Providers'
@@ -488,31 +490,31 @@ content:
         cellType: dropdown
         fieldSuffix: provider
         options:
-          - { value: a10, label: 'A10 Networks Thunder TPS' }
-          - { value: checkpoint, label: 'Check Point Quantum DDoS Protector' }
-          - { value: corero, label: 'Corero SmartWall ONE' }
-          - { value: f5, label: 'F5 DDoS Hybrid Defender' }
-          - { value: fortinet, label: 'Fortinet FortiDDoS' }
-          - { value: huawei, label: 'Huawei AntiDDoS' }
-          - { value: netscout, label: 'NETSCOUT Arbor Edge Defense (AED)' }
-          - { value: nsfocus, label: 'NSFOCUS ADS' }
-          - { value: radware, label: 'Radware DefensePro' }
-          - { value: other, label: 'Other' }
-          - { value: none, label: 'None' }
+          - {value: a10, label: 'A10 Networks Thunder TPS'}
+          - {value: checkpoint, label: 'Check Point Quantum DDoS Protector'}
+          - {value: corero, label: 'Corero SmartWall ONE'}
+          - {value: f5, label: 'F5 DDoS Hybrid Defender'}
+          - {value: fortinet, label: 'Fortinet FortiDDoS'}
+          - {value: huawei, label: 'Huawei AntiDDoS'}
+          - {value: netscout, label: 'NETSCOUT Arbor Edge Defense (AED)'}
+          - {value: nsfocus, label: 'NSFOCUS ADS'}
+          - {value: radware, label: 'Radware DefensePro'}
+          - {value: other, label: 'Other'}
+          - {value: none, label: 'None'}
       - label: 'Action'
         width: 100
         cellType: dropdown
         fieldSuffix: action
         options:
-          - { value: replace, label: 'Replace' }
-          - { value: layer, label: 'Layer' }
-          - { value: keep, label: 'Keep' }
+          - {value: replace, label: 'Replace'}
+          - {value: layer, label: 'Layer'}
+          - {value: keep, label: 'Keep'}
 
   - type: table
     label: 'SLA Metrics'
     columns:
-      - { label: 'SLA Metric', width: 240, cellType: label }
-      - { label: 'Value', width: 100, cellType: text }
+      - {label: 'SLA Metric', width: 240, cellType: label}
+      - {label: 'Value', width: 100, cellType: text}
     rows:
       - values: ['Time to Detect (minutes)', 'sla_detect_time']
       - values: ['Time to Mitigate (minutes)', 'sla_mitigate_time']
@@ -522,8 +524,8 @@ content:
   - type: table
     label: 'Reporting Options'
     columns:
-      - { label: 'Report Type', width: 240, cellType: label }
-      - { label: 'Select', width: 100, cellType: checkbox }
+      - {label: 'Report Type', width: 240, cellType: label}
+      - {label: 'Select', width: 100, cellType: checkbox}
     rows:
       - values: ['Real-time attack dashboard', 'report_realtime']
       - values: ['Monthly summary reports', 'report_monthly']
@@ -538,15 +540,15 @@ content:
     labelWidth: 100
     width: 240
     options:
-      - { value: standard, label: 'Standard - Business hours' }
-      - { value: enhanced, label: 'Enhanced - 24x7 SOC' }
-      - { value: enhanced_plus, label: 'Enhanced Plus - Dedicated SOC' }
+      - {value: standard, label: 'Standard - Business hours'}
+      - {value: enhanced, label: 'Enhanced - 24x7 SOC'}
+      - {value: enhanced_plus, label: 'Enhanced Plus - Dedicated SOC'}
 
   - type: table
     label: 'Alerts'
     columns:
-      - { label: 'Method', width: 240, cellType: label }
-      - { label: 'Select', width: 100, cellType: checkbox }
+      - {label: 'Method', width: 240, cellType: label}
+      - {label: 'Select', width: 100, cellType: checkbox}
     rows:
       - values: ['Email alerts', 'alert_email']
       - values: ['Webhook/API integration', 'alert_webhook']
@@ -557,27 +559,14 @@ content:
   - type: table
     label: 'Alert Contacts'
     columns:
-      - { label: 'Contact', width: 88, cellType: label }
-      - { label: 'Name', width: 120, cellType: text }
-      - { label: 'Email', width: 150, cellType: text }
-      - { label: 'Phone', width: 110, cellType: text }
+      - {label: 'Contact', width: 88, cellType: label}
+      - {label: 'Name', width: 120, cellType: text}
+      - {label: 'Email', width: 150, cellType: text}
+      - {label: 'Phone', width: 110, cellType: text}
     rows:
-      - values:
-          ['Primary', 'contact_primary_name', 'contact_primary_email', 'contact_primary_phone']
-      - values:
-          [
-            'Secondary',
-            'contact_secondary_name',
-            'contact_secondary_email',
-            'contact_secondary_phone',
-          ]
-      - values:
-          [
-            'Escalation',
-            'contact_escalation_name',
-            'contact_escalation_email',
-            'contact_escalation_phone',
-          ]
+      - values: ['Primary', 'contact_primary_name', 'contact_primary_email', 'contact_primary_phone']
+      - values: ['Secondary', 'contact_secondary_name', 'contact_secondary_email', 'contact_secondary_phone']
+      - values: ['Escalation', 'contact_escalation_name', 'contact_escalation_email', 'contact_escalation_phone']
 
   - type: field
     label: 'Additional Notes:'
