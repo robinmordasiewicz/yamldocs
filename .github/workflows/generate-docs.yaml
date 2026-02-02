@@ -54,14 +54,6 @@ jobs:
           echo "Building all schema documents..."
           npx tsx scripts/build-all-schemas.ts
 
-      - name: Generate example documents
-        run: |
-          echo "Generating advanced form..."
-          npm run start -- generate examples/advanced-form/content.md \
-            --schema examples/advanced-form/schema.yaml \
-            --output dist/examples/advanced-form \
-            --format pdf,html
-
       - name: List generated files
         run: |
           echo "Generated files:"
@@ -138,18 +130,6 @@ jobs:
                 <span class="format">
                   [<a href="schemas/network-ddos/network-ddos.html">HTML</a>]
                   [<a href="schemas/network-ddos/network-ddos.pdf">PDF</a>]
-                </span>
-              </li>
-            </ul>
-
-            <h2>Example Documents</h2>
-            <p>Generated from markdown files with form schemas</p>
-            <ul>
-              <li>
-                <strong>Advanced Form</strong>
-                <span class="format">
-                  [<a href="examples/advanced-form/content.html">HTML</a>]
-                  [<a href="examples/advanced-form/content.pdf">PDF</a>]
                 </span>
               </li>
             </ul>
