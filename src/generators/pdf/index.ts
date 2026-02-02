@@ -119,12 +119,13 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
     await drawFooter(ctx, `Version ${schema.form.version}`);
   }
 
-  // Draw markdown content if provided
-  if (markdown) {
-    await drawMarkdownContent(ctx, markdown);
-  } else if (schema.content && schema.content.length > 0) {
+  // Draw content: prefer schema content when available (matches HTML generator logic)
+  const hasSchemaContentToDraw = schema.content && schema.content.length > 0;
+  if (hasSchemaContentToDraw && schema.content) {
     // Draw schema-defined content elements using flow positioning
     await drawSchemaContent(ctx, schema.content);
+  } else if (markdown) {
+    await drawMarkdownContent(ctx, markdown);
   } else {
     // Draw form title only
     await drawTitle(ctx, schema.form.title, { centered: true });
@@ -134,12 +135,11 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
   const contentBaselineY = ctx.cursor.y;
 
   // Skip field labels when schema content provides the context (text field labels above)
-  const hasSchemaContent = schema.content && schema.content.length > 0;
 
   let fieldCount = 0;
   for (const field of schema.fields) {
     const adjustedField = adjustFieldPosition(field, contentBaselineY);
-    await addFieldToDocument(doc, ctx, adjustedField, hasSchemaContent);
+    await addFieldToDocument(doc, ctx, adjustedField, hasSchemaContentToDraw);
     fieldCount++;
   }
 

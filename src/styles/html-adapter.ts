@@ -2,15 +2,15 @@
  * HTML Adapter - Converts design tokens to CSS for HTML generation
  */
 
-import { colors, typography, spacing, borders, components, ptToRem } from './tokens.js';
+import { colors, typography, spacing, borders, components, ptToRem, ptToPx } from './tokens.js';
 import type { AdmonitionVariant } from '../types/stylesheet.js';
 import type { PageLayoutConfig } from '../types/config.js';
 
 /**
- * Convert points directly to px (1pt = 1px for PDF-HTML parity at standard viewing)
- * This keeps dimensions consistent between PDF and HTML
+ * Convert points to CSS pixels using true pt-to-px conversion (1pt = 1.333px at 96 DPI)
+ * This ensures HTML tables render at the same pixel heights as PDF tables
  */
-const px = (pt: number): string => `${pt}px`;
+const px = (pt: number): string => `${Math.round(ptToPx(pt))}px`;
 
 /**
  * Generate CSS string from design tokens
@@ -428,6 +428,32 @@ export function generateCssFromTokens(pageLayout?: PageLayoutConfig): string {
     }
 
 ${generateAdmonitionVariantCss()}
+
+    /* Page continuation styling (for multi-page forms) */
+    .page-continuation {
+      /* Elements continue from previous page */
+    }
+
+    /* Page break control - prevent splitting these elements across pages */
+    .content-table,
+    .admonition,
+    .form-group,
+    .inline-field {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* Keep headings with following content */
+    main h2, main h3, main h4 {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    /* Paragraph orphan/widow control */
+    main p {
+      orphans: 3;
+      widows: 3;
+    }
 
     /* Responsive fallback for narrow screens */
     @media (max-width: ${pageDimensions.width + 48}px) {
