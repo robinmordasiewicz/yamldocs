@@ -19,7 +19,6 @@ import {
   detectTextFieldOverlaps,
 } from '../helpers/layout-analyzer.js';
 import { SchemaBuilder } from '../helpers/schema-builder.js';
-import type { ParsedMarkdown } from '../../src/parsers/markdown.js';
 
 describe('Layout Validation', () => {
   const pageSize = { width: 612, height: 792 }; // Letter
@@ -221,24 +220,16 @@ describe('Layout Validation', () => {
     });
   });
 
-  describe('Markdown-Field Overlap Detection', () => {
+  describe('Schema Content-Field Overlap Detection', () => {
     it('tracks drawn elements during PDF generation', async () => {
       const schema = new SchemaBuilder('track-test', 'Tracking Test')
         .addTextField('name', { x: 72, y: -100, width: 200, height: 24 })
+        .addContent({ type: 'heading', level: 1, text: 'Test Form Title' })
+        .addContent({ type: 'heading', level: 2, text: 'Section One' })
+        .addContent({ type: 'paragraph', text: 'This is some test content for the form.' })
         .build();
 
-      const markdown: ParsedMarkdown = {
-        title: 'Test Form Title',
-        sections: [
-          {
-            level: 2,
-            title: 'Section One',
-            content: 'This is some test content for the form.',
-          },
-        ],
-      };
-
-      const result = await generatePdf({ schema, markdown });
+      const result = await generatePdf({ schema });
 
       expect(result.drawnElements).toBeDefined();
       expect(result.drawnElements!.length).toBeGreaterThan(0);
@@ -251,14 +242,12 @@ describe('Layout Validation', () => {
     it('fields positioned with relative offsets never overlap content', async () => {
       const schema = new SchemaBuilder('no-overlap-test', 'No Overlap Test')
         .addTextField('name', { x: 72, y: -30, width: 200, height: 24 })
+        .addContent({ type: 'heading', level: 1, text: 'Form Title' })
+        .addContent({ type: 'heading', level: 2, text: 'Section' })
+        .addContent({ type: 'paragraph', text: 'Content paragraph.' })
         .build();
 
-      const markdown: ParsedMarkdown = {
-        title: 'Form Title',
-        sections: [{ level: 2, title: 'Section', content: 'Content paragraph.' }],
-      };
-
-      const result = await generatePdf({ schema, markdown });
+      const result = await generatePdf({ schema });
       const fields = await getFormFields(result.bytes);
 
       const fieldElements = fieldsToLayoutElements(fields);
@@ -271,20 +260,12 @@ describe('Layout Validation', () => {
     it('verifies text elements are tracked with positions', async () => {
       const schema = new SchemaBuilder('heading-test', 'Heading Test')
         .addTextField('name', { x: 72, y: -100, width: 200, height: 24 })
+        .addContent({ type: 'heading', level: 1, text: 'Form Title' })
+        .addContent({ type: 'heading', level: 2, text: 'Personal Information' })
+        .addContent({ type: 'paragraph', text: 'Please fill in your details.' })
         .build();
 
-      const markdown: ParsedMarkdown = {
-        title: 'Form Title',
-        sections: [
-          {
-            level: 2,
-            title: 'Personal Information',
-            content: 'Please fill in your details.',
-          },
-        ],
-      };
-
-      const result = await generatePdf({ schema, markdown });
+      const result = await generatePdf({ schema });
       const textElements = drawnElementsToLayoutElements(result.drawnElements ?? []);
 
       const headingElements = textElements.filter((e) => e.type === 'heading');
@@ -296,14 +277,12 @@ describe('Layout Validation', () => {
       const schema = new SchemaBuilder('auto-test', 'Auto Position Test')
         .addTextField('field1', { x: 72, y: -30, width: 200, height: 24 })
         .addTextField('field2', { x: 72, y: -80, width: 200, height: 24 })
+        .addContent({ type: 'heading', level: 1, text: 'Test Title' })
+        .addContent({ type: 'heading', level: 2, text: 'Section' })
+        .addContent({ type: 'paragraph', text: 'Some content here.' })
         .build();
 
-      const markdown: ParsedMarkdown = {
-        title: 'Test Title',
-        sections: [{ level: 2, title: 'Section', content: 'Some content here.' }],
-      };
-
-      const result = await generatePdf({ schema, markdown });
+      const result = await generatePdf({ schema });
 
       const fields = await getFormFields(result.bytes);
       const fieldElements = fieldsToLayoutElements(fields);
@@ -323,20 +302,12 @@ describe('Layout Validation', () => {
     it('converts drawn elements to layout elements correctly', async () => {
       const schema = new SchemaBuilder('convert-test', 'Conversion Test')
         .addTextField('name', { x: 72, y: -100, width: 200, height: 24 })
+        .addContent({ type: 'heading', level: 1, text: 'Test Title' })
+        .addContent({ type: 'heading', level: 2, text: 'Section' })
+        .addContent({ type: 'paragraph', text: 'Paragraph content here.' })
         .build();
 
-      const markdown: ParsedMarkdown = {
-        title: 'Test Title',
-        sections: [
-          {
-            level: 2,
-            title: 'Section',
-            content: 'Paragraph content here.',
-          },
-        ],
-      };
-
-      const result = await generatePdf({ schema, markdown });
+      const result = await generatePdf({ schema });
       const textElements = drawnElementsToLayoutElements(result.drawnElements ?? []);
 
       expect(textElements.some((e) => e.type === 'title')).toBe(true);

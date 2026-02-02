@@ -10,7 +10,6 @@ import chalk from 'chalk';
 
 const SAMPLE_CONFIG = `# markdown-2pdf Configuration
 input:
-  content: "./content"
   schemas: "./schemas"
   styles: "./styles"
 
@@ -44,79 +43,57 @@ form:
   version: "1.0.0"
   pages: 1
 
-fields:
-  # Text Input
-  - name: "full_name"
-    type: "text"
+content:
+  - type: heading
+    level: 1
+    text: "Sample Form"
+
+  - type: paragraph
+    text: "Welcome to this sample form. Please fill out all required fields."
+
+  - type: heading
+    level: 2
+    text: "Personal Information"
+
+  - type: field
+    fieldType: text
+    fieldName: "full_name"
     label: "Full Name"
-    page: 1
     required: true
-    maxLength: 100
-    position:
-      x: 72
-      y: 650
-      width: 250
-      height: 24
+    width: 250
 
-  # Email Field
-  - name: "email"
-    type: "text"
+  - type: field
+    fieldType: text
+    fieldName: "email"
     label: "Email Address"
-    page: 1
     required: true
-    position:
-      x: 72
-      y: 580
-      width: 250
-      height: 24
+    width: 250
 
-  # Checkbox
-  - name: "subscribe"
-    type: "checkbox"
+  - type: heading
+    level: 2
+    text: "Preferences"
+
+  - type: field
+    fieldType: checkbox
+    fieldName: "subscribe"
     label: "Subscribe to newsletter"
-    page: 1
-    position:
-      x: 72
-      y: 520
 
-  # Dropdown
-  - name: "department"
-    type: "dropdown"
+  - type: field
+    fieldType: dropdown
+    fieldName: "department"
     label: "Department"
-    page: 1
+    width: 150
     options:
-      - "Engineering"
-      - "Marketing"
-      - "Sales"
-      - "Support"
-    position:
-      x: 72
-      y: 450
-      width: 150
-      height: 24
-`;
+      - value: "engineering"
+        label: "Engineering"
+      - value: "marketing"
+        label: "Marketing"
+      - value: "sales"
+        label: "Sales"
+      - value: "support"
+        label: "Support"
 
-const SAMPLE_CONTENT = `---
-title: Sample Form
-author: Your Name
-date: 2024-01-01
----
-
-# Sample Form
-
-Welcome to this sample form. Please fill out all required fields marked with an asterisk (*).
-
-## Personal Information
-
-Please provide your contact details below.
-
-## Preferences
-
-Select your preferences and options.
-
-## Submission
-
-By submitting this form, you agree to our terms and conditions.
+fields: []
 `;
 
 const GITIGNORE = `# Dependencies
@@ -148,7 +125,7 @@ export async function initProject(directory: string): Promise<void> {
   console.log('');
 
   // Create directories
-  const dirs = ['content', 'schemas', 'styles', 'dist'];
+  const dirs = ['schemas', 'styles', 'dist'];
 
   for (const dir of dirs) {
     const dirPath = join(targetDir, dir);
@@ -171,10 +148,6 @@ export async function initProject(directory: string): Promise<void> {
       content: SAMPLE_SCHEMA,
     },
     {
-      path: 'content/sample.md',
-      content: SAMPLE_CONTENT,
-    },
-    {
       path: '.gitignore',
       content: GITIGNORE,
     },
@@ -194,12 +167,7 @@ export async function initProject(directory: string): Promise<void> {
   console.log(chalk.green('Project initialized successfully!'));
   console.log('');
   console.log('Next steps:');
-  console.log(chalk.gray('  1. Edit content/sample.md with your content'));
-  console.log(chalk.gray('  2. Edit schemas/sample-form.yaml to define your form fields'));
-  console.log(
-    chalk.gray(
-      '  3. Run: markdown-2pdf generate content/sample.md --schema schemas/sample-form.yaml'
-    )
-  );
+  console.log(chalk.gray('  1. Edit schemas/sample-form.yaml to define your form'));
+  console.log(chalk.gray('  2. Run: markdown-2pdf generate schemas/sample-form.yaml'));
   console.log('');
 }

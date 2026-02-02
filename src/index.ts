@@ -1,6 +1,6 @@
 /**
  * markdown-2pdf
- * Generate fillable PDF forms from markdown and YAML schemas
+ * Generate fillable PDF forms from YAML schemas
  */
 
 // Types

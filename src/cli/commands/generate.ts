@@ -1,6 +1,6 @@
 /**
  * Generate Command
- * Generates PDF, HTML, and DOCX outputs from markdown and schema
+ * Generates PDF and HTML outputs from schema
  */
 
 import { resolve, basename, extname } from 'path';
@@ -9,10 +9,8 @@ import chalk from 'chalk';
 import type { GenerateOptions, OutputFormat } from '../../types/index.js';
 import { loadConfig, generateOutputFilename } from '../config.js';
 import { parseSchema } from '../../parsers/schema.js';
-import { parseMarkdown } from '../../parsers/markdown.js';
 import { generateAndSavePdf } from '../../generators/pdf/index.js';
 import { generateAndSaveHtml } from '../../generators/html/index.js';
-import { generateAndSaveDocx } from '../../generators/docx/index.js';
 
 export interface GenerateResult {
   format: OutputFormat;
@@ -34,66 +32,41 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
   // Load configuration
   const config = await loadConfig(options);
 
-  // Validate content file
-  const contentPath = resolve(options.content);
-  if (!existsSync(contentPath)) {
-    throw new Error(`Content file not found: ${contentPath}`);
+  // Validate schema file
+  const schemaPath = resolve(options.schema);
+  if (!existsSync(schemaPath)) {
+    throw new Error(`Schema file not found: ${schemaPath}`);
   }
 
-  // Parse markdown content
-  const markdown = await parseMarkdown(contentPath);
+  // Parse schema
+  const schema = await parseSchema(schemaPath);
   if (options.verbose) {
-    console.log(chalk.gray(`  Parsed markdown: ${markdown.title ?? 'Untitled'}`));
-  }
-
-  // Parse schema if provided
-  let schema = null;
-  if (options.schema) {
-    const schemaPath = resolve(options.schema);
-    if (!existsSync(schemaPath)) {
-      throw new Error(`Schema file not found: ${schemaPath}`);
-    }
-    schema = await parseSchema(schemaPath);
-    if (options.verbose) {
-      console.log(
-        chalk.gray(`  Parsed schema: ${schema.form.title} (${schema.fields.length} fields)`)
-      );
-    }
+    console.log(
+      chalk.gray(`  Parsed schema: ${schema.form.title} (${schema.fields.length} fields)`)
+    );
   }
 
   // Determine output formats
   const formats = config.output.formats;
 
-  // Determine base output name
-  const contentName = basename(contentPath, extname(contentPath));
+  // Determine base output name from schema file
+  const schemaName = basename(schemaPath, extname(schemaPath));
   const outputDir = resolve(options.output ?? config.output.directory);
 
   // Generate each format
   for (const format of formats) {
     const outputFilename = generateOutputFilename(
       config.output.filenameTemplate,
-      contentName,
+      schemaName,
       format,
-      schema?.form.version
+      schema.form.version
     );
     const outputPath = resolve(outputDir, outputFilename);
 
     try {
       switch (format) {
         case 'pdf': {
-          if (!schema) {
-            results.push({
-              format,
-              outputPath,
-              success: false,
-              error: 'PDF generation requires a schema file (--schema)',
-            });
-            continue;
-          }
-          const pdfResult = await generateAndSavePdf(
-            { schema, markdown, config: config.pdf },
-            outputPath
-          );
+          const pdfResult = await generateAndSavePdf({ schema, config: config.pdf }, outputPath);
           results.push({
             format,
             outputPath,
@@ -107,16 +80,7 @@ export async function executeGenerate(options: GenerateOptions): Promise<Generat
         }
 
         case 'html':
-          await generateAndSaveHtml({ markdown, schema, config: config.html }, outputPath);
-          results.push({
-            format,
-            outputPath,
-            success: true,
-          });
-          break;
-
-        case 'docx':
-          await generateAndSaveDocx({ markdown, config: config.docx, contentPath }, outputPath);
+          await generateAndSaveHtml({ schema, config: config.html }, outputPath);
           results.push({
             format,
             outputPath,

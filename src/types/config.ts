@@ -3,7 +3,7 @@
  * Defines the structure for markdown-2pdf.config.yaml
  */
 
-export type OutputFormat = 'pdf' | 'html' | 'docx';
+export type OutputFormat = 'pdf' | 'html';
 
 export type PageSize = 'letter' | 'a4' | 'legal' | 'tabloid';
 
@@ -43,13 +43,7 @@ export interface HtmlConfig {
   pageLayout: PageLayoutConfig;
 }
 
-export interface DocxConfig {
-  referenceDoc: string;
-  tableOfContents: boolean;
-}
-
 export interface InputConfig {
-  content: string;
   schemas: string;
   styles: string;
 }
@@ -65,12 +59,10 @@ export interface Config {
   output: OutputConfig;
   pdf: PdfConfig;
   html: HtmlConfig;
-  docx: DocxConfig;
 }
 
 export interface GenerateOptions {
-  content: string;
-  schema?: string;
+  schema: string;
   output?: string;
   format?: OutputFormat | OutputFormat[];
   config?: string;
@@ -91,7 +83,6 @@ export interface PreviewOptions {
 // Default configuration values
 export const DEFAULT_CONFIG: Config = {
   input: {
-    content: './content',
     schemas: './schemas',
     styles: './styles',
   },
@@ -125,10 +116,6 @@ export const DEFAULT_CONFIG: Config = {
       pageSize: 'letter', // Match PDF default for consistent table widths
       showPageNumbers: true,
     },
-  },
-  docx: {
-    referenceDoc: '',
-    tableOfContents: false,
   },
 };
 

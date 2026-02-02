@@ -2,7 +2,7 @@
 
 /**
  * markdown-2pdf CLI
- * Generate fillable PDF forms from markdown and YAML schemas
+ * Generate fillable PDF forms from YAML schemas
  */
 
 import { Command } from 'commander';
@@ -25,7 +25,6 @@ import {
 
 // CLI option interfaces
 interface GenerateCliOptions {
-  schema?: string;
   output?: string;
   format: string;
   config?: string;
@@ -61,28 +60,26 @@ const program = new Command();
 
 program
   .name('markdown-2pdf')
-  .description('Generate fillable PDF forms from markdown and YAML schemas')
+  .description('Generate fillable PDF forms from YAML schemas')
   .version(getVersion());
 
 // Generate command
 program
   .command('generate')
-  .description('Generate documents from markdown content and form schema')
-  .argument('<content>', 'Path to markdown content file')
-  .option('-s, --schema <path>', 'Path to form schema YAML file')
+  .description('Generate documents from form schema')
+  .argument('<schema>', 'Path to form schema YAML file')
   .option('-o, --output <directory>', 'Output directory')
-  .option('-f, --format <formats>', 'Output formats (comma-separated: pdf,html,docx)', 'pdf')
+  .option('-f, --format <formats>', 'Output formats (comma-separated: pdf,html)', 'pdf')
   .option('-c, --config <path>', 'Path to configuration file')
   .option('-w, --watch', 'Watch for file changes and regenerate')
   .option('-v, --verbose', 'Verbose output')
-  .action(async (content: string, options: GenerateCliOptions) => {
+  .action(async (schema: string, options: GenerateCliOptions) => {
     try {
       // Parse formats
       const formats = options.format.split(',').map((f) => f.trim()) as OutputFormat[];
 
       const generateOptions = {
-        content,
-        schema: options.schema,
+        schema,
         output: options.output,
         format: formats,
         config: options.config,
@@ -95,10 +92,7 @@ program
         console.log(chalk.gray('Press Ctrl+C to stop'));
         console.log('');
 
-        const filesToWatch: string[] = [content];
-        if (options.schema) {
-          filesToWatch.push(options.schema);
-        }
+        const filesToWatch: string[] = [schema];
         if (options.config) {
           filesToWatch.push(options.config);
         }
@@ -138,11 +132,8 @@ program
         // Single generation
         console.log(chalk.cyan('Generating documents...'));
 
-        if (options.verbose && options.schema) {
-          console.log(chalk.gray(`  Schema: ${resolve(options.schema)}`));
-        }
         if (options.verbose) {
-          console.log(chalk.gray(`  Content: ${resolve(content)}`));
+          console.log(chalk.gray(`  Schema: ${resolve(schema)}`));
         }
 
         const results = await executeGenerate(generateOptions);

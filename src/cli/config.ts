@@ -89,10 +89,6 @@ function mergeConfig(base: Config, override: Partial<Config>): Config {
       ...base.html,
       ...override.html,
     },
-    docx: {
-      ...base.docx,
-      ...override.docx,
-    },
   };
 }
 
@@ -134,12 +130,10 @@ export function resolveInputPaths(
   config: Config,
   baseDir: string
 ): {
-  contentDir: string;
   schemasDir: string;
   stylesDir: string;
 } {
   return {
-    contentDir: resolve(baseDir, config.input.content),
     schemasDir: resolve(baseDir, config.input.schemas),
     stylesDir: resolve(baseDir, config.input.styles),
   };

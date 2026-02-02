@@ -18,22 +18,15 @@ export interface WatchOptions extends GenerateOptions {
  * Execute the watch command
  */
 export async function executeWatch(options: WatchOptions): Promise<void> {
-  const { content, schema, debounce = 300 } = options;
+  const { schema, debounce = 300 } = options;
 
-  const contentPath = resolve(content);
-  if (!existsSync(contentPath)) {
-    throw new Error(`Content file not found: ${contentPath}`);
+  const schemaPath = resolve(schema);
+  if (!existsSync(schemaPath)) {
+    throw new Error(`Schema file not found: ${schemaPath}`);
   }
 
   // Files to watch
-  const watchPaths: string[] = [contentPath];
-
-  if (schema) {
-    const schemaPath = resolve(schema);
-    if (existsSync(schemaPath)) {
-      watchPaths.push(schemaPath);
-    }
-  }
+  const watchPaths: string[] = [schemaPath];
 
   console.log(chalk.cyan('\n📁 Watching for changes...\n'));
   console.log(chalk.gray('  Files being watched:'));

@@ -7,8 +7,16 @@ import { PDFDocument, PDFPage, StandardFonts } from 'pdf-lib';
 import type { PdfConfig } from '../../types/index.js';
 import type { ResolvedStylesheet, FontFamily } from '../../types/stylesheet.js';
 import { PAGE_SIZES } from '../../types/index.js';
-import type { ParsedMarkdown, Admonition } from '../../parsers/markdown.js';
 import { wrapText, hexToRgb } from './utils.js';
+
+/**
+ * Admonition type for rendering admonition boxes
+ */
+export interface Admonition {
+  type: 'warning' | 'note' | 'info' | 'tip' | 'danger';
+  title: string;
+  content: string;
+}
 
 /**
  * Represents a drawn element with its position for overlap detection
@@ -496,80 +504,5 @@ export async function drawAdmonition(ctx: LayoutContext, admonition: Admonition)
   // Check for page break
   if (ctx.cursor.y < ctx.stylesheet.page.margins.bottom) {
     nextPage(ctx);
-  }
-}
-
-/**
- * Draw markdown content to PDF with admonition support
- */
-export async function drawMarkdownContent(
-  ctx: LayoutContext,
-  markdown: ParsedMarkdown
-): Promise<void> {
-  // Draw title if present
-  if (markdown.title) {
-    await drawTitle(ctx, markdown.title, { centered: true });
-    moveCursorDown(ctx, 10);
-  }
-
-  // Create a map of admonitions by title for quick lookup
-  const admonitionMap = new Map<string, Admonition>();
-  for (const adm of markdown.admonitions || []) {
-    admonitionMap.set(adm.title, adm);
-  }
-  const renderedAdmonitions = new Set<string>();
-
-  // Draw sections
-  for (const section of markdown.sections) {
-    await drawSectionHeading(ctx, section.title, section.level);
-
-    // Split content into paragraphs
-    const paragraphs = section.content.split('\n\n').filter((p) => p.trim());
-
-    for (const paragraph of paragraphs) {
-      const trimmedParagraph = paragraph.trim();
-
-      // Check for horizontal rule
-      if (trimmedParagraph === '---' || /^-{3,}$/.exec(trimmedParagraph)) {
-        drawHorizontalRule(ctx);
-        continue;
-      }
-
-      // Check if this paragraph starts an admonition
-      const admonitionMatch = /^!!!\s+(warning|note|info|tip|danger)\s+"([^"]+)"/.exec(
-        trimmedParagraph
-      );
-      if (admonitionMatch) {
-        const admTitle = admonitionMatch[2];
-        const admonition = admonitionMap.get(admTitle);
-        if (admonition && !renderedAdmonitions.has(admTitle)) {
-          await drawAdmonition(ctx, admonition);
-          renderedAdmonitions.add(admTitle);
-        }
-        continue;
-      }
-
-      // Skip form HTML containers (they become form fields)
-      if (trimmedParagraph.includes('<div class="form-')) {
-        continue;
-      }
-
-      // Draw regular paragraph
-      const cleanedParagraph = trimmedParagraph
-        .replace(/\n/g, ' ')
-        .replace(/<[^>]+>/g, '') // Remove any remaining HTML tags
-        .trim();
-
-      if (cleanedParagraph) {
-        await drawParagraph(ctx, cleanedParagraph);
-      }
-    }
-  }
-
-  // Draw any remaining admonitions that weren't inline
-  for (const admonition of markdown.admonitions || []) {
-    if (!renderedAdmonitions.has(admonition.title)) {
-      await drawAdmonition(ctx, admonition);
-    }
   }
 }

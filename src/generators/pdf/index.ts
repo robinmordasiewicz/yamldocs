@@ -8,9 +8,7 @@ import { dirname, resolve } from 'path';
 import { PDFDocument } from 'pdf-lib';
 import type { ParsedFormSchema, NormalizedFormField, PdfConfig } from '../../types/index.js';
 import type { ResolvedStylesheet } from '../../types/stylesheet.js';
-import { DEFAULT_CONFIG, PAGE_SIZES } from '../../types/index.js';
-import type { ParsedMarkdown } from '../../parsers/index.js';
-import { extractFormFields, fieldsToSchema } from '../../parsers/form-extractor.js';
+import { DEFAULT_CONFIG } from '../../types/index.js';
 import { parseStylesheet, getDefaultStylesheet } from '../../parsers/stylesheet.js';
 import {
   createTextField,
@@ -31,15 +29,13 @@ import {
   drawTitle,
   drawHeader,
   drawFooter,
-  drawMarkdownContent,
   type LayoutContext,
   type DrawnElement,
 } from './layout.js';
 import { drawSchemaContent } from './content.js';
 
 export interface PdfGeneratorOptions {
-  schema?: ParsedFormSchema;
-  markdown?: ParsedMarkdown;
+  schema: ParsedFormSchema;
   config?: Partial<PdfConfig>;
   /** Base directory for resolving relative stylesheet paths */
   basePath?: string;
@@ -54,11 +50,10 @@ export interface GeneratedPdf {
 }
 
 /**
- * Generate a fillable PDF from schema or auto-extracted from markdown
+ * Generate a fillable PDF from schema
  */
 export async function generatePdf(options: PdfGeneratorOptions): Promise<GeneratedPdf> {
-  const { markdown, config = {}, basePath = process.cwd() } = options;
-  let { schema } = options;
+  const { schema, config = {}, basePath = process.cwd() } = options;
 
   // Merge config with defaults
   const pdfConfig: Required<PdfConfig> = {
@@ -66,25 +61,6 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
     ...config,
     margins: { ...DEFAULT_CONFIG.pdf.margins, ...(config.margins ?? {}) },
     fonts: { ...DEFAULT_CONFIG.pdf.fonts, ...(config.fonts ?? {}) },
-  };
-
-  // Auto-extract form fields from markdown if no schema provided
-  if (!schema && markdown) {
-    const extractedFields = extractFormFields(markdown.content);
-    if (extractedFields.length > 0) {
-      const pageSize = PAGE_SIZES[pdfConfig.pageSize];
-      schema = fieldsToSchema(extractedFields, markdown.title ?? 'Form', pageSize.height);
-    }
-  }
-
-  // If still no schema, create a minimal one
-  schema ??= {
-    form: {
-      id: 'generated',
-      title: markdown?.title ?? 'Document',
-      pages: 1,
-    },
-    fields: [],
   };
 
   // Load stylesheet - from schema path or use defaults
@@ -119,13 +95,11 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
     await drawFooter(ctx, `Version ${schema.form.version}`);
   }
 
-  // Draw content: prefer schema content when available (matches HTML generator logic)
+  // Draw content: use schema content when available
   const hasSchemaContentToDraw = schema.content && schema.content.length > 0;
   if (hasSchemaContentToDraw && schema.content) {
     // Draw schema-defined content elements using flow positioning
     await drawSchemaContent(ctx, schema.content);
-  } else if (markdown) {
-    await drawMarkdownContent(ctx, markdown);
   } else {
     // Draw form title only
     await drawTitle(ctx, schema.form.title, { centered: true });
@@ -164,7 +138,7 @@ function adjustFieldPosition(
   field: NormalizedFormField,
   contentBaselineY: number
 ): NormalizedFormField {
-  // Only adjust fields on page 1 (where markdown content is drawn)
+  // Only adjust fields on page 1 (where content is drawn)
   if (field.page !== 1) {
     return field;
   }

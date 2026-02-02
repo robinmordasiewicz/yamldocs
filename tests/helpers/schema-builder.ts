@@ -11,6 +11,7 @@ import type {
   NormalizedFieldOption,
   FieldPosition,
   FieldValidation,
+  SchemaContentElement,
 } from '../../src/types/schema.js';
 
 export interface Position {
@@ -49,6 +50,7 @@ export class SchemaBuilder {
   private version = '1.0.0';
   private pageCount = 1;
   private fields: NormalizedFormField[] = [];
+  private content: SchemaContentElement[] = [];
 
   constructor(formId: string, title: string) {
     this.formId = formId;
@@ -68,6 +70,14 @@ export class SchemaBuilder {
    */
   setPages(count: number): this {
     this.pageCount = count;
+    return this;
+  }
+
+  /**
+   * Add a content element (heading, paragraph, rule, etc.)
+   */
+  addContent(element: SchemaContentElement): this {
+    this.content.push(element);
     return this;
   }
 
@@ -279,6 +289,7 @@ export class SchemaBuilder {
         pages: this.pageCount,
       },
       fields: [...this.fields],
+      content: this.content.length > 0 ? [...this.content] : undefined,
     };
   }
 
@@ -311,6 +322,7 @@ export class SchemaBuilder {
     cloned.version = this.version;
     cloned.pageCount = this.pageCount;
     cloned.fields = JSON.parse(JSON.stringify(this.fields));
+    cloned.content = JSON.parse(JSON.stringify(this.content));
     return cloned;
   }
 }

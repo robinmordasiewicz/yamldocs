@@ -14,10 +14,8 @@ export default defineConfig({
       exclude: ['src/**/*.test.ts', 'src/**/__tests__/**', 'tests/**'],
     },
     pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
+    forks: {
+      singleFork: true,
     },
   },
 });

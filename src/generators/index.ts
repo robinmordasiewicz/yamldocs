@@ -4,4 +4,3 @@
 
 export * from './pdf/index.js';
 export * from './html/index.js';
-export * from './docx/index.js';

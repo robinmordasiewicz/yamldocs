@@ -22,7 +22,6 @@ import type {
   PageLayoutConfig,
 } from '../../types/index.js';
 import { DEFAULT_CONFIG } from '../../types/index.js';
-import type { ParsedMarkdown } from '../../parsers/index.js';
 import { generateCssFromTokens, ptToPx } from '../../styles/index.js';
 import {
   initializeHtmlLayout,
@@ -35,8 +34,7 @@ import {
 } from './layout.js';
 
 export interface HtmlGeneratorOptions {
-  markdown?: ParsedMarkdown;
-  schema?: ParsedFormSchema | null;
+  schema: ParsedFormSchema;
   config?: Partial<HtmlConfig>;
 }
 
@@ -44,7 +42,7 @@ export interface HtmlGeneratorOptions {
  * Generate HTML document
  */
 export async function generateHtml(options: HtmlGeneratorOptions): Promise<string> {
-  const { markdown, schema, config = {} } = options;
+  const { schema, config = {} } = options;
 
   const htmlConfig: Required<HtmlConfig> = {
     ...DEFAULT_CONFIG.html,
@@ -57,14 +55,12 @@ export async function generateHtml(options: HtmlGeneratorOptions): Promise<strin
   if (htmlConfig.template && existsSync(htmlConfig.template)) {
     html = await readFile(htmlConfig.template, 'utf-8');
     // Replace placeholders in template
-    html = html.replace('{{title}}', markdown?.title ?? schema?.form.title ?? 'Document');
-    html = html.replace('{{content}}', markdown?.html ?? '');
-    if (schema) {
-      html = html.replace('{{form}}', generateFormHtml(schema));
-    }
+    html = html.replace('{{title}}', schema.form.title ?? 'Document');
+    html = html.replace('{{content}}', '');
+    html = html.replace('{{form}}', generateFormHtml(schema));
   } else {
     // Generate default HTML
-    html = generateDefaultHtml(markdown, schema, htmlConfig);
+    html = generateDefaultHtml(schema, htmlConfig);
   }
 
   return html;
@@ -73,16 +69,9 @@ export async function generateHtml(options: HtmlGeneratorOptions): Promise<strin
 /**
  * Generate default HTML document
  */
-function generateDefaultHtml(
-  markdown: ParsedMarkdown | undefined,
-  schema: ParsedFormSchema | null | undefined,
-  config: Required<HtmlConfig>
-): string {
-  // When schema has content, prefer schema title; otherwise use markdown title
-  const hasSchemaContent = schema?.content && schema.content.length > 0;
-  const title = hasSchemaContent
-    ? (schema?.form.title ?? markdown?.title ?? 'Document')
-    : (markdown?.title ?? schema?.form.title ?? 'Document');
+function generateDefaultHtml(schema: ParsedFormSchema, config: Required<HtmlConfig>): string {
+  const hasSchemaContent = schema.content && schema.content.length > 0;
+  const title = schema.form.title ?? 'Document';
 
   const pageLayoutEnabled = config.pageLayout?.enabled ?? true;
 
@@ -95,39 +84,37 @@ function generateDefaultHtml(
   }
 
   let scripts = '';
-  if (config.includeJs && schema) {
+  if (config.includeJs) {
     scripts = `
     <script>
       ${getFormScripts()}
     </script>`;
   }
 
-  const formHtml = schema ? generateFormHtml(schema) : '';
+  const formHtml = generateFormHtml(schema);
 
   // Build the body content based on page layout mode
   let bodyContent: string;
 
-  if (pageLayoutEnabled && hasSchemaContent && schema) {
+  if (pageLayoutEnabled && hasSchemaContent) {
     // Use multi-page layout with pagination for schema content
     bodyContent = generateMultiPageContent(schema, title, config);
   } else if (pageLayoutEnabled) {
-    // Single page layout for markdown or simple content
-    const contentHtml =
-      hasSchemaContent && schema ? generateContentHtml(schema) : (markdown?.html ?? '');
-    const mainContent =
-      hasSchemaContent && schema
-        ? `<form id="form-${schema.form.id ?? 'main'}" class="schema-content-form">
+    // Single page layout for simple content
+    const contentHtml = hasSchemaContent ? generateContentHtml(schema) : '';
+    const mainContent = hasSchemaContent
+      ? `<form id="form-${schema.form.id ?? 'main'}" class="schema-content-form">
             ${contentHtml}
             <div class="form-actions">
               <button type="submit" class="btn btn-primary">Submit</button>
               <button type="reset" class="btn btn-secondary">Reset</button>
             </div>
           </form>`
-        : `${contentHtml}
+      : `${contentHtml}
         ${
           formHtml
             ? `
-        <form id="form-${schema?.form.id ?? 'main'}" class="form">
+        <form id="form-${schema.form.id ?? 'main'}" class="form">
           ${formHtml}
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -144,7 +131,7 @@ function generateDefaultHtml(
       <div class="page-content">
         <header>
           <h1>${escapeHtml(title)}</h1>
-          ${schema?.form.version ? `<span class="version">v${escapeHtml(schema.form.version)}</span>` : ''}
+          ${schema.form.version ? `<span class="version">v${escapeHtml(schema.form.version)}</span>` : ''}
         </header>
 
         <main>
@@ -160,22 +147,20 @@ function generateDefaultHtml(
   </div>`;
   } else {
     // Legacy container mode (non-page-layout)
-    const contentHtml =
-      hasSchemaContent && schema ? generateContentHtml(schema) : (markdown?.html ?? '');
-    const mainContent =
-      hasSchemaContent && schema
-        ? `<form id="form-${schema.form.id ?? 'main'}" class="schema-content-form">
+    const contentHtml = hasSchemaContent ? generateContentHtml(schema) : '';
+    const mainContent = hasSchemaContent
+      ? `<form id="form-${schema.form.id ?? 'main'}" class="schema-content-form">
             ${contentHtml}
             <div class="form-actions">
               <button type="submit" class="btn btn-primary">Submit</button>
               <button type="reset" class="btn btn-secondary">Reset</button>
             </div>
           </form>`
-        : `${contentHtml}
+      : `${contentHtml}
         ${
           formHtml
             ? `
-        <form id="form-${schema?.form.id ?? 'main'}" class="form">
+        <form id="form-${schema.form.id ?? 'main'}" class="form">
           ${formHtml}
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -190,7 +175,7 @@ function generateDefaultHtml(
   <div class="container">
     <header>
       <h1>${escapeHtml(title)}</h1>
-      ${schema?.form.version ? `<span class="version">v${escapeHtml(schema.form.version)}</span>` : ''}
+      ${schema.form.version ? `<span class="version">v${escapeHtml(schema.form.version)}</span>` : ''}
     </header>
 
     <main>

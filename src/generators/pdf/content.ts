@@ -234,9 +234,10 @@ async function drawHeadingContent(
   });
 
   // Track drawn element
+  // Level 1 headings are tracked as 'title' type, others as 'heading'
   const textWidth = font.widthOfTextAtSize(element.text, fontSize);
   ctx.drawnElements.push({
-    type: 'heading',
+    type: headingLevel === 1 ? 'title' : 'heading',
     page: pageNum,
     bounds: {
       x,

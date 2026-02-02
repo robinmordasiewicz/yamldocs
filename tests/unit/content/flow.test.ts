@@ -62,7 +62,8 @@ describe('Flow Positioning Mode', () => {
       expect(result.drawnElements?.length).toBeGreaterThan(0);
 
       // Find the drawn elements
-      const heading = result.drawnElements?.find((el) => el.type === 'heading');
+      // Level 1 headings are tracked as 'title' type
+      const heading = result.drawnElements?.find((el) => el.type === 'title');
       const paragraphs = result.drawnElements?.filter((el) => el.type === 'paragraph');
 
       expect(heading).toBeDefined();
@@ -378,7 +379,8 @@ describe('Flow Positioning Mode', () => {
       expect(result.pageCount).toBe(1);
 
       // Elements should be rendered at their specified positions
-      const heading = result.drawnElements?.find((el) => el.type === 'heading');
+      // Level 1 headings are tracked as 'title' type
+      const heading = result.drawnElements?.find((el) => el.type === 'title');
       expect(heading).toBeDefined();
     });
 
