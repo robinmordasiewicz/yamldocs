@@ -8,6 +8,18 @@
   "bin": {
     "yamldocs": "./dist/cli/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robinmordasiewicz/yamldocs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/robinmordasiewicz/yamldocs/issues"
+  },
+  "homepage": "https://github.com/robinmordasiewicz/yamldocs#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "tsc && npm run copy-assets",
     "copy-assets": "mkdir -p dist/schemas && cp src/schemas/form-schema.json dist/schemas/",
@@ -38,7 +50,8 @@
     "audit": "npm audit",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "release-it"
   },
   "keywords": [
     "pdf",
@@ -63,6 +76,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@release-it/conventional-changelog": "^10.0.4",
     "@types/css-tree": "^2.3.11",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.10.9",
@@ -82,6 +96,7 @@
     "pixelmatch": "^7.1.0",
     "pngjs": "^7.0.0",
     "prettier": "^3.8.1",
+    "release-it": "^18.1.2",
     "stylelint": "^17.1.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^5.9.3",

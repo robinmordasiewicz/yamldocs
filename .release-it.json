@@ -1,0 +1,32 @@
+{
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}",
+    "tagAnnotation": "Release ${version}",
+    "requireCleanWorkingDir": true,
+    "requireBranch": "main",
+    "push": true,
+    "pushArgs": ["--follow-tags"]
+  },
+  "github": {
+    "release": true,
+    "releaseName": "v${version}",
+    "draft": false,
+    "preRelease": false,
+    "tokenRef": "GITHUB_TOKEN"
+  },
+  "npm": {
+    "publish": true,
+    "publishArgs": ["--access", "public"]
+  },
+  "hooks": {
+    "before:init": ["npm run test:run", "npm run lint", "npm run typecheck"]
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md",
+      "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n"
+    }
+  }
+}
