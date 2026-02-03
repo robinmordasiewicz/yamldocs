@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "build:action": "npm run build && ncc build dist/action/index.js -o dist/action --source-map --license licenses.txt && mkdir -p dist/action/data && cp node_modules/css-tree/data/patch.json dist/action/data/",
+    "build:action": "npm run build && ncc build dist/action/index.js -o dist/action --source-map --license licenses.txt && mkdir -p dist/data && cp node_modules/css-tree/data/patch.json dist/data/",
     "copy-assets": "mkdir -p dist/schemas && cp src/schemas/form-schema.json dist/schemas/",
     "dev": "tsc --watch",
     "start": "node dist/cli/index.js",
