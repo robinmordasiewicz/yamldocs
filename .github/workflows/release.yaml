@@ -98,6 +98,10 @@ jobs:
           git add -f dist/action/
           git diff --staged --quiet || git commit --no-verify -m "chore: rebuild action bundle for release"
 
+      - name: Sync with remote
+        if: steps.params.outputs.should_release == 'true'
+        run: git pull --rebase origin main
+
       - name: Release
         if: steps.params.outputs.should_release == 'true'
         id: release
