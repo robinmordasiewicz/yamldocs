@@ -45,6 +45,69 @@ form:
   # stylesheet: './custom-styles.css'
 
 # =============================================================================
+# COVER PAGE (Optional)
+# =============================================================================
+# When present, a dedicated cover page is rendered as the first page.
+# The cover page inherits title, author, version, and description from
+# the form object above. All coverPage fields are optional.
+# The cover page has no header or footer; content pages start on page 2.
+coverPage:
+  # Secondary title displayed below the main title
+  subtitle: 'Comprehensive Schema Reference'
+
+  # Organization and department
+  organization: 'YAMLForms Project'
+  department: 'Documentation Team'
+
+  # Document identification
+  documentNumber: 'DOC-REF-001'
+  documentType: 'Reference Guide'
+
+  # Status: arbitrary string (e.g., Draft, Review, Approved, Final)
+  status: 'Approved'
+
+  # Classification: arbitrary string (e.g., Public, Internal, Confidential)
+  classification: 'Public'
+
+  # Dates (arbitrary string format)
+  date: '2024-06-15'
+  effectiveDate: '2024-07-01'
+  reviewDate: '2025-01-01'
+
+  # Authorship chain (supplements form.author)
+  preparedBy: 'YAMLForms Documentation, Technical Writer'
+  reviewedBy: 'Jane Doe, Lead Engineer'
+  approvedBy: 'Bob Wilson, Project Lead'
+
+  # Legal block rendered at the bottom of the cover page
+  copyright: '(c) 2024 YAMLForms Project'
+  disclaimer: 'This document is provided as-is for reference purposes.'
+  distributionStatement: 'Public distribution permitted.'
+
+  # Images (PNG or JPEG only; paths relative to this YAML file)
+  # logo: './assets/logo.png'
+  # coverImage: './assets/cover-background.jpg'
+
+  # Watermark: diagonal semi-transparent text overlay
+  # Rendered on top of all other cover page content
+  watermark: 'REFERENCE'
+
+  # Revision history table
+  revisionHistory:
+    - version: '0.1.0'
+      date: '2024-01-10'
+      author: 'YAMLForms Docs'
+      description: 'Initial draft'
+    - version: '0.9.0'
+      date: '2024-04-20'
+      author: 'Jane Doe'
+      description: 'Added tables and calculations sections'
+    - version: '1.0.0'
+      date: '2024-06-15'
+      author: 'YAMLForms Docs'
+      description: 'Added cover page feature, finalized for release'
+
+# =============================================================================
 # CONTENT ELEMENTS
 # =============================================================================
 # Content elements define the structure and layout of your form.

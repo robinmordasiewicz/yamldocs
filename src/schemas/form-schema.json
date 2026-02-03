@@ -84,6 +84,95 @@
         "$ref": "#/definitions/conditionalField"
       }
     },
+    "coverPage": {
+      "type": "object",
+      "description": "Optional cover page configuration. Presence enables a dedicated first page.",
+      "properties": {
+        "subtitle": {
+          "type": "string",
+          "description": "Secondary title below main title"
+        },
+        "organization": {
+          "type": "string",
+          "description": "Company or institution name"
+        },
+        "department": {
+          "type": "string",
+          "description": "Department or division"
+        },
+        "documentNumber": {
+          "type": "string",
+          "description": "Document ID or reference number"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Category (Report, Form, Spec, etc.)"
+        },
+        "status": {
+          "type": "string",
+          "description": "Document status (e.g., Draft, Review, Approved, Final, Obsolete)"
+        },
+        "classification": {
+          "type": "string",
+          "description": "Document classification (e.g., Public, Internal, Confidential, Restricted)"
+        },
+        "date": {
+          "type": "string",
+          "description": "Primary document date"
+        },
+        "effectiveDate": {
+          "type": "string",
+          "description": "When document takes effect"
+        },
+        "reviewDate": {
+          "type": "string",
+          "description": "Next scheduled review date"
+        },
+        "preparedBy": {
+          "type": "string",
+          "description": "Document preparer (supplements form.author)"
+        },
+        "reviewedBy": {
+          "type": "string",
+          "description": "Document reviewer"
+        },
+        "approvedBy": {
+          "type": "string",
+          "description": "Document approver"
+        },
+        "copyright": {
+          "type": "string",
+          "description": "Copyright notice"
+        },
+        "disclaimer": {
+          "type": "string",
+          "description": "Disclaimer or confidentiality statement"
+        },
+        "distributionStatement": {
+          "type": "string",
+          "description": "Distribution control statement"
+        },
+        "logo": {
+          "type": "string",
+          "description": "Path to logo image (PNG or JPEG)"
+        },
+        "coverImage": {
+          "type": "string",
+          "description": "Path to background or featured image (PNG or JPEG)"
+        },
+        "watermark": {
+          "type": "string",
+          "description": "Diagonal text overlay (e.g., DRAFT, CONFIDENTIAL)"
+        },
+        "revisionHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/revisionHistoryEntry"
+          },
+          "description": "Version history entries"
+        }
+      }
+    },
     "validation": {
       "type": "object",
       "properties": {
@@ -622,6 +711,28 @@
           "type": "integer",
           "minimum": 0,
           "maximum": 10
+        }
+      }
+    },
+    "revisionHistoryEntry": {
+      "type": "object",
+      "required": ["version", "date", "author", "description"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Version number"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of the revision"
+        },
+        "author": {
+          "type": "string",
+          "description": "Author of the revision"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of changes"
         }
       }
     },

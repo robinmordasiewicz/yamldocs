@@ -23,6 +23,7 @@ import {
   createSignatureWithLabel,
 } from './fields/index.js';
 import { mapFontFamily, hexToDocxColor, ptToTwip } from './utils.js';
+import { createCoverPageSection } from './coverpage.js';
 
 export interface DocxGeneratorOptions {
   schema: ParsedFormSchema;
@@ -62,6 +63,19 @@ export async function generateDocx(options: DocxGeneratorOptions): Promise<Gener
 
   // Build document sections
   const sections = [];
+
+  // Add cover page section if configured (no headers/footers)
+  if (schema.coverPage) {
+    const coverSection = await createCoverPageSection(
+      schema.form,
+      schema.coverPage,
+      stylesheet,
+      docxConfig,
+      basePath
+    );
+    sections.push(coverSection);
+  }
+
   const children: (Paragraph | Table)[] = [];
 
   // Draw content: use schema content when available

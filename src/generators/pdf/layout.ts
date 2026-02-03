@@ -157,18 +157,21 @@ export function moveCursorDown(ctx: LayoutContext, amount: number): void {
 
 /**
  * Draw page header
+ * @param startPage - Page index to start drawing headers from (0-indexed). Used to skip cover page.
  */
 export async function drawHeader(
   ctx: LayoutContext,
   text: string,
-  options: { pageNumber?: boolean } = {}
+  options: { pageNumber?: boolean; startPage?: number } = {}
 ): Promise<void> {
   const style = ctx.stylesheet.header;
   const font = await ctx.doc.embedFont(getFontName(style.fontFamily));
   const fontSize = style.fontSize;
   const color = hexToRgb(style.color);
+  const startPage = options.startPage ?? 0;
+  const contentPageCount = ctx.pages.length - startPage;
 
-  for (let i = 0; i < ctx.pages.length; i++) {
+  for (let i = startPage; i < ctx.pages.length; i++) {
     const page = ctx.pages[i];
     const y = ctx.pageSize.height - 30;
 
@@ -182,8 +185,9 @@ export async function drawHeader(
     });
 
     // Draw page number on right
-    if (options.pageNumber !== false && ctx.pages.length > 1) {
-      const pageNumText = `Page ${i + 1} of ${ctx.pages.length}`;
+    if (options.pageNumber !== false && contentPageCount > 1) {
+      const contentPageNum = i - startPage + 1;
+      const pageNumText = `Page ${contentPageNum} of ${contentPageCount}`;
       const textWidth = font.widthOfTextAtSize(pageNumText, fontSize);
 
       page.drawText(pageNumText, {
@@ -199,14 +203,21 @@ export async function drawHeader(
 
 /**
  * Draw page footer
+ * @param options.startPage - Page index to start drawing footers from (0-indexed). Used to skip cover page.
  */
-export async function drawFooter(ctx: LayoutContext, text: string): Promise<void> {
+export async function drawFooter(
+  ctx: LayoutContext,
+  text: string,
+  options: { startPage?: number } = {}
+): Promise<void> {
   const style = ctx.stylesheet.footer;
   const font = await ctx.doc.embedFont(getFontName(style.fontFamily));
   const fontSize = style.fontSize;
   const color = hexToRgb(style.color);
+  const startPage = options.startPage ?? 0;
 
-  for (const page of ctx.pages) {
+  for (let i = startPage; i < ctx.pages.length; i++) {
+    const page = ctx.pages[i];
     const textWidth = font.widthOfTextAtSize(text, fontSize);
     const x = (ctx.pageSize.width - textWidth) / 2;
 

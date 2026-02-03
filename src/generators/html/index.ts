@@ -32,6 +32,7 @@ import {
   getContentWidthPx,
   type HtmlPageSize,
 } from './layout.js';
+import { renderCoverPageHtml, getCoverPageCss } from './coverpage.js';
 
 export interface HtmlGeneratorOptions {
   schema: ParsedFormSchema;
@@ -75,11 +76,14 @@ function generateDefaultHtml(schema: ParsedFormSchema, config: Required<HtmlConf
 
   const pageLayoutEnabled = config.pageLayout?.enabled ?? true;
 
+  const hasCoverPage = !!schema.coverPage;
+
   let styles = '';
   if (config.embedStyles) {
     styles = `
     <style>
       ${getDefaultStyles(config.pageLayout)}
+      ${hasCoverPage ? getCoverPageCss() : ''}
     </style>`;
   }
 
@@ -96,9 +100,13 @@ function generateDefaultHtml(schema: ParsedFormSchema, config: Required<HtmlConf
   // Build the body content based on page layout mode
   let bodyContent: string;
 
+  // Generate cover page HTML if configured
+  const coverPageHtml =
+    hasCoverPage && schema.coverPage ? renderCoverPageHtml(schema.form, schema.coverPage) : '';
+
   if (pageLayoutEnabled && hasSchemaContent) {
     // Use multi-page layout with pagination for schema content
-    bodyContent = generateMultiPageContent(schema, title, config);
+    bodyContent = generateMultiPageContent(schema, title, config, coverPageHtml);
   } else if (pageLayoutEnabled) {
     // Single page layout for simple content
     const contentHtml = hasSchemaContent ? generateContentHtml(schema) : '';
@@ -127,6 +135,7 @@ function generateDefaultHtml(schema: ParsedFormSchema, config: Required<HtmlConf
 
     bodyContent = `
   <div class="page-layout-wrapper">
+    ${coverPageHtml}
     <div class="page">
       <div class="page-content">
         <header>
@@ -172,6 +181,7 @@ function generateDefaultHtml(schema: ParsedFormSchema, config: Required<HtmlConf
         }`;
 
     bodyContent = `
+  ${coverPageHtml}
   <div class="container">
     <header>
       <h1>${escapeHtml(title)}</h1>
@@ -210,7 +220,8 @@ function generateDefaultHtml(schema: ParsedFormSchema, config: Required<HtmlConf
 function generateMultiPageContent(
   schema: ParsedFormSchema,
   title: string,
-  config: Required<HtmlConfig>
+  config: Required<HtmlConfig>,
+  coverPageHtml = ''
 ): string {
   const pageSize = (config.pageLayout?.pageSize ?? 'a4') as HtmlPageSize;
   const ctx = initializeHtmlLayout(pageSize);
@@ -307,6 +318,7 @@ function generateMultiPageContent(
 
   return `
   <div class="page-layout-wrapper">
+    ${coverPageHtml}
     ${pagesHtml}
   </div>`;
 }

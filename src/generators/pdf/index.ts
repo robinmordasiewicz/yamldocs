@@ -29,10 +29,12 @@ import {
   drawTitle,
   drawHeader,
   drawFooter,
+  nextPage,
   type LayoutContext,
   type DrawnElement,
 } from './layout.js';
 import { drawSchemaContent } from './content.js';
+import { drawCoverPage } from './coverpage.js';
 
 export interface PdfGeneratorOptions {
   schema: ParsedFormSchema;
@@ -85,14 +87,24 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
   doc.setCreationDate(new Date());
 
   // Initialize layout with stylesheet
+  const hasCoverPage = !!schema.coverPage;
   const pageCount = schema.form.pages ?? 1;
-  const ctx = initializeLayout(doc, pdfConfig, pageCount, stylesheet);
+  const totalPages = hasCoverPage ? pageCount + 1 : pageCount;
+  const ctx = initializeLayout(doc, pdfConfig, totalPages, stylesheet);
 
-  // Draw header and footer
-  await drawHeader(ctx, schema.form.title, { pageNumber: true });
+  // Draw cover page if configured
+  if (hasCoverPage && schema.coverPage) {
+    await drawCoverPage(ctx, schema.form, schema.coverPage, basePath);
+    // Move to next page for content — cover page has no header/footer
+    nextPage(ctx);
+  }
+
+  // Draw header and footer on content pages only (skip cover page)
+  const startPage = hasCoverPage ? 1 : 0;
+  await drawHeader(ctx, schema.form.title, { pageNumber: true, startPage });
 
   if (schema.form.version) {
-    await drawFooter(ctx, `Version ${schema.form.version}`);
+    await drawFooter(ctx, `Version ${schema.form.version}`, { startPage });
   }
 
   // Draw content: use schema content when available
@@ -110,10 +122,13 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
 
   // Skip field labels when schema content provides the context (text field labels above)
 
+  // Page offset: when cover page is present, schema page 1 maps to array index 1
+  const pageOffset = hasCoverPage ? 1 : 0;
+
   let fieldCount = 0;
   for (const field of schema.fields) {
     const adjustedField = adjustFieldPosition(field, contentBaselineY);
-    await addFieldToDocument(doc, ctx, adjustedField, hasSchemaContentToDraw);
+    await addFieldToDocument(doc, ctx, adjustedField, hasSchemaContentToDraw, pageOffset);
     fieldCount++;
   }
 
@@ -160,10 +175,12 @@ async function addFieldToDocument(
   doc: PDFDocument,
   ctx: LayoutContext,
   field: NormalizedFormField,
-  skipLabels = false
+  skipLabels = false,
+  pageOffset = 0
 ): Promise<void> {
   // Get the appropriate page (1-indexed in schema, 0-indexed in array)
-  const pageIndex = Math.min(field.page - 1, ctx.pages.length - 1);
+  // pageOffset accounts for cover page occupying index 0
+  const pageIndex = Math.min(field.page - 1 + pageOffset, ctx.pages.length - 1);
   const page = ctx.pages[pageIndex];
   const stylesheet = ctx.stylesheet;
 

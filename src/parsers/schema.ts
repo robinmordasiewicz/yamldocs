@@ -5,7 +5,7 @@
 
 import { readFile } from 'fs/promises';
 import { existsSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
 import * as yaml from 'js-yaml';
 import Ajv from 'ajv';
@@ -214,6 +214,33 @@ export async function parseSchema(filePath: string): Promise<ParsedFormSchema> {
         if (fieldNames.has(token) || schema.calculations.some((c) => c.name === token)) {
           continue;
         }
+      }
+    }
+  }
+
+  // Validate cover page image paths
+  if (schema.coverPage) {
+    const schemaDir = dirname(resolvedPath);
+    const allowedExtensions = ['.png', '.jpg', '.jpeg'];
+
+    const imagePaths: [string, string | undefined][] = [
+      ['coverPage.logo', schema.coverPage.logo],
+      ['coverPage.coverImage', schema.coverPage.coverImage],
+    ];
+
+    for (const [fieldPath, imagePath] of imagePaths) {
+      if (!imagePath) continue;
+
+      const ext = extname(imagePath).toLowerCase();
+      if (!allowedExtensions.includes(ext)) {
+        console.warn(
+          `${fieldPath}: unsupported image format "${ext}". Only PNG and JPEG are supported.`
+        );
+      }
+
+      const resolvedImagePath = resolve(schemaDir, imagePath);
+      if (!existsSync(resolvedImagePath)) {
+        console.warn(`${fieldPath}: image file not found at "${resolvedImagePath}"`);
       }
     }
   }

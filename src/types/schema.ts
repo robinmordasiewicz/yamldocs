@@ -224,9 +224,40 @@ export interface FormMetadata {
   numbering?: boolean;
 }
 
+export interface RevisionHistoryEntry {
+  version: string;
+  date: string;
+  author: string;
+  description: string;
+}
+
+export interface CoverPage {
+  subtitle?: string;
+  organization?: string;
+  department?: string;
+  documentNumber?: string;
+  documentType?: string;
+  status?: string;
+  classification?: string;
+  date?: string;
+  effectiveDate?: string;
+  reviewDate?: string;
+  preparedBy?: string;
+  reviewedBy?: string;
+  approvedBy?: string;
+  copyright?: string;
+  disclaimer?: string;
+  distributionStatement?: string;
+  logo?: string;
+  coverImage?: string;
+  watermark?: string;
+  revisionHistory?: RevisionHistoryEntry[];
+}
+
 export interface FormSchema {
   $schema?: string;
   form: FormMetadata;
+  coverPage?: CoverPage;
   content?: SchemaContentElement[];
   fields: FormField[];
   calculations?: CalculatedField[];
