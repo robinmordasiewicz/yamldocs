@@ -59,7 +59,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: rebuild action bundle [skip ci]"
+          git commit --no-verify -m "chore: rebuild action bundle [skip ci]"
           git push
 
   test-action:
