@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.2.1) (2026-02-03)
+
+### Bug Fixes
+
+- automate releases on push to main and rename dist output to site ([dc64a8a](https://github.com/robinmordasiewicz/yamlforms/commit/dc64a8a2ec98f3564b0ead5917702ddb6ab3a1d5))
+
 # [1.2.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.2.0) (2026-02-03)
 
 ### Bug Fixes
