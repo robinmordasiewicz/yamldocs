@@ -35,6 +35,7 @@ import {
 } from './layout.js';
 import { drawSchemaContent } from './content.js';
 import { drawCoverPage } from './coverpage.js';
+import { resolveFooterConfig } from '../footer-utils.js';
 
 export interface PdfGeneratorOptions {
   schema: ParsedFormSchema;
@@ -103,9 +104,8 @@ export async function generatePdf(options: PdfGeneratorOptions): Promise<Generat
   const startPage = hasCoverPage ? 1 : 0;
   await drawHeader(ctx, schema.form.title, { pageNumber: true, startPage });
 
-  if (schema.form.version) {
-    await drawFooter(ctx, `Version ${schema.form.version}`, { startPage });
-  }
+  const resolvedFooter = resolveFooterConfig(schema.footer, schema.form);
+  await drawFooter(ctx, resolvedFooter, { startPage });
 
   // Draw content: use schema content when available
   const hasSchemaContentToDraw = schema.content && schema.content.length > 0;

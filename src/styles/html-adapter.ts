@@ -257,10 +257,66 @@ export function generateCssFromTokens(pageLayout?: PageLayoutConfig): string {
     footer {
       margin-top: ${rem(spacing[6])};
       padding-top: ${rem(spacing[3])};
-      border-top: 1px solid ${colors.gray[300]};
       text-align: center;
       color: ${colors.gray[500]};
       font-size: ${rem(components.footer.fontSize)};
+    }
+
+    .document-footer {
+      margin-top: ${rem(spacing[6])};
+      padding-top: ${rem(spacing[3])};
+      color: ${colors.gray[500]};
+      font-size: ${rem(components.footer.fontSize)};
+    }
+
+    .footer-separator {
+      border-top: 1px solid ${colors.gray[300]};
+    }
+
+    .footer-sections {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      width: 100%;
+    }
+
+    .footer-sections .footer-left {
+      text-align: left;
+      flex: 1;
+    }
+
+    .footer-sections .footer-center {
+      text-align: center;
+      flex: 1;
+    }
+
+    .footer-sections .footer-right {
+      text-align: right;
+      flex: 1;
+    }
+
+    .footer-social {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: ${rem(spacing[1])};
+    }
+
+    .footer-social a {
+      display: inline-block;
+      line-height: 0;
+    }
+
+    .footer-social img {
+      width: 16px;
+      height: 16px;
+      opacity: 0.6;
+    }
+
+    .footer-social img:hover {
+      opacity: 1;
     }
 
     /* Schema content styles */

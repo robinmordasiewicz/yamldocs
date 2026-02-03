@@ -84,6 +84,103 @@
         "$ref": "#/definitions/conditionalField"
       }
     },
+    "footer": {
+      "type": "object",
+      "description": "Footer configuration for all output formats. Supports three-section layout, template variables, and social links.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show or hide footer"
+        },
+        "left": {
+          "type": "string",
+          "description": "Left section text. Supports template variables: {{title}}, {{version}}, {{date}}, {{author}}, {{page}}, {{pages}}"
+        },
+        "center": {
+          "type": "string",
+          "description": "Center section text. Supports template variables."
+        },
+        "right": {
+          "type": "string",
+          "description": "Right section text. Supports template variables."
+        },
+        "text": {
+          "type": "string",
+          "description": "Shorthand for single centered text"
+        },
+        "copyright": {
+          "type": "string",
+          "description": "Shorthand for left section copyright text"
+        },
+        "showPageNumbers": {
+          "type": "boolean",
+          "description": "Adds 'Page X of Y' to right section"
+        },
+        "showVersion": {
+          "type": "boolean",
+          "description": "Shows version in footer"
+        },
+        "showDate": {
+          "type": "boolean",
+          "description": "Shows current date in footer"
+        },
+        "separator": {
+          "type": "object",
+          "description": "Horizontal line above footer",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable separator line"
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "default": "#cccccc",
+              "description": "Separator line color"
+            },
+            "thickness": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 5,
+              "default": 0.5,
+              "description": "Separator line thickness in points"
+            }
+          }
+        },
+        "socialLinks": {
+          "type": "object",
+          "description": "Social media links displayed below footer text",
+          "properties": {
+            "youtube": {
+              "type": "string",
+              "description": "YouTube channel URL"
+            },
+            "x": {
+              "type": "string",
+              "description": "X (Twitter) profile URL"
+            },
+            "facebook": {
+              "type": "string",
+              "description": "Facebook page URL"
+            },
+            "linkedin": {
+              "type": "string",
+              "description": "LinkedIn profile or company URL"
+            },
+            "github": {
+              "type": "string",
+              "description": "GitHub organization or user URL"
+            },
+            "website": {
+              "type": "string",
+              "description": "Website URL"
+            }
+          }
+        }
+      }
+    },
     "coverPage": {
       "type": "object",
       "description": "Optional cover page configuration. Presence enables a dedicated first page.",

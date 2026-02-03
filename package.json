@@ -23,7 +23,7 @@
   "scripts": {
     "build": "tsc && npm run copy-assets",
     "build:action": "npm run build && ncc build dist/action/index.js -o dist/action --source-map --license licenses.txt -e css-tree && mkdir -p dist/action/node_modules && cp -r node_modules/css-tree node_modules/mdn-data node_modules/source-map-js dist/action/node_modules/",
-    "copy-assets": "mkdir -p dist/schemas && cp src/schemas/form-schema.json dist/schemas/",
+    "copy-assets": "mkdir -p dist/schemas && cp src/schemas/form-schema.json dist/schemas/ && mkdir -p dist/assets/icons && cp src/assets/icons/*.png dist/assets/icons/",
     "dev": "tsc --watch",
     "start": "node dist/cli/index.js",
     "generate": "node dist/cli/index.js generate",

@@ -254,10 +254,40 @@ export interface CoverPage {
   revisionHistory?: RevisionHistoryEntry[];
 }
 
+export interface FooterSeparator {
+  enabled?: boolean;
+  color?: string;
+  thickness?: number;
+}
+
+export interface FooterSocialLinks {
+  youtube?: string;
+  x?: string;
+  facebook?: string;
+  linkedin?: string;
+  github?: string;
+  website?: string;
+}
+
+export interface FooterConfig {
+  enabled?: boolean;
+  left?: string;
+  center?: string;
+  right?: string;
+  text?: string;
+  copyright?: string;
+  showPageNumbers?: boolean;
+  showVersion?: boolean;
+  showDate?: boolean;
+  separator?: FooterSeparator;
+  socialLinks?: FooterSocialLinks;
+}
+
 export interface FormSchema {
   $schema?: string;
   form: FormMetadata;
   coverPage?: CoverPage;
+  footer?: FooterConfig;
   content?: SchemaContentElement[];
   fields: FormField[];
   calculations?: CalculatedField[];

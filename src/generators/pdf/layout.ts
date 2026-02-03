@@ -8,6 +8,8 @@ import type { PdfConfig } from '../../types/index.js';
 import type { ResolvedStylesheet, FontFamily } from '../../types/stylesheet.js';
 import { PAGE_SIZES } from '../../types/index.js';
 import { wrapText, hexToRgb } from './utils.js';
+import { type ResolvedFooter, resolvePageVariables } from '../footer-utils.js';
+import { loadSocialIconBytes, SOCIAL_ICON_SIZE } from '../icon-utils.js';
 
 /**
  * Admonition type for rendering admonition boxes
@@ -202,32 +204,135 @@ export async function drawHeader(
 }
 
 /**
- * Draw page footer
+ * Draw page footer with three-section layout, separator, and social icon links
  * @param options.startPage - Page index to start drawing footers from (0-indexed). Used to skip cover page.
  */
 export async function drawFooter(
   ctx: LayoutContext,
-  text: string,
+  footer: ResolvedFooter,
   options: { startPage?: number } = {}
 ): Promise<void> {
+  if (!footer.enabled) return;
+
   const style = ctx.stylesheet.footer;
   const font = await ctx.doc.embedFont(getFontName(style.fontFamily));
   const fontSize = style.fontSize;
   const color = hexToRgb(style.color);
   const startPage = options.startPage ?? 0;
+  const contentPageCount = ctx.pages.length - startPage;
+  const leftMargin = ctx.stylesheet.page.margins.left;
+  const rightMargin = ctx.stylesheet.page.margins.right;
+  const contentWidth = ctx.pageSize.width - leftMargin - rightMargin;
+
+  // Build social links entries
+  const socialEntries = Object.entries(footer.socialLinks).filter(([, url]) => !!url);
+
+  // Pre-embed all needed social icons once
+  const embeddedIcons = new Map<string, Awaited<ReturnType<typeof ctx.doc.embedPng>>>();
+  for (const [key] of socialEntries) {
+    const bytes = await loadSocialIconBytes(key);
+    if (bytes) {
+      const img = await ctx.doc.embedPng(bytes);
+      embeddedIcons.set(key, img);
+    }
+  }
+
+  const iconW = SOCIAL_ICON_SIZE.width;
+  const iconH = SOCIAL_ICON_SIZE.height;
+  const iconGap = 8;
 
   for (let i = startPage; i < ctx.pages.length; i++) {
     const page = ctx.pages[i];
-    const textWidth = font.widthOfTextAtSize(text, fontSize);
-    const x = (ctx.pageSize.width - textWidth) / 2;
+    const contentPageNum = i - startPage + 1;
+    let footerY = 20;
 
-    page.drawText(text, {
-      x,
-      y: 20,
-      size: fontSize,
-      font,
-      color,
-    });
+    // Draw social icons row (below main footer text)
+    if (socialEntries.length > 0 && embeddedIcons.size > 0) {
+      const totalIconsWidth = embeddedIcons.size * iconW + (embeddedIcons.size - 1) * iconGap;
+      let iconX = (ctx.pageSize.width - totalIconsWidth) / 2;
+
+      for (const [key, url] of socialEntries) {
+        const img = embeddedIcons.get(key);
+        if (!img) continue;
+
+        page.drawImage(img, {
+          x: iconX,
+          y: footerY,
+          width: iconW,
+          height: iconH,
+        });
+
+        // Add link annotation over the icon
+        if (url) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const annotObj = ctx.doc.context.obj({
+            Type: 'Annot',
+            Subtype: 'Link',
+            Rect: [iconX, footerY, iconX + iconW, footerY + iconH],
+            Border: [0, 0, 0],
+            A: {
+              Type: 'Action',
+              S: 'URI',
+              URI: url,
+            },
+          } as any);
+          page.node.addAnnot(ctx.doc.context.register(annotObj));
+        }
+
+        iconX += iconW + iconGap;
+      }
+
+      footerY += iconH + 4;
+    }
+
+    // Draw separator line
+    if (footer.separator.enabled) {
+      const sepY = footerY + fontSize + 4;
+      page.drawLine({
+        start: { x: leftMargin, y: sepY },
+        end: { x: leftMargin + contentWidth, y: sepY },
+        thickness: footer.separator.thickness,
+        color: hexToRgb(footer.separator.color),
+      });
+    }
+
+    // Draw left section
+    const leftText = resolvePageVariables(footer.left, contentPageNum, contentPageCount);
+    if (leftText) {
+      page.drawText(leftText, {
+        x: leftMargin,
+        y: footerY,
+        size: fontSize,
+        font,
+        color,
+      });
+    }
+
+    // Draw center section
+    const centerText = resolvePageVariables(footer.center, contentPageNum, contentPageCount);
+    if (centerText) {
+      const centerWidth = font.widthOfTextAtSize(centerText, fontSize);
+      page.drawText(centerText, {
+        x: (ctx.pageSize.width - centerWidth) / 2,
+        y: footerY,
+        size: fontSize,
+        font,
+        color,
+      });
+    }
+
+    // Draw right section
+    const rightText = resolvePageVariables(footer.right, contentPageNum, contentPageCount);
+    if (rightText) {
+      const rightWidth = font.widthOfTextAtSize(rightText, fontSize);
+      page.drawText(rightText, {
+        x: ctx.pageSize.width - rightMargin - rightWidth,
+        y: footerY,
+        size: fontSize,
+        font,
+        color,
+      });
+    }
   }
 }
 

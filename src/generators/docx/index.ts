@@ -24,6 +24,7 @@ import {
 } from './fields/index.js';
 import { mapFontFamily, hexToDocxColor, ptToTwip } from './utils.js';
 import { createCoverPageSection } from './coverpage.js';
+import { resolveFooterConfig } from '../footer-utils.js';
 
 export interface DocxGeneratorOptions {
   schema: ParsedFormSchema;
@@ -116,8 +117,8 @@ export async function generateDocx(options: DocxGeneratorOptions): Promise<Gener
   // Create section with header and footer
   const sectionProps = createSectionProperties(docxConfig, stylesheet);
   const header = createHeader(schema.form.title, stylesheet, schema.form.pages !== 1);
-  const footerText = schema.form.version ? `Version ${schema.form.version}` : '';
-  const footer = footerText ? createFooter(footerText, stylesheet) : undefined;
+  const resolvedFooter = resolveFooterConfig(schema.footer, schema.form);
+  const footer = await createFooter(resolvedFooter, stylesheet);
 
   sections.push({
     properties: sectionProps,
