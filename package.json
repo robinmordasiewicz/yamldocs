@@ -1,6 +1,6 @@
 {
   "name": "yamldocs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Generate fillable PDF forms with AcroForm fields from YAML schemas",
   "type": "module",
   "main": "dist/index.js",

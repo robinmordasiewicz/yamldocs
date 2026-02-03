@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.4](https://github.com/robinmordasiewicz/yamldocs/compare/v1.0.3...v1.0.4) (2026-02-03)
+
+### Bug Fixes
+
+- use force flag for git add in CI workflows ([a7c2152](https://github.com/robinmordasiewicz/yamldocs/commit/a7c2152df3ddc4405fba9e44fa059e822a0598d6))
+
+### Features
+
+- add GitHub Action for yamldocs ([#45](https://github.com/robinmordasiewicz/yamldocs/issues/45)) ([4b0bd5a](https://github.com/robinmordasiewicz/yamldocs/commit/4b0bd5a3dc063ab6d5d46adce096b1a6724b8390))
+- add major version tag automation for GitHub Action ([f94f3a9](https://github.com/robinmordasiewicz/yamldocs/commit/f94f3a9f3f0f8b2f1eef6b197a7b2d8d13b97417))
+
 ## [1.0.3](https://github.com/robinmordasiewicz/yamldocs/compare/v1.0.2...v1.0.3) (2026-02-03)
 
 ### Bug Fixes
