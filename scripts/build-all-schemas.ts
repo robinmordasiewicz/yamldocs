@@ -7,6 +7,7 @@
  */
 
 import { mkdir, readdir, writeFile } from 'fs/promises';
+import { existsSync } from 'fs';
 import { resolve, dirname, basename } from 'path';
 import { parseSchema } from '../src/parsers/schema.js';
 import { generatePdf, savePdf } from '../src/generators/pdf/index.js';
@@ -31,12 +32,27 @@ async function main() {
   console.log('Schema Document Generator');
   console.log('=========================\n');
 
+  // Check if schemas directory exists
+  if (!existsSync(SCHEMAS_DIR)) {
+    console.log('No schemas/ directory found. Skipping schema generation.');
+    console.log('This is expected when yamldocs is used as a library.');
+    await mkdir(OUTPUT_DIR, { recursive: true });
+    const indexHtml = generateIndexPage([]);
+    await writeFile(resolve(OUTPUT_DIR, 'index.html'), indexHtml);
+    console.log('Empty index page created.\n');
+    return;
+  }
+
   // Find all YAML schemas
   const files = await readdir(SCHEMAS_DIR);
   const yamlFiles = files.filter((f) => f.endsWith('.yaml') || f.endsWith('.yml'));
 
   if (yamlFiles.length === 0) {
     console.log('No schema files found in schemas/ directory');
+    await mkdir(OUTPUT_DIR, { recursive: true });
+    const indexHtml = generateIndexPage([]);
+    await writeFile(resolve(OUTPUT_DIR, 'index.html'), indexHtml);
+    console.log('Empty index page created.\n');
     return;
   }
 
