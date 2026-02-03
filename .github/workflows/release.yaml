@@ -62,3 +62,12 @@ jobs:
         with:
           tag_name: v${{ steps.release.outputs.version }}
           generate_release_notes: true
+
+      - name: Update major version tag
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          MAJOR_VERSION="v${VERSION%%.*}"
+          echo "Updating $MAJOR_VERSION tag to point to v$VERSION"
+          git tag -fa "$MAJOR_VERSION" -m "Update $MAJOR_VERSION tag to v$VERSION"
+          git push origin "$MAJOR_VERSION" --force
