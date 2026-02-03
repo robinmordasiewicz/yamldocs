@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+# [1.3.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.3.0) (2026-02-03)
+
+### Bug Fixes
+
+- release minor version on every push to main ([#59](https://github.com/robinmordasiewicz/yamlforms/issues/59)) ([44e1ddd](https://github.com/robinmordasiewicz/yamlforms/commit/44e1ddda9d89b3661c5142509b945b9c86eb662b))
+
 ## [1.2.1](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.2.1) (2026-02-03)
 
 ### Bug Fixes
