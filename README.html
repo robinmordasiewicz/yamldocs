@@ -562,11 +562,188 @@
       margin: 72pt;
     }
   
+      
+    .cover-page {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+    .cover-page header,
+    .cover-page footer {
+      display: none;
+    }
+    .cover-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      font-size: 72px;
+      font-weight: bold;
+      color: rgba(200, 200, 200, 0.15);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      padding: 40px;
+      flex: 1;
+    }
+    .cover-logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .cover-logo img {
+      max-width: 150px;
+      max-height: 80px;
+      object-fit: contain;
+    }
+    .cover-title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+      border: none;
+      padding: 0;
+    }
+    .cover-subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 16px;
+    }
+    .cover-divider {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 16px 40px 20px;
+    }
+    .cover-metadata {
+      margin: 0 40px 20px;
+      border-collapse: collapse;
+    }
+    .cover-metadata td {
+      padding: 3px 12px 3px 0;
+      font-size: 10px;
+      vertical-align: top;
+    }
+    .cover-meta-label {
+      font-weight: bold;
+      color: #333;
+      white-space: nowrap;
+    }
+    .cover-meta-value {
+      color: #444;
+    }
+    .cover-revision-history {
+      margin: 16px 40px 0;
+    }
+    .cover-revision-history h3 {
+      font-size: 11px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 6px;
+    }
+    .cover-revision-history table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+    }
+    .cover-revision-history th {
+      background: #f0f0f0;
+      font-weight: bold;
+      color: #333;
+      padding: 4px 8px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    .cover-revision-history td {
+      padding: 3px 8px;
+      color: #444;
+      border: 1px solid #ddd;
+    }
+    .cover-legal {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 40px 20px;
+      margin-top: auto;
+    }
+    .cover-legal p {
+      font-size: 8px;
+      color: #888;
+      margin: 2px 0;
+    }
+  
     </style>
 </head>
 <body>
   
   <div class="page-layout-wrapper">
+    
+    <div class="page cover-page">
+      <div class="cover-watermark">REFERENCE</div>
+      <div class="cover-content">
+        
+        <h1 class="cover-title">YAMLForms Complete Reference Guide</h1>
+        <p class="cover-subtitle">Comprehensive Schema Reference</p>
+        <hr class="cover-divider" />
+        <table class="cover-metadata"><tr><td class="cover-meta-label">Organization</td><td class="cover-meta-value">YAMLForms Project</td></tr>
+<tr><td class="cover-meta-label">Department</td><td class="cover-meta-value">Documentation Team</td></tr>
+<tr><td class="cover-meta-label">Document #</td><td class="cover-meta-value">DOC-REF-001</td></tr>
+<tr><td class="cover-meta-label">Type</td><td class="cover-meta-value">Reference Guide</td></tr>
+<tr><td class="cover-meta-label">Status</td><td class="cover-meta-value">Approved</td></tr>
+<tr><td class="cover-meta-label">Classification</td><td class="cover-meta-value">Public</td></tr>
+<tr><td class="cover-meta-label">Date</td><td class="cover-meta-value">2024-06-15</td></tr>
+<tr><td class="cover-meta-label">Effective Date</td><td class="cover-meta-value">2024-07-01</td></tr>
+<tr><td class="cover-meta-label">Review Date</td><td class="cover-meta-value">2025-01-01</td></tr>
+<tr><td class="cover-meta-label">Version</td><td class="cover-meta-value">1.0.0</td></tr>
+<tr><td class="cover-meta-label">Author</td><td class="cover-meta-value">YAMLForms Documentation</td></tr>
+<tr><td class="cover-meta-label">Prepared By</td><td class="cover-meta-value">YAMLForms Documentation, Technical Writer</td></tr>
+<tr><td class="cover-meta-label">Reviewed By</td><td class="cover-meta-value">Jane Doe, Lead Engineer</td></tr>
+<tr><td class="cover-meta-label">Approved By</td><td class="cover-meta-value">Bob Wilson, Project Lead</td></tr></table>
+        
+      <div class="cover-revision-history">
+        <h3>Revision History</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Date</th>
+              <th>Author</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody><tr>
+            <td>0.1.0</td>
+            <td>2024-01-10</td>
+            <td>YAMLForms Docs</td>
+            <td>Initial draft</td>
+          </tr>
+<tr>
+            <td>0.9.0</td>
+            <td>2024-04-20</td>
+            <td>Jane Doe</td>
+            <td>Added tables and calculations sections</td>
+          </tr>
+<tr>
+            <td>1.0.0</td>
+            <td>2024-06-15</td>
+            <td>YAMLForms Docs</td>
+            <td>Added cover page feature, finalized for release</td>
+          </tr></tbody>
+        </table>
+      </div>
+      </div>
+      <div class="cover-legal">
+        <p>(c) 2024 YAMLForms Project</p>
+<p>This document is provided as-is for reference purposes.</p>
+<p>Public distribution permitted.</p>
+      </div>
+    </div>
     
     <div class="page">
       <div class="page-content">
