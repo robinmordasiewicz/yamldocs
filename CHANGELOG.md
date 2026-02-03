@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+# [1.1.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.1.0) (2026-02-03)
+
+### Features
+
+- rename project from yamldocs to yamlforms ([c73dcda](https://github.com/robinmordasiewicz/yamlforms/commit/c73dcda7c9ed44e50458124b41114b766b68b8fd))
+
+### BREAKING CHANGES
+
+- Package renamed from yamldocs to yamlforms
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
 ## [1.0.4](https://github.com/robinmordasiewicz/yamldocs/compare/v1.0.3...v1.0.4) (2026-02-03)
 
 ### Bug Fixes
