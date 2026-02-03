@@ -10,12 +10,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robinmordasiewicz/yamldocs.git"
+    "url": "git+https://github.com/robinmordasiewicz/yamlforms.git"
   },
   "bugs": {
-    "url": "https://github.com/robinmordasiewicz/yamldocs/issues"
+    "url": "https://github.com/robinmordasiewicz/yamlforms/issues"
   },
-  "homepage": "https://github.com/robinmordasiewicz/yamldocs#readme",
+  "homepage": "https://github.com/robinmordasiewicz/yamlforms#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
