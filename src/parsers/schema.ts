@@ -23,10 +23,19 @@ const __dirname = dirname(__filename);
 
 // Load the JSON Schema for validation
 async function loadJsonSchema(): Promise<object> {
-  // Path from dist/parsers/ to src/schemas/
-  const schemaPath = resolve(__dirname, '../../src/schemas/form-schema.json');
-  const schemaContent = await readFile(schemaPath, 'utf-8');
-  return JSON.parse(schemaContent) as object;
+  // Support both installed (dist/schemas/) and development (src/schemas/) paths
+  const possiblePaths = [
+    resolve(__dirname, '../schemas/form-schema.json'), // Installed: dist/schemas/
+    resolve(__dirname, '../../src/schemas/form-schema.json'), // Dev: src/schemas/
+  ];
+
+  for (const schemaPath of possiblePaths) {
+    if (existsSync(schemaPath)) {
+      const schemaContent = await readFile(schemaPath, 'utf-8');
+      return JSON.parse(schemaContent) as object;
+    }
+  }
+  throw new Error('form-schema.json not found. Try reinstalling yamldocs.');
 }
 
 /**

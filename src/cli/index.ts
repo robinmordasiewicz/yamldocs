@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * markdown-2pdf CLI
+ * yamldocs CLI
  * Generate fillable PDF forms from YAML schemas
  */
 
@@ -45,21 +45,31 @@ const __dirname = dirname(__filename);
 
 // Load package.json for version
 function getVersion(): string {
-  try {
-    const packagePath = resolve(__dirname, '../../package.json');
-    const packageJson = JSON.parse(readFileSync(packagePath, 'utf-8')) as {
-      version?: string;
-    };
-    return packageJson.version ?? '1.0.0';
-  } catch {
-    return '1.0.0';
+  // Support both installed (dist/cli/) and development paths
+  const possiblePaths = [
+    resolve(__dirname, '../../package.json'), // Dev: src/cli/ → package.json
+    resolve(__dirname, '../../../package.json'), // Installed: dist/cli/ → package.json
+  ];
+
+  for (const packagePath of possiblePaths) {
+    try {
+      const packageJson = JSON.parse(readFileSync(packagePath, 'utf-8')) as {
+        version?: string;
+      };
+      if (packageJson.version) {
+        return packageJson.version;
+      }
+    } catch {
+      // Try next path
+    }
   }
+  return '1.0.0';
 }
 
 const program = new Command();
 
 program
-  .name('markdown-2pdf')
+  .name('yamldocs')
   .description('Generate fillable PDF forms from YAML schemas')
   .version(getVersion());
 
@@ -207,7 +217,7 @@ program
 // Init command (scaffolds a new project)
 program
   .command('init')
-  .description('Initialize a new markdown-2pdf project')
+  .description('Initialize a new yamldocs project')
   .argument('[directory]', 'Directory to initialize', '.')
   .action(async (directory: string) => {
     try {
