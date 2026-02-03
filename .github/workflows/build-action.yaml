@@ -103,3 +103,25 @@ jobs:
             exit 1
           fi
           echo "✅ All files generated successfully"
+
+      - name: Test action - generate with index
+        uses: ./
+        with:
+          command: generate
+          schema: 'tests/fixtures/schemas/valid/*.yaml'
+          output: 'test-index-output'
+          format: 'pdf'
+          generate-index: true
+          index-title: 'Test Documents'
+          publish: false
+
+      - name: Verify index generation
+        run: |
+          ls -la test-index-output/
+          if [ ! -f "test-index-output/index.html" ]; then
+            echo "Error: index.html not generated"
+            exit 1
+          fi
+          echo "✅ Index page generated successfully"
+          echo "Index content preview:"
+          head -30 test-index-output/index.html
