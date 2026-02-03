@@ -25,13 +25,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate PDF and HTML documents
+      - name: Generate documents
         uses: robinmordasiewicz/yamlforms@v1
         id: generate
         with:
           schema: 'schemas/*.yaml'
           output: 'dist'
-          format: 'pdf,html'
+          format: 'pdf,html,docx'
           generate-index: true
           index-title: 'YAMLForms Generated Documents'
           publish: false
@@ -57,7 +57,7 @@ jobs:
         with:
           schema: 'schemas/*.yaml'
           output: 'dist'
-          format: 'pdf,html'
+          format: 'pdf,html,docx'
           generate-index: true
           index-title: 'YAMLForms Generated Documents'
           publish: true

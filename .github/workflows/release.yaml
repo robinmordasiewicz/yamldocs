@@ -46,7 +46,7 @@ jobs:
       - name: Commit action bundle
         run: |
           git add -f dist/action/
-          git diff --staged --quiet || git commit -m "chore: rebuild action bundle for release"
+          git diff --staged --quiet || git commit --no-verify -m "chore: rebuild action bundle for release"
 
       - name: Release
         id: release
