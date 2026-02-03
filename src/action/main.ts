@@ -12,6 +12,7 @@ import { generatePdf, savePdf } from '../generators/pdf/index.js';
 import { generateHtml, saveHtml } from '../generators/html/index.js';
 import { generateDocx, saveDocx } from '../generators/docx/index.js';
 import { publish, parsePublishOptions, type PublishOptions } from './publish/index.js';
+import { generateIndexPage, createGeneratedFiles } from './publish/index-generator.js';
 
 interface ActionInputs {
   command: 'generate' | 'validate';
@@ -358,6 +359,23 @@ async function runGenerate(inputs: ActionInputs): Promise<void> {
     if (inputs.failOnError) {
       core.setFailed(`${failureCount} file(s) failed to generate`);
       return;
+    }
+  }
+
+  // Generate index page if requested (runs even when publishing is disabled)
+  if (inputs.publish.generateIndex && successfulFiles.length > 0) {
+    try {
+      const files = createGeneratedFiles(successfulFiles);
+      const indexFile = await generateIndexPage({
+        title: inputs.publish.indexTitle,
+        files,
+        outputDir: resolve(inputs.output),
+      });
+      core.setOutput('index-file', indexFile);
+      core.info(`✅ Generated index: ${indexFile}`);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      core.warning(`⚠️ Failed to generate index page: ${errorMessage}`);
     }
   }
 

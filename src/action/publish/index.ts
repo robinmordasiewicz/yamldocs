@@ -5,7 +5,6 @@
 
 import * as core from '@actions/core';
 import type { PublishOptions, PublishResult, GeneratedFile } from './types.js';
-import { generateIndexPage, createGeneratedFiles } from './index-generator.js';
 import { publishToBranch } from './branch.js';
 import { prepareForPagesApi } from './pages-api.js';
 
@@ -33,25 +32,6 @@ export async function publish(context: PublishContext): Promise<PublishResult> {
   core.info('');
   core.info('🚀 Publishing to GitHub Pages');
 
-  // Generate index page if requested
-  let indexFile: string | undefined;
-  if (options.generateIndex && generatedFiles.length > 0) {
-    try {
-      const files: GeneratedFile[] = createGeneratedFiles(generatedFiles);
-
-      indexFile = await generateIndexPage({
-        title: options.indexTitle,
-        files,
-        outputDir,
-      });
-
-      core.info(`✅ Generated index: ${indexFile}`);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      core.warning(`⚠️ Failed to generate index page: ${errorMessage}`);
-    }
-  }
-
   // Publish based on method
   let result: PublishResult;
 
@@ -65,11 +45,6 @@ export async function publish(context: PublishContext): Promise<PublishResult> {
     result = prepareForPagesApi({
       sourceDir: outputDir,
     });
-  }
-
-  // Add index file to result
-  if (indexFile) {
-    result.indexFile = indexFile;
   }
 
   return result;
