@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+# [1.6.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.6.0) (2026-02-04)
+
+### Bug Fixes
+
+- add github.token fallback for PAT_TOKEN in release workflow ([433c8ed](https://github.com/robinmordasiewicz/yamlforms/commit/433c8ed16827af91b21b42ce6d3131521bf16136))
+- disable force pushes on main and harden CI workflows ([1b7810e](https://github.com/robinmordasiewicz/yamlforms/commit/1b7810eeed248be1a4e8a1e6624129a820c8cf6a))
+
+### Features
+
+- add footer and header improvements with page number support ([d8e037b](https://github.com/robinmordasiewicz/yamlforms/commit/d8e037b4666583876b3ec308b5db7281b5210fa1)), closes [#62](https://github.com/robinmordasiewicz/yamlforms/issues/62)
+- add footer and icon utilities to document generators ([#61](https://github.com/robinmordasiewicz/yamlforms/issues/61)) ([7d30edf](https://github.com/robinmordasiewicz/yamlforms/commit/7d30edfd2ae757fb45c88dd1e8b98808cb75c54d)), closes [#60](https://github.com/robinmordasiewicz/yamlforms/issues/60)
+
 # [1.4.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.4.0) (2026-02-03)
 
 ### Features
