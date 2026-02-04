@@ -181,6 +181,46 @@
         }
       }
     },
+    "tableOfContents": {
+      "type": "object",
+      "description": "Table of Contents configuration. When present, generates a TOC from heading elements in the content array.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the Table of Contents"
+        },
+        "title": {
+          "type": "string",
+          "default": "Table of Contents",
+          "description": "Title displayed above the TOC entries"
+        },
+        "minLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "default": 1,
+          "description": "Minimum heading level to include (1-6)"
+        },
+        "maxLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "default": 3,
+          "description": "Maximum heading level to include (1-6)"
+        },
+        "numbered": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show hierarchical numbering (1, 1.1, 1.1.1)"
+        },
+        "showPageNumbers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show page numbers with dot leaders (PDF/DOCX only)"
+        }
+      }
+    },
     "coverPage": {
       "type": "object",
       "description": "Optional cover page configuration. Presence enables a dedicated first page.",
