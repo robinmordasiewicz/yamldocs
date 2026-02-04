@@ -59,6 +59,7 @@ export function generateCssFromTokens(pageLayout?: PageLayoutConfig): string {
 
     .page {
       width: ${pageDimensions.width}px;
+      height: ${pageDimensions.height}px;
       min-height: ${pageDimensions.height}px;
       background: ${components.pageLayout.pageBackgroundColor};
       box-shadow: ${components.pageLayout.pageShadow};
@@ -70,6 +71,13 @@ export function generateCssFromTokens(pageLayout?: PageLayoutConfig): string {
     .page-content {
       width: ${pageDimensions.contentWidth}px;
       max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .page-content > main {
+      flex: 1 1 auto;
     }
 
     .page-number {
@@ -255,7 +263,7 @@ export function generateCssFromTokens(pageLayout?: PageLayoutConfig): string {
     }
 
     footer {
-      margin-top: ${rem(spacing[6])};
+      margin-top: auto;
       padding-top: ${rem(spacing[3])};
       text-align: center;
       color: ${colors.gray[500]};
@@ -263,7 +271,7 @@ export function generateCssFromTokens(pageLayout?: PageLayoutConfig): string {
     }
 
     .document-footer {
-      margin-top: ${rem(spacing[6])};
+      margin-top: auto;
       padding-top: ${rem(spacing[3])};
       color: ${colors.gray[500]};
       font-size: ${rem(components.footer.fontSize)};

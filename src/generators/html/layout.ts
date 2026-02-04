@@ -66,10 +66,12 @@ export function initializeHtmlLayout(pageSize: HtmlPageSize = 'a4'): HtmlLayoutC
   const pageDimensions =
     pageSize === 'a4' ? components.pageLayout.a4 : components.pageLayout.letter;
 
-  // Content height = page height - top margin - bottom margin
+  // Content height = page height - top margin - bottom margin - footer reserve
   // This matches PDF: pageSize.height - margins.top - margins.bottom
   // Page number is absolutely positioned, so doesn't affect content area
-  const contentHeight = pageDimensions.height - pageDimensions.margin * 2;
+  // Reserve space for footer (text + separator + social icons)
+  const footerReserve = 50;
+  const contentHeight = pageDimensions.height - pageDimensions.margin * 2 - footerReserve;
 
   return {
     pageSize,
