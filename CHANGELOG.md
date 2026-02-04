@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+# [1.7.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.7.0) (2026-02-04)
+
+### Bug Fixes
+
+- remove single-entry matrix from CI so job name matches branch protection ([9cb8b37](https://github.com/robinmordasiewicz/yamlforms/commit/9cb8b377ac722a8239ccb2ce8384eb8c3b61310b))
+
+### Features
+
+- add table of contents and footer support ([c0279c6](https://github.com/robinmordasiewicz/yamlforms/commit/c0279c6666f255eb614525a307f757c9e3bc2ddf))
+
 ## [1.6.1](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.6.1) (2026-02-04)
 
 # [1.6.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.6.0) (2026-02-04)
