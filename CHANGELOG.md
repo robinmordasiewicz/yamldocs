@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.1](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.6.1) (2026-02-04)
+
 # [1.6.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.6.0) (2026-02-04)
 
 ### Bug Fixes
