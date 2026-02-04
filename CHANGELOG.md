@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+# [1.8.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.8.0) (2026-02-04)
+
+### Features
+
+- improve footer layout positioning ([45109d4](https://github.com/robinmordasiewicz/yamlforms/commit/45109d47b9393e5da165d472837bb8d855baeeea)), closes [#68](https://github.com/robinmordasiewicz/yamlforms/issues/68)
+
 # [1.7.0](https://github.com/robinmordasiewicz/yamlforms/compare/v1...v1.7.0) (2026-02-04)
 
 ### Bug Fixes
