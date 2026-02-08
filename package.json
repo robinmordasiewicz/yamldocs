@@ -84,7 +84,7 @@
     "@release-it/conventional-changelog": "^10.0.4",
     "@types/css-tree": "^2.3.11",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^24.10.9",
+    "@types/node": "^25.2.2",
     "@vercel/ncc": "^0.38.3",
     "@types/pixelmatch": "^5.2.6",
     "@types/pngjs": "^6.0.5",
